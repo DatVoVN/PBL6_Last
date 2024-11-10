@@ -1,0 +1,36 @@
+/* src/pages/NotFound.css */
+.not-found-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f8f9fa; /* Màu nền sáng */
+    text-align: center;
+    font-family: Arial, sans-serif;
+  }
+  
+  .not-found-title {
+    font-size: 6rem; /* Kích thước chữ lớn cho số 404 */
+    color: #dc3545; /* Màu đỏ */
+    margin: 0;
+  }
+  
+  .not-found-message {
+    font-size: 1.5rem; /* Kích thước chữ cho thông báo */
+    margin: 20px 0;
+  }
+  
+  .not-found-home-button {
+    padding: 10px 20px;
+    background-color: #007bff; /* Màu xanh */
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+  }
+  
+  .not-found-home-button:hover {
+    background-color: #0056b3; /* Màu xanh đậm khi hover */
+  }
+  

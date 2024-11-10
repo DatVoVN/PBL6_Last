@@ -1,0 +1,66 @@
+
+.trending__product .row:first-child {
+  display: flex;
+  align-items: center;
+  margin-bottom: 25px; 
+}
+
+.product__item {
+  margin-bottom: 15px; 
+  border: none;
+}
+
+.col-lg-8 {
+  flex: 1;
+}
+.col-lg-4 {
+  flex: 1; 
+  gap: 10px;
+}
+
+.section-title h5 {
+  color: #ffffff; 
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  line-height: 21px;
+  text-transform: uppercase;
+  padding-left: 20px;
+  position: relative;
+  margin: 0; 
+}
+
+.section-title h5::after {
+  position: absolute;
+  left: 0;
+  top: -6px;
+  height: 32px;
+  width: 4px;
+  background: #e53637;
+  content: "";
+}
+
+.btn__all {
+  text-align: right;
+  margin: 0; 
+}
+
+.primary-btn {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 500;
+  text-transform: uppercase;
+  color: #ffffff;
+  letter-spacing: 2px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.arrow_right {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-left: 10px solid #ffffff;
+  margin-left: 5px;
+  vertical-align: middle;
+}

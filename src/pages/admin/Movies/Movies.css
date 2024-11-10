@@ -1,0 +1,95 @@
+/* General Styles */
+.movie-list {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  max-width: 1200px; /* Limit the width of the movie list */
+  margin: auto; /* Center the list */
+}
+
+.movie-list h1 {
+  font-size: 2em;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Table Styles */
+.movies-table {
+  width: 100%;
+}
+
+.movies-table th,
+.movies-table td {
+  padding: 10px; /* Reduced cell padding */
+  text-align: left; /* Align text to the left */
+  border-bottom: 1px solid #ddd; /* Light border for separation */
+  font-size: 0.9em; /* Slightly smaller font size */
+}
+
+.movies-table th {
+  background-color: #3498db; /* Header background color */
+  color: white; /* Header text color */
+  font-weight: bold; /* Bold header text */
+}
+
+.movies-table tr:hover {
+  background-color: #f1f1f1; /* Change background on hover */
+}
+
+/* Image Styles */
+.movie-image {
+  width: 80px; /* Fixed width for images */
+  height: auto; /* Auto height to maintain aspect ratio */
+}
+
+/* Movie Actions (Buttons) */
+.movie-actions {
+  display: flex;
+  gap: 5px;
+}
+
+.movie-actions button {
+  padding: 5px 10px; /* Reduced padding for buttons */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  font-size: 0.9em; /* Smaller font size for buttons */
+}
+
+.movie-actions button:nth-child(1) {
+  background-color: #2ecc71; /* Color for View Details */
+  color: white;
+}
+
+.movie-actions button:nth-child(1):hover {
+  background-color: #27ae60; /* Darker green on hover */
+}
+
+.movie-actions button:nth-child(2) {
+  background-color: #3498db; 
+  color: white;
+}
+
+.movie-actions button:nth-child(2):hover {
+  background-color: #2980b9; 
+}
+
+.movie-actions button:nth-child(3) {
+  background-color: #e74c3c; 
+  color: white;
+}
+
+.movie-actions button:nth-child(3):hover {
+  background-color: #c0392b; 
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .movies-table {
+    font-size: 0.8em; /* Slightly smaller font size */
+  }
+
+  .movie-image {
+    width: 60px; /* Smaller image for mobile */
+  }
+}

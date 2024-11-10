@@ -1,0 +1,58 @@
+
+.movies-list {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); 
+    gap: 10px; 
+    margin-left: 20px;
+  }
+  
+  .product__item {
+    background-color: #fff; 
+    border-radius: 6px; 
+    overflow: hidden; 
+    transition: transform 0.3s; 
+  }
+  
+  .product__item:hover {
+    transform: scale(1.05); 
+  }
+  .filter-section {
+    display: flex;
+    gap: 10px; 
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .filter-dropdown {
+    padding: 6px 50px; 
+    font-size: 16px; 
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background-color: #f8f8f8;
+    color: #333;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .filter-dropdown:hover {
+    border-color: #aaa;
+    background-color: gray;
+  }
+  
+  .search-button1 {
+    padding: 8px 30px; 
+    font-size: 16px; 
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .search-button1:hover {
+    background-color: #0056b3;
+  }

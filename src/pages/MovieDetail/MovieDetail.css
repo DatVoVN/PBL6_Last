@@ -1,0 +1,216 @@
+/*---------------------
+  Anime Details
+-----------------------*/
+.anime-details {
+    padding-top: 70px;
+    background-color: #070720;
+}
+.container{
+    display: block;
+}
+.anime__details__content {
+    margin-bottom: 65px;
+    display: block;
+}
+.anime__details__text {
+    position: relative;
+
+    p {
+        color: #b7b7b7;
+        font-size: 18px;
+        line-height: 30px;
+    }
+}
+
+.anime__details__pic {
+    height: 500px;
+    border-radius: 5px;
+    position: relative;
+
+    
+}
+
+.anime__details__title {
+    margin-bottom: 20px;
+
+    h3 {
+        color: #ffffff;
+        font-weight: 700;
+        margin-bottom: 13px;
+    }
+
+    span {
+        font-size: 15px;
+        color: #b7b7b7;
+        display: block;
+    }
+}
+
+
+
+.anime__details__widget {
+    margin-bottom: 15px;
+
+    ul {
+        margin-bottom: 20px;
+
+        li {
+            list-style: none;
+            font-size: 15px;
+            color: #ffffff;
+            line-height: 30px;
+            position: relative;
+            padding-left: 18px;
+
+            &:before {
+                position: absolute;
+                left: 0;
+                top: 12px;
+                height: 6px;
+                width: 6px;
+                background: #b7b7b7;
+                content: "";
+            }
+            
+            span {
+                color: #b7b7b7;
+                width: 115px;
+                display: inline-block;
+            }
+        }
+    }
+}
+
+.anime__details__btn {
+
+    .follow-btn {
+        font-size: 13px;
+        color: #ffffff;
+        background: #e53637;
+        display: inline-block;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        padding: 14px 20px;
+        border-radius: 4px;
+        margin-right: 11px;
+    }
+
+    .watch-btn {
+
+        span {
+            font-size: 13px;
+            color: #ffffff;
+            background: #e53637;
+            display: inline-block;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 14px 20px;
+            border-radius: 4px 0 0 4px;
+            margin-right: 1px;
+        }
+    }
+    .trailer-btn {
+        font-size: 13px;
+        color: #ffffff;
+        background: brown;
+        display: inline-block;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        padding: 14px 20px;
+        border-radius: 4px;
+        margin: 0 5px; 
+    }
+}
+
+.anime__details__review {
+    margin-bottom: 55px;
+}
+
+.anime__review__item {
+    overflow: hidden;
+    margin-bottom: 15px;
+}
+
+.anime__review__item__pic {
+    float: left;
+    margin-right: 20px;
+    position: relative;
+
+    &:before {
+        position: absolute;
+        right: -30px;
+        top: 15px;
+        border-top: 15px solid transparent;
+        border-left: 15px solid #1d1e39;
+        content: "";
+        transform: rotate(45deg);
+    }
+    
+    img {
+        height: 50px;
+        width: 50px;
+        border-radius: 50%;
+    }
+}
+
+.anime__review__item__text{
+   overflow: hidden;
+    background: #1d1e39;
+    padding: 18px 30px 16px 20px;
+    border-radius: 10px;
+
+    h6 {
+        color: #ffffff;
+        font-weight: 700;
+        margin-bottom: 10px;
+
+        span {
+            color: #b7b7b7;
+            font-weight: 400;
+        }
+    }
+
+    p {
+        color: #b7b7b7;
+        line-height: 23px;
+        margin-bottom: 0;
+    }
+}
+
+.anime__details__form {
+
+    form {
+
+        textarea {
+            width: 100%;
+            font-size: 15px;
+            color: #b7b7b7;
+            padding-left: 20px;
+            padding-top: 12px;
+            height: 110px;
+            border: none;
+            border-radius: 5px;
+            resize: none;
+            margin-bottom: 24px;
+        }
+
+        button {
+            font-size: 11px;
+            height: 60px;
+            color: #ffffff;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            background: #e53637;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 2px;
+        }
+    }
+}
+.back{
+    margin-left: 120px;
+}

@@ -1,0 +1,18 @@
+
+.movies-list {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); 
+    gap: 20px; 
+  }
+  
+  .product__item {
+    background-color: #fff; 
+    border-radius: 4px; 
+    overflow: hidden; 
+    transition: transform 0.3s; 
+  }
+  
+  .product__item:hover {
+    transform: scale(1.05); 
+  }
+  

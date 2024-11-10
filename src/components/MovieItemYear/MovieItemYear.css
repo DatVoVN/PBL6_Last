@@ -1,0 +1,49 @@
+.hero__item {
+    position: relative;
+    background-color: #333;
+    border-radius: 10px;
+    overflow: hidden;
+    color: white;
+    background-size: cover;
+    background-position: center;
+    gap: 10px;
+  }
+  
+  .hero__text {
+    position: absolute;
+    bottom: 20px;
+    left: 15px;
+    right: 15px;
+    color: white;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6); 
+  }
+  
+  .label {
+    font-size: 14px;
+    font-weight: bold;
+    color: #ff6347;
+  }
+  
+  .hero__text h2 {
+    font-size: 16px;
+    margin: 8px 0;
+    line-height: 1.2;
+  }
+  
+  .hero__text a {
+    display: inline-block; /* Makes the link behave like a button */
+      padding: 10px 10px; /* Adjust padding for the button size */
+      font-size: 16px; /* Font size */
+      font-weight: bold; /* Bold text */
+      color: #ffffff; /* Text color */
+      background-color: transparent; /* Make the background transparent */
+      border: 2px solid #ffffff; /* Add a border for visibility */
+      border-radius: 5px; /* Rounded corners */
+      text-align: center; /* Center the text */
+      text-decoration: none; /* Remove underline */
+      transition: background 0.3s ease, color 0.3s ease; /* Smooth transition for background and text color */
+  }
+  .hero__text a:hover{
+    background: linear-gradient(90deg, #e53637, #ff007d); /* Gradient background on hover */
+      color: #ffffff; /* Keep text color white on hover */
+  }

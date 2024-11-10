@@ -1,0 +1,108 @@
+/* Poster.css */
+
+.hero {
+  position: relative; /* Ensure the hero section is positioned relative */
+}
+
+.hero__slider {
+  width: 100%; /* Set the slider width to full */
+}
+
+.hero__items1 {
+  height: 500px; /* Adjust height for carousel items */
+  background-size: cover; /* Ensure the background image covers the whole div */
+  background-position: center; /* Center the image */
+}
+
+/* Center navigation buttons vertically */
+.owl-nav {
+  display: flex;
+  justify-content: space-between;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+  z-index: 10;
+}
+
+.owl-nav button {
+  background-color: rgba(255, 255, 255, 0.5);
+  border: none;
+  color: #333;
+  padding: 10px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.owl-nav button:hover {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+.owl-dots {
+  position: absolute; /* Position the dots absolutely */
+  bottom: 20px; /* Adjust the distance from the bottom to align with the center of the image */
+  left: 50%; /* Center horizontally */
+  transform: translateX(-50%); /* Centering adjustment */
+  z-index: 10; /* Ensure they are above other elements */
+}
+
+.owl-dots .owl-dot {
+  background: black; 
+  margin: 0 2px; 
+  border-radius: 50%;  
+}
+
+.owl-dots .owl-dot.active {
+  background: black; /* White background for the active dot */
+}
+/* Adjust text styles if needed */
+.hero__text1 {
+  position: absolute; /* Position text absolutely */
+  bottom: 20px; /* Position it from the bottom */
+  left: 20px; /* Position it from the left */
+  color: white; /* Change text color to white for better contrast */
+  z-index: 10; /* Ensure it is above other elements */
+  padding-left: 20px;
+}
+
+.hero__text1 .label{
+  font-size: 13px;
+    color: #e53637;
+    background: #ffffff;
+    padding: 5px 14px 3px;
+    display: inline-block;
+    position: relative;
+}
+.hero__text1 .h2-title{
+  width: 500px;
+  font-size: 42px;
+  font-weight: 700;
+}
+.hero__text1 a {
+  display: inline-flex; /* Use flexbox for alignment */
+  align-items: center; /* Vertically center the text and icon */
+  text-decoration: none; /* Remove underline */
+  color: #ffffff; /* Set text color */
+  background-color: rgba(255, 0, 0, 0.7); /* Semi-transparent red background */
+  padding: 10px 15px; /* Add padding around the text */
+  border-radius: 5px; /* Slightly rounded corners */
+  transition: background-color 0.3s, transform 0.3s; /* Smooth transition for background and scale effect */
+  font-size: 16px; /* Set font size */
+  font-weight: bold; /* Make text bold */
+}
+
+.hero__text1 a:hover {
+  background-color: rgba(255, 0, 0, 1); /* Solid red on hover */
+  transform: scale(1.05); /* Slightly enlarge on hover for emphasis */
+}
+
+.hero__text1 a i {
+  margin-left: 8px; /* Space between text and icon */
+  transition: transform 0.3s; /* Smooth transition for icon */
+}
+
+.hero__text1 a:hover i {
+  transform: translateX(3px); /* Move icon slightly to the right on hover */
+}

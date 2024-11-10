@@ -1,0 +1,61 @@
+/* MovieDetailAd.css */
+
+.movie-detail {
+    width: 100%; /* Full width of the container */
+    height: 100%; /* Full height of the container */
+    padding: 20px; /* Adding padding around the content */
+    background-color: #f9f9f9; /* Light gray background */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    font-family: Arial, sans-serif; /* Font for the text */
+    overflow-y: auto; /* Allow scrolling if content overflows */
+  }
+  
+  .movie-detail h1 {
+    font-size: 2rem; /* Adjusted font size for the title */
+    margin-bottom: 20px; /* Space below the title */
+    color: #333; /* Dark gray color for the title */
+  }
+  
+  .movie-detail img {
+    width: 100%; /* Make the image responsive */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 8px; /* Rounded corners for the image */
+    margin-bottom: 20px; /* Space below the image */
+  }
+  
+  .movie-detail p {
+    font-size: 1rem; /* Regular font size for paragraphs */
+    margin: 10px 0; /* Space above and below paragraphs */
+    line-height: 1.5; /* Increased line height for readability */
+    color: #555; /* Dark gray for paragraph text */
+  }
+  
+  .movie-detail strong {
+    color: #222; /* Darker color for labels */
+  }
+  
+  .movie-detail a {
+    color: #007bff; /* Bootstrap primary color for links */
+    text-decoration: none; /* Remove underline from links */
+  }
+  
+  .movie-detail a:hover {
+    text-decoration: underline; /* Underline on hover */
+  }
+  
+  .movie-detail .status {
+    font-weight: bold; /* Bold text for status */
+  }
+  
+  @media (max-width: 600px) {
+    .movie-detail {
+      padding: 15px; /* Reduce padding on smaller screens */
+      height: auto; /* Allow height to adjust on smaller screens */
+    }
+  
+    .movie-detail h1 {
+      font-size: 1.5rem; /* Slightly smaller title on small screens */
+    }
+  }
+  

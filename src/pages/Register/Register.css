@@ -1,0 +1,129 @@
+.register {
+  position: relative; /* Allow positioning of child elements */
+  width: 100vw; /* Full width of the viewport */
+  height: 100vh; /* Full height of the viewport */
+  overflow: hidden; /* Prevent overflow */
+}
+.image-wrapper {
+  position: relative;
+  width: 100%; 
+  height: 300px; 
+}
+
+.background-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; 
+}
+
+.text-content {
+  position: absolute;
+  top: 50%; 
+  left: 50%; 
+  transform: translate(-50%, -50%); 
+  color: white;
+  text-align: center;  
+}
+
+.register-form {
+  padding-bottom: 700px;
+  background: #070720;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; 
+}
+
+.register__form {
+  padding: 30px; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+  width: 100%;
+  display: flex;
+  flex-direction: column; /* Stack children vertically */
+  align-items: center; /* Center align children */
+}
+
+.register__form h3 {
+  font-size: 40px;
+  font-weight: bold;
+  color: whitesmoke;
+}
+
+.input__group {
+  display: flex; /* Use flexbox to align inputs in a row */
+  justify-content: space-between; /* Space between the items */
+  width: 100%; /* Full width for the input group */
+  margin-bottom: -2px; /* Space below the group */
+}
+
+.input__item {
+  flex: 1; /* Allow the inputs to grow equally */
+  margin-right: 5px; /* Right margin for spacing */
+  position: relative; /* Relative positioning for the icon */
+}
+
+.input__item:last-child {
+  margin-right: 0; /* Remove right margin for the last item */
+}
+
+.input__item input {
+  height: 40px; 
+  width: 100%; 
+  font-size: 15px; 
+  color: #333; 
+  background: white; 
+  border: 1px solid #ccc; 
+  padding-left: 30px; 
+  border-radius: 4px; 
+}
+
+.input__item input::placeholder {
+  color: #b7b7b7;
+  padding-right: 20px;
+}
+.input__item select {
+  height: 40px; 
+  width: 100%; 
+  font-size: 15px; 
+  color: #b7b7b7; 
+  background: white; 
+  border: 1px solid #ccc; 
+  border-radius: 4px; 
+  padding-left: 30px; 
+  appearance: none; 
+}
+.site-btn {
+  display: block; 
+  padding: 10px; 
+  border: none; 
+  cursor: pointer; 
+  text-align: center; 
+  width: 100%;
+  border-radius: 0;
+  margin-top: 10px;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 700;
+  background-color: #ff4343;
+  height: 50px;
+  transform: translateX(-10px);
+}
+
+.text1 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.text1 h4 {
+  font-size: 15px;
+  color: #fff;
+  padding-right: 15px;
+  padding-top: 10px;
+}
+
+.text1 span .textlink {
+  font-size: 15px;
+  color: red;
+  text-decoration: none;
+}

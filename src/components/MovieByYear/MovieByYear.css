@@ -1,0 +1,97 @@
+.yearly-movies {
+  width: 100%;
+  padding: 20px;
+}
+
+.section-title {
+  margin-bottom: 20px; /* Adds space between the title and the year selector */
+}
+
+.section-title h5 {
+  color: #fff;
+  font-size: 20px;
+}
+
+.year-selector {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  width: 100%; /* Ensure it takes full width */
+}
+
+.year-btn {
+  flex: 1; /* Allow buttons to grow and fill available space */
+  padding: 12px 0; /* Vertical padding for button height */
+  border: none;
+  background-color: #333;
+  color: #fff;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s; 
+  font-size: 18px; /* Increase font size */
+  text-align: center; /* Center the text inside the button */
+}
+
+.year-btn:hover {
+  background-color: #555;
+}
+
+.year-btn.active {
+  background-color: #ff7f50; 
+  color: #fff; 
+}
+
+.scroll-buttons {
+  position: relative; /* Positioning relative for absolute children */
+  display: flex; /* Flexbox for alignment */
+  align-items: center; /* Center items vertically */
+  width: 100%; /* Full width for container */
+}
+
+.scroll-btn {
+  background-color: rgba(0, 0, 0, 0.7); /* Background color */
+  color: #fff; /* Text color */
+  border: none; /* No border */
+  cursor: pointer; /* Pointer cursor on hover */
+  width: 50px; /* Fixed width for circular button */
+  height: 50px; /* Fixed height equal to width */
+  font-size: 24px; /* Font size for icon/text */
+  position: absolute; /* Position absolute for placement */
+  z-index: 10; /* Ensure it appears above other elements */
+  top: 50%; /* Center vertically */
+  transform: translateY(-50%); /* Adjust vertical alignment */
+  border-radius: 50%; /* Makes the button circular */
+  display: flex; /* Flexbox to center content */
+  align-items: center; /* Center content vertically */
+  justify-content: center; /* Center content horizontally */
+}
+
+.left-btn {
+  left: -10px; 
+}
+
+.right-btn {
+  right: -10px; 
+}
+
+.scroll-btn:hover {
+  background-color: rgba(255, 255, 255, 0.5); 
+}
+
+.movie-list {
+  display: flex;
+  gap: 5px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 20px 0;
+  width: 100%;
+}
+
+.movie-item {
+  flex: 0 0 239px; 
+  margin: 10px; 
+}
+
+.movie-list::-webkit-scrollbar {
+  display: none; 
+}
