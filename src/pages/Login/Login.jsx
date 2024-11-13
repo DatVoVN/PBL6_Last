@@ -16,6 +16,7 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
+      console.log("12345");
       const response = await axios.post(
         "https://localhost:7000/api/auth/login",
         {
@@ -39,12 +40,14 @@ const Login = () => {
         // Store user data in context and cookies
         setUserData(id, token); // Save user ID and token
 
-        Cookies.set("authToken", token, { expires: 1 });
+        Cookies.set("Bearer", token, { expires: 1 });
 
         // Navigate based on role
         if (role === "ADMIN") {
+          console.log("1");
           navigate("/admin");
         } else {
+          console.log("12");
           navigate("/"); // Navigate to the home page
         }
       }

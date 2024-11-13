@@ -19,7 +19,7 @@ const MovieWatching = () => {
       const userId = Cookies.get("userId");
       if (!userId) return;
 
-      const response = await fetch("https://localhost:7196/api/memberShips");
+      const response = await fetch("https://localhost:7002/api/memberShips");
       const data = await response.json();
 
       console.log("Fetched Membership Data:", data); // Log to check the fetched data

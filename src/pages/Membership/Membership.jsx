@@ -8,7 +8,7 @@ function Membership() {
 
   const fetchPackages = async () => {
     try {
-      const response = await fetch("https://localhost:7196/api/packages");
+      const response = await fetch("https://localhost:7002/api/packages");
       const data = await response.json();
       if (data.isSuccess && Array.isArray(data.result)) {
         setPackages(data.result);
