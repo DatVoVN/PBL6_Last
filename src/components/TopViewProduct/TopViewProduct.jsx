@@ -1,23 +1,33 @@
 import React from "react";
 import "./TopViewProduct.css";
-const TopViewProduct = () => {
+
+const TopViewProduct = ({ movies }) => {
   return (
-    <div
-      class="product__sidebar__view__item set-bg mix day years"
-      style={{
-        backgroundImage: `url(img/sidebar/tv-1.jpg)`,
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "cover",
-        backgroundPosition: "top center",
-      }}>
-      <div class="ep">18 / ?</div>
-      <div class="view">
-        <i class="fa fa-eye"></i> 9141
-      </div>
-      <h5>
-        <a href="#">Boruto: Naruto next generations</a>
-      </h5>
-    </div>
+    <>
+      {movies.map((movie) => (
+        <div
+          className="product__sidebar__view__item set-bg"
+          style={{
+            backgroundImage: `url(${movie.movie.imageUrl})`,
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "cover",
+            backgroundPosition: "top center",
+          }}
+          key={movie.movieId}>
+          <div className="ep">
+            {movie.movie.episodeCurrent} / {movie.movie.episodeTotal || "?"}
+          </div>
+          <div className="view">
+            <i className="fa fa-eye"></i> {movie.movie.view}
+          </div>
+          <h5>
+            <a href={`/detail-watching/${movie.movie.movieId}`}>
+              {movie.movie.name}
+            </a>
+          </h5>
+        </div>
+      ))}
+    </>
   );
 };
 

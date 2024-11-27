@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  BsCart3,
   BsFillArchiveFill,
   BsFillGrid3X3GapFill,
   BsGrid1X2Fill,
@@ -10,6 +9,7 @@ import {
 } from "react-icons/bs";
 import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import "./SidebarAd.css";
 function SidebarAd() {
   const navigate = useNavigate();
 
@@ -20,7 +20,7 @@ function SidebarAd() {
     }
   };
   return (
-    <aside id="sidebar">
+    <aside id="sidebar" style={{ backgroundColor: "#070720" }}>
       <div className="sidebar-title">
         <div className="sidebar-brand">ADMIN</div>
         <span className="icon close_icon"></span>

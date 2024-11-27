@@ -43,7 +43,7 @@ const UpdateUser = () => {
 
     try {
       const response = await fetch(
-        "https://localhost:7000/api/users/UpdateInformation",
+        "https://cineworld.io.vn:7000/api/users/UpdateInformation",
         {
           method: "PUT",
           headers: {

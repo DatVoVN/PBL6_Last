@@ -18,7 +18,9 @@ const UpdateGenre = () => {
 
   const fetchGenre = async () => {
     try {
-      const response = await fetch(`https://localhost:7001/api/genre/${id}`);
+      const response = await fetch(
+        `https://cineworld.io.vn:7001/api/genre/${id}`
+      );
       const data = await response.json();
       if (data.isSuccess) {
         setGenre(data.result);
@@ -38,14 +40,17 @@ const UpdateGenre = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`https://localhost:7001/api/genres/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${Cookies.get("authToken")}`,
-        },
-        body: JSON.stringify(genre),
-      });
+      const response = await fetch(
+        `https://cineworld.io.vn:7001/api/genres/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${Cookies.get("authToken")}`,
+          },
+          body: JSON.stringify(genre),
+        }
+      );
       const data = await response.json();
       if (data.isSuccess) {
         setMessage("Cập nhật genre thành công!");

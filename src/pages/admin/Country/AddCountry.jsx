@@ -6,7 +6,6 @@ import "./AddCountry.css";
 const AddCountry = () => {
   const [newCountry, setNewCountry] = useState({
     name: "",
-    slug: "",
     status: true,
   });
   const [message, setMessage] = useState("");
@@ -20,18 +19,21 @@ const AddCountry = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("https://localhost:7001/api/countries", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${Cookies.get("authToken")}`, // Lấy token từ cookie
-        },
-        body: JSON.stringify(newCountry),
-      });
+      const response = await fetch(
+        "https://cineworld.io.vn:7001/api/countries",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${Cookies.get("authToken")}`, // Lấy token từ cookie
+          },
+          body: JSON.stringify(newCountry),
+        }
+      );
       const data = await response.json();
       if (data.isSuccess) {
         setMessage("Thêm country thành công!");
-        setNewCountry({ name: "", slug: "", status: true });
+        setNewCountry({ name: "", status: true });
         navigate("/admin/countries");
       } else {
         setMessage("Thêm country không thành công: " + data.message);
@@ -52,16 +54,6 @@ const AddCountry = () => {
             type="text"
             name="name"
             value={newCountry.name}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label>Slug:</label>
-          <input
-            type="text"
-            name="slug"
-            value={newCountry.slug}
             onChange={handleChange}
             required
           />

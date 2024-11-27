@@ -15,7 +15,9 @@ const CountriesAd = () => {
 
   const fetchCountries = async () => {
     try {
-      const response = await fetch("https://localhost:7001/api/countries");
+      const response = await fetch(
+        "https://cineworld.io.vn:7001/api/countries"
+      );
       const data = await response.json();
       if (data.isSuccess) {
         setCountries(data.result);
@@ -98,7 +100,6 @@ const CountriesAd = () => {
           <tr>
             <th>ID</th>
             <th>Tên</th>
-            <th>Slug</th>
             <th>Trạng thái</th>
             <th>Hành động</th>
           </tr>
@@ -108,7 +109,6 @@ const CountriesAd = () => {
             <tr key={country.countryId}>
               <td>{country.countryId}</td>
               <td>{country.name}</td>
-              <td>{country.slug}</td>
               <td>{country.status ? "Kích hoạt" : "Không kích hoạt"}</td>
               <td>
                 <button onClick={() => handleUpdate(country.countryId)}>

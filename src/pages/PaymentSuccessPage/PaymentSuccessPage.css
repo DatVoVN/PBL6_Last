@@ -1,0 +1,47 @@
+.success-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #070720;
+    font-family: Arial, sans-serif;
+    color: #fff;
+  }
+  
+  .success-message {
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    padding: 20px 30px;
+    text-align: center;
+    color: #333;
+    max-width: 500px;
+  }
+  
+  .success-message h1 {
+    font-size: 32px;
+    color: #28a745;
+    margin-bottom: 10px;
+  }
+  
+  .success-message p {
+    font-size: 16px;
+    margin: 10px 0;
+  }
+  
+  .success-message button {
+    background: #28a745;
+    color: #fff;
+    font-size: 16px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .success-message button:hover {
+    background: #218838;
+    box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+  }
+  

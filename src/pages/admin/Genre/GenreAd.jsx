@@ -8,13 +8,14 @@ const GenreAd = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const navigate = useNavigate();
   const itemsPerPage = 5;
+
   useEffect(() => {
     fetchGenre();
   }, []);
 
   const fetchGenre = async () => {
     try {
-      const response = await fetch("https://localhost:7001/api/genres");
+      const response = await fetch("https://cineworld.io.vn:7001/api/genres");
       const data = await response.json();
       if (data.isSuccess) {
         setGenre(data.result);
@@ -30,7 +31,7 @@ const GenreAd = () => {
     if (window.confirm("Bạn có chắc chắn muốn xóa genre này?")) {
       try {
         const response = await fetch(
-          `https://localhost:7001/api/genres/?id=${genreId}`,
+          `https://cineworld.io.vn:7001/api/genres/?id=${genreId}`,
           {
             method: "DELETE",
             headers: {
@@ -72,6 +73,7 @@ const GenreAd = () => {
   const handleViewMovies = (genreId) => {
     navigate(`/admin/genre/${genreId}/movies`);
   };
+
   // Phân trang
   const totalPages = Math.ceil(genre.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -93,7 +95,6 @@ const GenreAd = () => {
           <tr>
             <th>ID</th>
             <th>Tên</th>
-            <th>Slug</th>
             <th>Trạng thái</th>
             <th>Hành động</th>
           </tr>
@@ -101,9 +102,8 @@ const GenreAd = () => {
         <tbody>
           {currentGenre.map((genre) => (
             <tr key={genre.categoryId}>
-              <td>{genre.slugId}</td>
+              <td>{genre.genreId}</td>
               <td>{genre.name}</td>
-              <td>{genre.slug}</td>
               <td>{genre.status ? "Kích hoạt" : "Không kích hoạt"}</td>
               <td>
                 <button onClick={() => handleUpdate(genre.genreId)}>

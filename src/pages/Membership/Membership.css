@@ -1,31 +1,104 @@
-/* Membership.css */
+/* General Section Styling */
+.pricing-section {
+  text-align: center;
+  padding: 50px 20px;
+  background-color: #070720;
+}
 
-.packages-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-    padding: 20px;
-  }
-  
-  .package-card {
-    padding: 20px;
-    width: 300px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background-color: #f9f9f9;
-  }
-  
-  .package-name {
-    font-size: 1.5em;
-    margin-bottom: 10px;
-    color: #333;
-  }
-  
-  .package-card p {
-    margin: 5px 0;
-    font-size: 1em;
-    color: #555;
-  }
-  
+.pricing-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 10px;
+}
+
+.pricing-subtitle {
+  font-size: 1rem;
+  color: #718096;
+  margin-bottom: 40px;
+}
+
+/* Cards Container */
+.pricing-cards {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+/* Individual Card Styling */
+.pricing-card {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 20px;
+  width: 300px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
+}
+
+.pricing-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Highlighted Card Styling */
+.highlight {
+  background: #1a202c;
+  color: #fff;
+}
+
+.highlight .subscribe-button {
+  background: #4299e1;
+  color: #fff;
+}
+
+.package-name {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.package-price {
+  font-size: 2rem;
+  color: #2d3748;
+  margin-bottom: 10px;
+}
+
+.package-price .package-term {
+  font-size: 1rem;
+  color: #718096;
+}
+
+.package-description {
+  font-size: 0.9rem;
+  color: #718096;
+  margin-bottom: 15px;
+}
+
+.package-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px 0;
+}
+
+.package-features li {
+  font-size: 0.9rem;
+  color: #4a5568;
+  margin: 5px 0;
+}
+
+.subscribe-button {
+  background: #3182ce;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.subscribe-button:hover {
+  background: #2b6cb0;
+}

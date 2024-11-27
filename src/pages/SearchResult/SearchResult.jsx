@@ -21,13 +21,8 @@ const SearchResults = () => {
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const response = await fetch("https://localhost:7001/api/movies");
+        const response = await fetch("https://cineworld.io.vn:7001/api/movies");
         const data = await response.json();
-
-        // Log each movie's name from the fetched data
-        data.result.forEach((movie) => {
-          console.log("Fetched Movie Name:", movie.movie.name); // Log movie name
-        });
 
         setMovies(data.result);
         setFilteredMovies(data.result); // Initialize filteredMovies with fetched data
@@ -45,31 +40,30 @@ const SearchResults = () => {
       setQuery(searchQuery);
       filterMovies(searchQuery);
     }
-  }, [location]);
+  }, [location, movies]);
 
   const filterMovies = (searchQuery) => {
     const normalizedQuery = normalizeString(searchQuery);
-    console.log("Normalized Query:", normalizedQuery);
 
     const filtered = movies.filter((movie) => {
       if (!movie.movie.name) return false;
 
       const normalizedMovieName = normalizeString(movie.movie.name);
-      console.log(`Normalized Movie Name: "${normalizedMovieName}"`);
-      return normalizedMovieName.includes(normalizedQuery);
+      // Check if the movie name starts with the search query
+      return normalizedMovieName.startsWith(normalizedQuery);
     });
 
-    console.log("Filtered Movies:", filtered);
     setFilteredMovies(filtered);
   };
 
   const handleSearch = (e) => {
     e.preventDefault();
     navigate(`/search?query=${encodeURIComponent(query)}`);
+    filterMovies(query); // Update filteredMovies after search
   };
 
   return (
-    <div>
+    <div className="search-results-container">
       {filteredMovies.length > 0 ? (
         <div className="movies-list">
           {filteredMovies.map((movie) => (
@@ -82,7 +76,7 @@ const SearchResults = () => {
           ))}
         </div>
       ) : (
-        <p>No movies found.</p>
+        <p className="no-results">No movies found.</p>
       )}
     </div>
   );

@@ -35,6 +35,9 @@ import PageNotFound from "./pages/PageNotFound/PageNotFound.jsx";
 import Membership from "./pages/Membership/Membership.jsx";
 import { UserProvider } from "./Context/UserContext.jsx";
 import CouponPage from "./pages/CouponPage/CouponPage.jsx";
+import PaymentSuccessPage from "./pages/PaymentSuccessPage/PaymentSuccessPage.jsx";
+import ChangePassword from "./pages/ChangePassword/ChangePassword.jsx";
+import Profile from "./pages/Profile/Profile.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -97,6 +100,9 @@ createRoot(document.getElementById("root")).render(
               path="/membership/coupon/:packageId"
               element={<CouponPage />}
             />
+            <Route path="/payment-success" element={<PaymentSuccessPage />} />
+            <Route path="/change-password" element={<ChangePassword />} />
+            <Route path="/profile" element={<Profile />} />
           </Route>
         </Routes>
       </BrowserRouter>

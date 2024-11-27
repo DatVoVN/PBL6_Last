@@ -20,7 +20,7 @@ const AddGenre = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("https://localhost:7001/api/genres", {
+      const response = await fetch("https://cineworld.io.vn:7001/api/genres", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

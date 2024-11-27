@@ -12,7 +12,7 @@ const Movies = () => {
 
   const fetchMovies = async () => {
     try {
-      const response = await fetch("https://localhost:7001/api/movies");
+      const response = await fetch("https://cineworld.io.vn:7001/api/movies");
       const data = await response.json();
       if (data.isSuccess) {
         setMovies(data.result);

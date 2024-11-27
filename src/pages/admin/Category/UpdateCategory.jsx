@@ -21,7 +21,7 @@ const UpdateCategory = () => {
   const fetchCategory = async () => {
     try {
       const response = await fetch(
-        `https://localhost:7001/api/categories/${id}`
+        `https://cineworld.io.vn:7001/api/categories/${id}`
       );
       const data = await response.json();
       if (data.isSuccess) {
@@ -45,14 +45,17 @@ const UpdateCategory = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`https://localhost:7001/api/categories`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${Cookies.get("authToken")}`,
-        },
-        body: JSON.stringify(category),
-      });
+      const response = await fetch(
+        `https://cineworld.io.vn:7001/api/categories`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${Cookies.get("authToken")}`,
+          },
+          body: JSON.stringify(category),
+        }
+      );
 
       console.log("Request Body:", JSON.stringify(category));
 

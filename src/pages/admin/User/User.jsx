@@ -19,7 +19,7 @@ const User = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch("https://localhost:7000/api/users", {
+      const response = await fetch("https://cineworld.io.vn:7000/api/users", {
         method: "GET",
         headers: { Authorization: `Bearer ${Cookies.get("authToken")}` },
       });
@@ -40,7 +40,7 @@ const User = () => {
 
   const handleDelete = async (userId) => {
     try {
-      await fetch(`https://localhost:7000/api/users/${userId}`, {
+      await fetch(`https://cineworld.io.vn:7000/api/users/${userId}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${Cookies.get("authToken")}` },
       });
@@ -65,7 +65,7 @@ const User = () => {
           <tr>
             <th>ID</th>
             <th>Email</th>
-            <th>User Name</th>
+            <th>Full Name</th>
             <th>Role</th>
             <th>Action</th>
           </tr>
@@ -75,7 +75,7 @@ const User = () => {
             <tr key={user.id}>
               <td>{user.id}</td>
               <td>{user.email}</td>
-              <td>{user.userName}</td>
+              <td>{user.fullName}</td>
               <td>{user.role}</td>
               <td>
                 <button onClick={() => handleUpdate(user)}>Update</button>

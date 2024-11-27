@@ -15,7 +15,9 @@ const CategoriesAd = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch("https://localhost:7001/api/categories");
+      const response = await fetch(
+        "https://cineworld.io.vn:7001/api/categories"
+      );
       const data = await response.json();
       if (data.isSuccess) {
         setCategories(data.result);
@@ -31,7 +33,7 @@ const CategoriesAd = () => {
     if (window.confirm("Bạn có chắc chắn muốn xóa category này?")) {
       try {
         const response = await fetch(
-          `https://localhost:7001/api/categories/?id=${categoryId}`,
+          `https://cineworld.io.vn:7001/api/categories/?id=${categoryId}`,
           {
             method: "DELETE",
             headers: {
@@ -98,7 +100,6 @@ const CategoriesAd = () => {
           <tr>
             <th>ID</th>
             <th>Tên</th>
-            <th>Slug</th>
             <th>Trạng thái</th>
             <th>Hành động</th>
           </tr>
@@ -108,7 +109,6 @@ const CategoriesAd = () => {
             <tr key={category.categoryId}>
               <td>{category.categoryId}</td>
               <td>{category.name}</td>
-              <td>{category.slug}</td>
               <td>{category.status ? "Kích hoạt" : "Không kích hoạt"}</td>
               <td>
                 <button onClick={() => handleUpdate(category.categoryId)}>

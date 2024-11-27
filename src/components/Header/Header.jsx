@@ -10,6 +10,7 @@ const Header = () => {
   const [availableCategories, setAvailableCategories] = useState([]); // New state for categories with movies
   const [availableCountries, setAvailableCountries] = useState([]); // New state for countries with movies
   const [searchQuery, setSearchQuery] = useState("");
+  const [isProfileMenuVisible, setProfileMenuVisible] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -22,7 +23,9 @@ const Header = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch("https://localhost:7001/api/categories");
+        const response = await fetch(
+          "https://cineworld.io.vn:7001/api/categories"
+        );
         const data = await response.json();
         if (Array.isArray(data.result)) {
           const filteredCategories = data.result.filter(
@@ -43,7 +46,9 @@ const Header = () => {
   useEffect(() => {
     const fetchCountries = async () => {
       try {
-        const response = await fetch("https://localhost:7001/api/countries");
+        const response = await fetch(
+          "https://cineworld.io.vn:7001/api/countries"
+        );
         const data = await response.json();
         if (Array.isArray(data.result)) {
           const filteredCountries = data.result.filter(
@@ -63,7 +68,7 @@ const Header = () => {
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const response = await fetch("https://localhost:7001/api/movies");
+        const response = await fetch("https://cineworld.io.vn:7001/api/movies");
         const data = await response.json();
         if (Array.isArray(data.result)) {
           const categoriesWithMovies = new Set(
@@ -100,7 +105,9 @@ const Header = () => {
     setIsLoggedIn(false);
     navigate("/login");
   };
-
+  const toggleProfileMenu = () => {
+    setProfileMenuVisible(!isProfileMenuVisible);
+  };
   const handleSearchInputChange = (event) => {
     setSearchQuery(event.target.value);
   };
@@ -121,7 +128,7 @@ const Header = () => {
           <div className="col-lg-2">
             <div className="header__logo">
               <a href="./index.html">
-                <img src="./img/logo.png" alt="Logo" />
+                <img src="/public/img/logo1.jpg" alt="Logo" />
               </a>
             </div>
           </div>
@@ -177,7 +184,10 @@ const Header = () => {
           </div>
           <div className="col-lg-4">
             <div className="header__right">
-              <form onSubmit={handleSearchSubmit} className="search-form">
+              <form
+                onSubmit={handleSearchSubmit}
+                className="search-form"
+                style={{ paddingTop: "10px" }}>
                 <input
                   type="text"
                   placeholder="Search..."
@@ -185,19 +195,38 @@ const Header = () => {
                   value={searchQuery}
                   onChange={handleSearchInputChange}
                 />
-                <button type="submit" className="search-button">
-                  <span className="icon_search">
+                <button
+                  type="submit"
+                  className="search-button"
+                  style={{ paddingTop: "8px" }}>
+                  <span className="icon_search" style={{ paddingTop: "15px" }}>
                     <i className="bi bi-search"></i>
                   </span>
                 </button>
               </form>
               {isLoggedIn ? (
-                <button onClick={handleLogout} className="logout-btn">
-                  <span className="icon_profile">
-                    <i className="bi bi-box-arrow-right"></i>
-                  </span>
-                  Logout
-                </button>
+                <div className="profile-btn" onClick={toggleProfileMenu}>
+                  <i className="bi bi-person-circle"></i>
+                  {isProfileMenuVisible && (
+                    <div className="profile-menu">
+                      <ul>
+                        <li>
+                          <Link className="change" to="/profile">
+                            My Profile
+                          </Link>
+                        </li>
+                        <li>
+                          <Link className="change" to="/change-password">
+                            Change Password
+                          </Link>
+                        </li>
+                        <li>
+                          <button onClick={handleLogout}>Logout</button>
+                        </li>
+                      </ul>
+                    </div>
+                  )}
+                </div>
               ) : (
                 <Link to="/login" className="login-btn">
                   <span className="icon_profile">

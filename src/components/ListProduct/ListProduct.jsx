@@ -9,7 +9,7 @@ const ListProduct = () => {
 
   const fetchMovies = async () => {
     try {
-      const response = await fetch("https://localhost:7001/api/movies");
+      const response = await fetch("https://cineworld.io.vn:7001/api/movies");
       const data = await response.json();
       if (data.isSuccess) {
         const sortedMovies = data.result.sort(
@@ -40,7 +40,7 @@ const ListProduct = () => {
       <div className="row">
         {movies.map((movie) => (
           <div className="col-lg-3 col-md-4 col-sm-6" key={movie.movieId}>
-            <ProductItem movie={movie} width="auto" height="400px" />
+            <ProductItem movie={movie} width="auto" height="450px" />
           </div>
         ))}
       </div>

@@ -19,7 +19,7 @@ const UpdateCountry = () => {
   const fetchCountry = async () => {
     try {
       const response = await fetch(
-        `https://localhost:7001/api/countries/${id}`
+        `https://cineworld.io.vn:7001/api/countries/${id}`
       );
       const data = await response.json();
       if (data.isSuccess) {

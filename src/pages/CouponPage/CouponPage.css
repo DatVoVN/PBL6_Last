@@ -1,0 +1,142 @@
+/* General Styles for Coupon Page */
+.coupon-page {
+  font-family: 'Arial', sans-serif;
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+  background-color: #070720; /* Dark background for contrast */
+  border-radius: 12px;
+  color: #f1f1f1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.h2 {
+  text-align: center;
+  font-size: 2rem;
+  color: #fff;
+  margin-bottom: 30px;
+  font-weight: 600;
+}
+
+h2 i {
+  margin-right: 10px;
+}
+
+/* Package Details */
+.selected-package-details {
+  background-color: #1e1c3b;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+}
+
+.selected-package-details p {
+  font-size: 1.1rem;
+  color: #b5b7bc;
+  margin-bottom: 15px;
+}
+
+.selected-package-details p strong {
+  font-weight: bold;
+  color: #fff;
+}
+
+.selected-package-details i {
+  margin-left: 10px;
+  color: #5cb85c;
+}
+
+/* Coupon Code Input Section */
+.coupon-input {
+  background-color: #1e1c3b;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.coupon-input h3 {
+  font-size: 1.4rem;
+  color: #fff;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.coupon-input h3 i {
+  margin-right: 10px;
+  color: #5cb85c;
+}
+
+.coupon-input input {
+  width: 100%;
+  padding: 15px;
+  border-radius: 6px;
+  border: 1px solid #4b4a6e;
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  background-color: #262340;
+  color: #f1f1f1;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.coupon-input input:focus {
+  border-color: #5cb85c;
+}
+
+.coupon-input button {
+  width: 100%;
+  padding: 16px;
+  background-color: rgb(47, 47, 238);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-weight: 600;
+}
+
+.coupon-input button:hover {
+  background-color: blue;
+}
+
+.coupon-input button:disabled {
+  background-color: #4b4a6e;
+  cursor: not-allowed;
+}
+
+.coupon-input button i {
+  margin-right: 10px;
+}
+
+/* Error Message */
+.error-message {
+  color: #f44336;
+  font-size: 1.1rem;
+  text-align: center;
+  margin-top: 25px;
+}
+
+.error-message i {
+  margin-right: 10px;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .coupon-page {
+    padding: 20px;
+  }
+
+  h2 {
+    font-size: 1.6rem;
+  }
+
+  .coupon-input h3 {
+    font-size: 1.2rem;
+  }
+
+  .selected-package-details p {
+    font-size: 1.0rem;
+  }
+}

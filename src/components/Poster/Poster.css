@@ -9,9 +9,14 @@
 }
 
 .hero__items1 {
-  height: 500px; /* Adjust height for carousel items */
-  background-size: cover; /* Ensure the background image covers the whole div */
-  background-position: center; /* Center the image */
+  height: 500px; /* Fixed height */
+  background-size: cover;
+  background-position: center; 
+  background-repeat: no-repeat;
+  display: flex; 
+  justify-content: center;
+  align-items: center; 
+  position: relative; 
 }
 
 /* Center navigation buttons vertically */
@@ -80,7 +85,7 @@
   font-size: 42px;
   font-weight: 700;
 }
-.hero__text1 a {
+.hero__text1 .ah {
   display: inline-flex; /* Use flexbox for alignment */
   align-items: center; /* Vertically center the text and icon */
   text-decoration: none; /* Remove underline */
@@ -93,16 +98,16 @@
   font-weight: bold; /* Make text bold */
 }
 
-.hero__text1 a:hover {
+.hero__text1 .ah:hover {
   background-color: rgba(255, 0, 0, 1); /* Solid red on hover */
   transform: scale(1.05); /* Slightly enlarge on hover for emphasis */
 }
 
-.hero__text1 a i {
+.hero__text1 .ah i {
   margin-left: 8px; /* Space between text and icon */
   transition: transform 0.3s; /* Smooth transition for icon */
 }
 
-.hero__text1 a:hover i {
+.hero__text1 .ah:hover i {
   transform: translateX(3px); /* Move icon slightly to the right on hover */
 }

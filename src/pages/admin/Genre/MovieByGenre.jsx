@@ -14,7 +14,7 @@ const MoviesByGenre = () => {
   const fetchMoviesByGenre = async () => {
     try {
       const response = await fetch(
-        `https://localhost:7001/api/movies?genreId=${id}`
+        `https://cineworld.io.vn:7001/api/movies?genreId=${id}`
       );
       const data = await response.json();
       if (data.isSuccess) {

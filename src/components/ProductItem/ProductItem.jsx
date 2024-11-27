@@ -5,10 +5,7 @@ import { Link } from "react-router-dom";
 
 const ProductItem = ({ movie, width, height }) => {
   return (
-    <div
-      className="product__item"
-      style={{ width: width, height: height }} // Use props for width and height
-    >
+    <div className="product__item" style={{ width: width, height: height }}>
       <div
         className="product__item__pic"
         style={{
@@ -19,12 +16,16 @@ const ProductItem = ({ movie, width, height }) => {
           backgroundPosition: "top center",
           backgroundSize: "cover",
         }}>
-        <div className="ep">{`${movie.movie.episodeCurrent} / ${movie.movie.episodeTotal}`}</div>
+        <div className="ep">
+          {`${movie.movie.episodeCurrent} / ${
+            movie.movie.episodeTotal !== null ? movie.movie.episodeTotal : "?"
+          }`}
+        </div>
         <div className="comment">
           <i className="fa fa-comments"></i> {movie.movie.commentCount || 0}
         </div>
         <div className="view">
-          <i className="fa fa-eye"></i> {movie.movie.viewCount || 0}
+          <i className="fa fa-eye"></i> {movie.movie.view || 0}
         </div>
       </div>
       <div className="product__item__text">

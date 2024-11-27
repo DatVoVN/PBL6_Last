@@ -57,10 +57,11 @@ body {
     box-sizing: border-box; 
     overflow-y: auto; 
 }
-
-.sidebar-title {
+/* Sidebar */
+/* .sidebar-title {
     display: flex;
-    justify-content: space-between;
+    align-items: center;
+    justify-content: center;
     align-items: center;
     padding: 15px 30px 0px 30px;
     margin-bottom: 30px;
@@ -101,7 +102,7 @@ body {
 }
 .icon {
     padding-right: 5px;
-}
+} */
 .main-title {
     display: flex;
     justify-content: space-between;

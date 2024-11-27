@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom"; // Use useNavigate for navigation
 import "./Membership.css";
+import { useNavigate } from "react-router-dom";
 
 function Membership() {
   const [packages, setPackages] = useState([]);
-  const navigate = useNavigate(); // Hook for navigation
-
+  const navigate = useNavigate();
   const fetchPackages = async () => {
     try {
-      const response = await fetch("https://localhost:7002/api/packages");
+      const response = await fetch("https://cineworld.io.vn:7002/api/packages");
       const data = await response.json();
       if (data.isSuccess && Array.isArray(data.result)) {
         setPackages(data.result);
@@ -20,40 +19,46 @@ function Membership() {
     }
   };
 
-  // Navigate to CouponPage with the selected packageId
-  const handlePackageClick = (packageId) => {
-    navigate(`/membership/coupon/${packageId}`);
-  };
-
   useEffect(() => {
     fetchPackages();
   }, []);
+  const handlePackageClick = (packageId) => {
+    console.log("1:", packageId);
+    navigate(`/membership/coupon/${packageId}`);
+  };
 
   return (
-    <div className="packages-container">
-      {packages.length > 0 ? (
-        packages.map((pkg) => (
-          <div className="package-card" key={pkg.packageId}>
+    <div className="pricing-section">
+      <h1 className="pricing-title">Convenient Pricing</h1>
+      <p className="pricing-subtitle">
+        Choose the right pricing for you and get started with your project.
+      </p>
+      <div className="pricing-cards">
+        {packages.map((pkg) => (
+          <div
+            className={`pricing-card ${
+              pkg.name === "Professional" ? "highlight" : ""
+            }`}
+            key={pkg.packageId}>
             <h2 className="package-name">{pkg.name}</h2>
-            <p>
-              <strong>Description:</strong> {pkg.description}
-            </p>
-            <p>
-              <strong>Price:</strong> ${pkg.price} {pkg.currency}
-            </p>
-            <p>
-              <strong>Term:</strong> {pkg.termInMonths} month(s)
-            </p>
+            <h3 className="package-price">
+              ${pkg.price}
+              <span className="package-term">/month</span>
+            </h3>
+            <p className="package-description">{pkg.description}</p>
+            <ul className="package-features">
+              <li>All features included</li>
+              <li>Over 600 components</li>
+              <li>Build tools and examples</li>
+            </ul>
             <button
-              onClick={() => handlePackageClick(pkg.packageId)}
-              className="subscribe-button">
-              Subscribe
+              className="subscribe-button"
+              onClick={() => handlePackageClick(pkg.packageId)}>
+              Get started
             </button>
           </div>
-        ))
-      ) : (
-        <p>Loading package data...</p>
-      )}
+        ))}
+      </div>
     </div>
   );
 }

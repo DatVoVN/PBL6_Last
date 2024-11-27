@@ -127,38 +127,114 @@
 .anime__details__form button:hover {
     background-color: #ff5733;
 }
-.modal {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: fixed;
+/* Modal Overlay */
+.subscription-modal {
+    position: fixed; /* Đảm bảo modal luôn ở trên màn hình */
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    z-index: 1000;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7); /* Làm mờ phần còn lại của màn hình với độ mờ tối hơn */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* Đảm bảo modal nằm trên tất cả các phần tử khác */
+    animation: fadeIn 0.3s ease-out; /* Thêm hiệu ứng mờ dần khi xuất hiện */
   }
   
+  /* Modal Content */
   .modal-content {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    text-align: center;
-    max-width: 400px;
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
     width: 100%;
+
+    text-align: center;
+    animation: slideUp 0.3s ease-out;
   }
   
-  button {
-    margin: 10px;
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
+  /* Animation: Fade-in for the modal */
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  
+  /* Animation: Slide-up for the modal content */
+  @keyframes slideUp {
+    0% {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  /* Modal Title */
+  .modal-content h3 {
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 15px;
+  }
+  
+  /* Modal Paragraph */
+  .modal-content p {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 20px;
+  }
+  
+  /* Button Styling */
+  .button1 {
+    padding: 12px 25px;
+    background-color: #007bff;
+    color: #fff;
     border: none;
-    border-radius: 5px;
+    border-radius: 6px;
+    font-size: 1rem;
     cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin: 5px;
   }
   
-  button:hover {
-    background-color: #45a049;
+  .button1:hover {
+    background-color: #0056b3; /* Hiệu ứng hover màu sắc */
   }
+  
+  .button1:focus {
+    outline: none;
+  }
+  
+  /* Modal Close Button */
+  .button1:last-child {
+    background-color: #f44336; /* Nút Cancel có màu đỏ */
+  }
+  
+  .button1:last-child:hover {
+    background-color: #d32f2f; /* Hiệu ứng hover của nút Cancel */
+  }
+  
+  /* Responsive Styles */
+  @media (max-width: 600px) {
+    .modal-content {
+      padding: 20px;
+      width: 80%;
+      max-width: 400px;
+    }
+  
+    .modal-content h3 {
+      font-size: 1.4rem;
+    }
+  
+    .modal-content p {
+      font-size: 0.9rem;
+    }
+  }
+  

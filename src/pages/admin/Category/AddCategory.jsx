@@ -6,7 +6,6 @@ import "./AddCategory.css";
 const AddCategory = () => {
   const [newCategory, setNewCategory] = useState({
     name: "",
-    slug: "",
     status: true,
   });
   const [message, setMessage] = useState("");
@@ -20,18 +19,21 @@ const AddCategory = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("https://localhost:7001/api/categories", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${Cookies.get("authToken")}`, // Lấy token từ cookie
-        },
-        body: JSON.stringify(newCategory),
-      });
+      const response = await fetch(
+        "https://cineworld.io.vn:7001/api/categories",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${Cookies.get("authToken")}`, // Lấy token từ cookie
+          },
+          body: JSON.stringify(newCategory),
+        }
+      );
       const data = await response.json();
       if (data.isSuccess) {
         setMessage("Thêm category thành công!");
-        setNewCategory({ name: "", slug: "", status: true });
+        setNewCategory({ name: "", status: true });
         navigate("/admin/categories");
       } else {
         setMessage("Thêm category không thành công: " + data.message);
@@ -52,16 +54,6 @@ const AddCategory = () => {
             type="text"
             name="name"
             value={newCategory.name}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label>Slug:</label>
-          <input
-            type="text"
-            name="slug"
-            value={newCategory.slug}
             onChange={handleChange}
             required
           />

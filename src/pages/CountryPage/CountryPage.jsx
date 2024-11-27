@@ -10,13 +10,13 @@ const CountryPage = () => {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1); // State for current page
-  const itemsPerPage = 6; // Set items per page as needed
+  const itemsPerPage = 10; // Set items per page as needed
 
   useEffect(() => {
     const fetchMoviesByCountry = async () => {
       try {
         const response = await fetch(
-          `https://localhost:7001/api/movies?countryId=${id}`
+          `https://cineworld.io.vn:7001/api/movies?countryId=${id}`
         );
         const data = await response.json();
         setMovies(data.result || []);

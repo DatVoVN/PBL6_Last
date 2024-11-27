@@ -17,14 +17,14 @@ const CategoryPage = () => {
   const [selectedGenre, setSelectedGenre] = useState("");
   const [selectedYear, setSelectedYear] = useState("");
 
-  const [currentPage, setCurrentPage] = useState(1); // Current page for pagination
-  const itemsPerPage = 6; // Customize items per page
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   useEffect(() => {
     const fetchMoviesByCategory = async () => {
       try {
         const response = await fetch(
-          `https://localhost:7001/api/movies?categoryId=${id}`
+          `https://cineworld.io.vn:7001/api/movies?categoryId=${id}`
         );
         const data = await response.json();
         const moviesData = data.result || [];

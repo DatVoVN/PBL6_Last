@@ -14,7 +14,7 @@ const MoviesByCountry = () => {
   const fetchMoviesByCountry = async () => {
     try {
       const response = await fetch(
-        `https://localhost:7001/api/movies?countryId=${id}`
+        `https://cineworld.io.vn:7001/api/movies?countryId=${id}`
       );
       const data = await response.json();
       if (data.isSuccess) {

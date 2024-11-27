@@ -1,7 +1,6 @@
-// src/pages/NotFound.jsx
 import React from "react";
 import { Link } from "react-router-dom";
-import "./PageNotFound.css"; // Nhập file CSS để áp dụng kiểu dáng
+import "./PageNotFound.css";
 
 const PageNotFound = () => {
   return (

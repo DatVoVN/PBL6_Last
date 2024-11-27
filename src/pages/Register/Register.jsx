@@ -4,7 +4,7 @@ import "./Register.css";
 import { Link, useNavigate } from "react-router-dom";
 const Register = () => {
   const [email, setEmail] = useState("");
-  const [userName, setUserName] = useState("");
+  const [fullName, setfullName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [gender, setGender] = useState("");
@@ -21,10 +21,10 @@ const Register = () => {
 
     try {
       const response = await axios.post(
-        "https://localhost:7000/api/auth/register",
+        "https://cineworld.io.vn:7000/api/auth/register",
         {
           email,
-          userName,
+          fullName,
           password,
           confirmPassword,
           gender,
@@ -90,9 +90,9 @@ const Register = () => {
                   <div className="input__item">
                     <input
                       type="text"
-                      placeholder="Username"
-                      value={userName}
-                      onChange={(e) => setUserName(e.target.value)}
+                      placeholder="fullName"
+                      value={fullName}
+                      onChange={(e) => setfullName(e.target.value)}
                       required
                     />
                   </div>

@@ -17,13 +17,13 @@
 
     p {
         color: #b7b7b7;
-        font-size: 18px;
+        font-size: 15px;
         line-height: 30px;
     }
 }
 
 .anime__details__pic {
-    height: 500px;
+    height: 550px;
     border-radius: 5px;
     position: relative;
 
@@ -131,7 +131,8 @@
 
 .anime__review__item {
     overflow: hidden;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
+    margin-top: 30px;
 }
 
 .anime__review__item__pic {
@@ -208,6 +209,7 @@
             border: none;
             padding: 10px 15px;
             border-radius: 2px;
+            
         }
     }
 }

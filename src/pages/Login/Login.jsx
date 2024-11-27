@@ -18,7 +18,7 @@ const Login = () => {
     try {
       console.log("12345");
       const response = await axios.post(
-        "https://localhost:7000/api/auth/login",
+        "https://cineworld.io.vn:7000/api/auth/login",
         {
           email,
           password,
@@ -34,13 +34,20 @@ const Login = () => {
         const { token, user } = response.data.result;
         const role = user.role;
         const id = user.id;
+        const fullName = user.fullName; // Get fullName from the response
+
         console.log("Role:", role);
         console.log("User ID:", id);
+        console.log("Full Name:", fullName);
 
-        // Store user data in context and cookies
-        setUserData(id, token); // Save user ID and token
+        // Set user data in context and cookies
+        setUserData(id, token, fullName); // Pass fullName to setUserData
 
         Cookies.set("Bearer", token, { expires: 1 });
+        Cookies.set("fullName", fullName, { expires: 1 }); // Save fullName in cookies
+
+        // Save the entire response.data to a cookie
+        Cookies.set("userData", JSON.stringify(response.data), { expires: 1 });
 
         // Navigate based on role
         if (role === "ADMIN") {
@@ -101,7 +108,10 @@ const Login = () => {
                       onChange={(e) => setPassword(e.target.value)}
                     />
                   </div>
-                  <button type="submit" className="site-btn1">
+                  <button
+                    type="submit"
+                    className="site-btn123"
+                    style={{ backgroundColor: "#ff4343", fontWeight: "700px" }}>
                     LOGIN NOW
                   </button>
                 </form>

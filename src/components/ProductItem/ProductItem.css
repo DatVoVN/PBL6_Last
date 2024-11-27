@@ -59,6 +59,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  height: auto; /* Allow the height to adjust based on content */
 }
 
 .product__item__text ul {
@@ -71,25 +72,32 @@
 .product__item__text ul li {
   font-size: 10px;
   color: #ffffff;
-  font-weight: 700;
+  font-weight: 500;
   padding: 1px 5px;
   background: rgba(255, 255, 255, 0.2);
   border-radius: 50px;
   display: inline-block;
-  margin-right: 10px; 
+  margin-right: 5px; 
 }
 
 .product__item__text h5 {
   margin: 0;
   padding: 0;
+  width: 100%; /* Ensure it takes the full width of the container */
+  white-space: normal; /* Allow the title to wrap to the next line */
+  word-wrap: break-word; /* Break long words into the next line */
 }
 
 .product__item__text h5 a {
   color: #ffffff;
-  font-weight: 700;
+  font-weight: 500;
   line-height: 26px;
   text-decoration: none;
   transition: color 0.3s;
+  display: block; /* Make the link a block element for better alignment */
+  text-overflow: ellipsis; /* Add ellipsis if the text overflows */
+  overflow: hidden; /* Prevent overflow */
+  white-space: nowrap; /* Prevent wrapping the text */
 }
 
 .product__item__text h5 a:hover {

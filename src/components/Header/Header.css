@@ -170,7 +170,6 @@
     margin-top: -10px;
 }
 
-.icon_search,
 .icon_profile {
     margin-right: 0.5rem;
 }
@@ -208,3 +207,87 @@
 .col-lg-4 {
     justify-content: flex-end;
 }
+/* New Profile Menu Styles */
+.profile-btn {
+    position: relative;
+    cursor: pointer;
+    padding: 12px 12px; /* Increase padding to make the button larger */
+    font-size: 16px; /* Increase font size */
+    border-radius: 50%; /* Optional: make the button edges rounder */
+    background-color: #070720; /* Set a background color */
+    color: #fff; 
+    transition: background-color 0.3s ease; 
+}
+.bi-person-circle {
+    font-size: 20px; /* Thay đổi kích thước biểu tượng */
+  }
+/* Profile Menu Container */
+/* Container của menu */
+.profile-menu {
+    position: absolute;
+    top: 60px; /* Tùy chỉnh theo chiều cao của profile-btn */
+    right: 0;
+    background-color: #fff; /* Nền trắng */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    min-width: 200px; /* Chiều rộng tối thiểu */
+    padding: 10px 0;
+    overflow: hidden;
+  }
+  
+  /* Danh sách bên trong menu */
+  .profile-menu ul {
+    display: grid; /* Sử dụng CSS Grid */
+    grid-template-columns: 1fr; /* Một cột */
+    row-gap: 8px; /* Khoảng cách giữa các hàng */
+    margin: 0;
+    padding: 0 10px; /* Khoảng cách hai bên */
+    list-style: none;
+  }
+  
+  /* Các mục menu */
+  .profile-menu li {
+    display: flex;
+    justify-content: center; /* Căn giữa theo chiều ngang */
+    align-items: center; /* Căn giữa theo chiều dọc */
+  }
+  
+  /* Link trong menu */
+  .profile-menu li .change {
+    display: inline-block;
+    width: 100%; /* Đảm bảo link chiếm toàn bộ chiều ngang */
+    text-align: center; /* Căn giữa văn bản */
+    text-decoration: none;
+    color: #333;
+    font-size: 14px;
+    padding: 8px 0; /* Khoảng cách đều xung quanh */
+    border-radius: 4px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  .profile-menu li .change:hover {
+    background-color: #f0f0f0;
+    color: #007bff;
+  }
+  
+  /* Nút Logout */
+  .profile-menu li button {
+    width: 100%;
+    text-align: center;
+    background: none;
+    border: none;
+    color: #dc3545;
+    font-size: 14px;
+    padding: 8px 0;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  .profile-menu li button:hover {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+  
