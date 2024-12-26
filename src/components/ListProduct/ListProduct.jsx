@@ -6,16 +6,15 @@ import { Link } from "react-router-dom";
 
 const ListProduct = () => {
   const [movies, setMovies] = useState([]);
-
+  const MOVIE = import.meta.env.VITE_MOVIE;
   const fetchMovies = async () => {
     try {
-      const response = await fetch("https://cineworld.io.vn:7001/api/movies");
+      const response = await fetch(
+        `${MOVIE}/api/movies?OrderBy=-CreatedDate&PageNumber=1&PageSize=8`
+      );
       const data = await response.json();
       if (data.isSuccess) {
-        const sortedMovies = data.result.sort(
-          (a, b) => new Date(b.updatedDate) - new Date(a.updatedDate)
-        );
-        setMovies(sortedMovies.slice(0, 8));
+        setMovies(data.result);
       } else {
         console.error("Failed to fetch movies:", data.message);
       }
@@ -32,7 +31,7 @@ const ListProduct = () => {
     <div className="trending__product">
       <div className="row">
         <div className="col-lg-8 col-md-8 col-sm-8">
-          <div className="section-title">
+          <div className="section-title" style={{ marginBottom: "0px" }}>
             <h5>PHIM MỚI NHẤT</h5>
           </div>
         </div>

@@ -5,10 +5,12 @@ import { Link } from "react-router-dom";
 const HeroSlider = () => {
   const [movies, setMovies] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-
+  const MOVIE = import.meta.env.VITE_MOVIE;
   const fetchMovies = async () => {
     try {
-      const response = await fetch("https://cineworld.io.vn:7001/api/movies");
+      const response = await fetch(
+        `${MOVIE}/api/movies?OrderBy=IsHot&PageNumber=1&PageSize=6`
+      );
       const data = await response.json();
       if (data.isSuccess) {
         setMovies(data.result);
@@ -22,37 +24,31 @@ const HeroSlider = () => {
   useEffect(() => {
     fetchMovies();
   }, []);
-
-  const hotMovies = movies.filter((movie) => movie.movie.isHot === false);
-  const maxItems = 6;
-  const circularMovies = [...hotMovies, ...hotMovies.slice(0, maxItems)];
+  const circularMovies = [...movies, ...movies.slice(0, 6)];
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % hotMovies.length);
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % movies.length);
     }, 3000);
 
     return () => clearInterval(interval);
-  }, [hotMovies]);
+  }, [movies]);
 
-  const currentMovies = circularMovies.slice(
-    currentIndex,
-    currentIndex + maxItems
-  );
+  const currentMovies = circularMovies.slice(currentIndex, currentIndex + 6);
 
   const handlePrev = () => {
     setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? hotMovies.length - 1 : prevIndex - 1
+      prevIndex === 0 ? movies.length - 1 : prevIndex - 1
     );
   };
 
   const handleNext = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % hotMovies.length);
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % movies.length);
   };
 
   return (
     <div className="hero-container">
-      <div className="section-title" style={{ paddingLeft: "110px" }}>
+      <div className="section-title" style={{ paddingLeft: "20px" }}>
         <h5>PHIM HOT NHẤT</h5>
       </div>
       <div className="hero-grid">

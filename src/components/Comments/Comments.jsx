@@ -1,16 +1,22 @@
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
+import "./Comments.css";
 
 function Comments({ movieId }) {
   const [comments, setComments] = useState([]);
   const [error, setError] = useState(null);
   const [commentContent, setCommentContent] = useState("");
+  const [replies, setReplies] = useState({});
+  const [visibleChildComments, setVisibleChildComments] = useState({});
+  const [commentsToShow, setCommentsToShow] = useState(10);
+  const [replyingTo, setReplyingTo] = useState(null);
+  const REACTION = import.meta.env.VITE_REACTION;
 
-  const handleCommentSubmit = async (e) => {
+  // Submit a new comment or reply
+  const handleCommentSubmit = async (e, parentId = null) => {
     e.preventDefault();
 
-    // Get userId, userName, and authToken from cookies using js-cookie
     const userId = Cookies.get("userId");
     const userName = Cookies.get("fullName");
     const authToken = Cookies.get("authToken");
@@ -24,104 +30,198 @@ function Comments({ movieId }) {
 
     const data = {
       commentId: 0,
-      commentParentId: 0,
+      commentParentId: parentId,
       userId,
       userName,
       movieId,
-      commentContent,
+      commentContent: parentId ? replies[parentId] : commentContent,
       createdAt: new Date().toISOString(),
     };
 
-    console.log("Comment data being sent:", data);
-
     try {
-      const response = await axios.post(
-        "https://cineworld.io.vn:7003/api/comment",
-        data,
-        {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        }
-      );
-      setCommentContent("");
+      const response = await axios.post(`${REACTION}/api/comments`, data, {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      });
 
-      // Immediately add the new comment to the top of the list
+      // Update state after comment submission
+      if (parentId) {
+        setReplies((prevReplies) => {
+          const updatedReplies = { ...prevReplies };
+          delete updatedReplies[parentId];
+          return updatedReplies;
+        });
+      } else {
+        setCommentContent("");
+      }
+
       setComments((prevComments) => {
-        // Add new comment to the front of the existing comments list
-        const newComments = [data, ...prevComments];
-
-        // Sort comments by createdAt in descending order to ensure new comments are at the top
+        const newComments = [response.data.result, ...prevComments];
         return newComments.sort(
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
         );
       });
+      setReplyingTo(null);
     } catch (error) {
-      console.error("Error posting comment:", error);
+      console.error(
+        "Error posting comment:",
+        error.response?.data || error.message
+      );
       alert("Failed to post comment. Please try again.");
     }
   };
 
+  // Fetch comments when the component mounts or movieId changes
   useEffect(() => {
-    // Fetch comments from the API when the component mounts
     const fetchComments = async () => {
+      const authToken = Cookies.get("authToken");
+
+      if (!authToken) {
+        setError("Authentication token is missing. Please log in.");
+        return;
+      }
+
       try {
         const response = await axios.get(
-          `https://cineworld.io.vn:7003/api/comment/GetCommentByFilm/${movieId}`
+          `${REACTION}/api/comments?movieId=${movieId}&PageNumber=1&PageSize=25`,
+          {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+          }
         );
 
-        console.log("API Response:", response.data);
+        const { result } = response.data;
 
-        if (Array.isArray(response.data.result)) {
-          // Sort the comments by 'createdAt' in descending order to show newest comments first
-          const sortedComments = response.data.result.sort(
+        if (result && Array.isArray(result.records)) {
+          const sortedComments = result.records.sort(
             (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
           );
-          setComments(sortedComments.slice(0, 7)); // Load only first 7 comments
+          setComments(sortedComments);
         } else {
           setError("Invalid data format received from the API.");
         }
       } catch (err) {
         setError("Failed to load comments. Please try again later.");
-        console.error(err);
+        console.error(
+          "Error fetching comments:",
+          err.response?.data || err.message
+        );
       }
     };
 
     fetchComments();
   }, [movieId]);
 
+  // Toggle visibility for child comments
+  const toggleChildComments = (commentId) => {
+    setVisibleChildComments((prevState) => ({
+      ...prevState,
+      [commentId]: !prevState[commentId], // Toggle visibility for the specific comment
+    }));
+  };
+
+  // Load more comments when clicked
+  const loadMoreComments = () => {
+    setCommentsToShow((prev) => prev + 5);
+  };
+
+  // Render the comments and replies
+  const renderComments = (commentsList, parentId = null) => {
+    const childComments = commentsList.filter(
+      (comment) => comment.commentParentId === parentId
+    );
+
+    if (childComments.length === 0) {
+      return null;
+    }
+
+    return childComments.map((comment) => (
+      <div
+        key={comment.commentId}
+        style={{ marginLeft: parentId ? "20px" : "0" }}>
+        <div className="anime__review__item">
+          <div className="anime__review__item__pic">
+            <img
+              style={{ borderRadius: "50%" }}
+              src={comment.avatarUrl || `/public/img/avatar.jpg`}
+              alt="Review"
+            />
+          </div>
+          <div className="anime__review__item__text">
+            <h6>
+              {comment.userName} -{" "}
+              <span>{new Date(comment.createdAt).toLocaleString()}</span>
+            </h6>
+            <p>{comment.commentContent}</p>
+
+            {/* Show/Hide button for child comments */}
+            {parentId === null && childComments.length > 0 && (
+              <button onClick={() => toggleChildComments(comment.commentId)}>
+                {visibleChildComments[comment.commentId]
+                  ? "Hide Replies"
+                  : "Show Replies"}
+              </button>
+            )}
+
+            {/* Reply button */}
+            {parentId === null && (
+              <button
+                onClick={() =>
+                  setReplyingTo(
+                    replyingTo === comment.commentId ? null : comment.commentId
+                  )
+                }>
+                {replyingTo === comment.commentId ? "Cancel Reply" : "Reply"}
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Show reply form if replying */}
+        {replyingTo === comment.commentId && (
+          <form
+            className="form_area"
+            onSubmit={(e) => handleCommentSubmit(e, comment.commentId)}>
+            <textarea
+              className="text_area"
+              placeholder="Your Reply"
+              value={replies[comment.commentId] || ""}
+              onChange={(e) =>
+                setReplies((prevReplies) => ({
+                  ...prevReplies,
+                  [comment.commentId]: e.target.value,
+                }))
+              }
+              required
+            />
+            <button type="submit">Reply</button>
+          </form>
+        )}
+
+        {/* Show child comments if visibility is enabled */}
+        {visibleChildComments[comment.commentId] &&
+          renderComments(commentsList, comment.commentId)}
+      </div>
+    ));
+  };
+
   return (
     <div>
       <div className="section-title">
-        <h5 style={{ marginTop: "20px" }}>Reviews</h5>
-        <div>
-          {error && <p style={{ color: "red" }}>{error}</p>}
-          {comments.length === 0 ? (
-            <p>No reviews yet.</p>
-          ) : (
-            comments.map((comment, index) => (
-              <div className="anime__review__item" key={index}>
-                <div className="anime__review__item__pic">
-                  <img
-                    style={{ borderRadius: "50%" }}
-                    src={comment.avatarUrl || `/public/img/avatar.jpg`}
-                    alt="Review"
-                  />
-                </div>
-                <div className="anime__review__item__text">
-                  <h6>
-                    {comment.userName} -{" "}
-                    <span>{new Date(comment.createdAt).toLocaleString()}</span>
-                  </h6>
-                  <p>{comment.commentContent}</p>
-                </div>
-              </div>
-            ))
-          )}
-        </div>
-
-        {/* Comment form */}
-        <div className="anime__details__form">
+        <h5 style={{ marginTop: "20px", marginBottom: "20px" }}>Reviews</h5>
+        {comments.length === 0 ? (
+          <p>Không có comment nào!</p>
+        ) : (
+          renderComments(comments.slice(0, commentsToShow))
+        )}
+        {comments.length > commentsToShow && (
+          <button onClick={loadMoreComments} className="load-more-btn">
+            Load More
+          </button>
+        )}
+        <div className="anime__details__form" style={{ marginRight: "20px" }}>
           <div className="section-title">
             <h5 style={{ marginTop: "20px", marginBottom: "10px" }}>
               Your Comment
@@ -132,7 +232,8 @@ function Comments({ movieId }) {
               placeholder="Your Comment"
               value={commentContent}
               onChange={(e) => setCommentContent(e.target.value)}
-              required></textarea>
+              required
+            />
             <button type="submit">
               <i className="fa fa-location-arrow"></i> Review
             </button>

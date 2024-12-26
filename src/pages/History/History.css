@@ -1,0 +1,95 @@
+.history-container {
+    background-color: #1d1d1d; /* Dark background */
+    color: #fff; /* White text */
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 1500px;
+    margin: 30px auto; /* Center the container */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    margin-bottom: 100px;
+  }
+  
+  .history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .history-header h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #f7f7f7;
+    display: flex;
+    align-items: center;
+  }
+  
+  .history-header h2::before {
+    content: "↻"; /* Icon */
+    font-size: 1.8rem;
+    margin-right: 10px;
+  }
+  
+  .history-header button {
+    background-color: #ffc107; /* Yellow color for the delete button */
+    color: #000;
+    border: none;
+    padding: 10px 15px;
+    font-size: 0.9rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .history-header button:hover {
+    background-color: #e0a800;
+  }
+  
+  .history-info {
+    background-color: #2a2a2a; /* Slightly lighter dark */
+    display: flex;
+    padding: 10px;
+    border-radius: 8px;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .history-image {
+    width: 100px;
+    height: 150px;
+    border-radius: 5px;
+    margin-right: 15px;
+    object-fit: cover;
+  }
+  
+  .history-details {
+    flex-grow: 1;
+  }
+  
+  .history-details h3 {
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+    color: #00b5ff; /* Light blue for movie name */
+  }
+  
+  .history-details p {
+    margin: 5px 0;
+    color: #ccc;
+  }
+  
+  .history-details p span {
+    color: #ff4d4f; /* Red for episode number */
+    font-weight: bold;
+  }
+  
+  .history-details a {
+    color: #00ffb7; /* Bright green for the 'Xem tiếp' link */
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+  }
+  
+  .history-details a:hover {
+    color: #008f7e;
+  }
+  

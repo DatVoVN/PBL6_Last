@@ -4,17 +4,18 @@ import TopViewProduct from "../../components/TopViewProduct/TopViewProduct";
 import HeroSlider from "../../components/HeroSlider/HeroSlider";
 import ListProduct from "../../components/ListProduct/ListProduct";
 import Poster from "../../components/Poster/Poster";
-
+const MOVIE = import.meta.env.VITE_MOVIE;
 const HomePage = () => {
   const [topViewedMovies, setTopViewedMovies] = useState([]);
 
   const fetchMovies = async () => {
     try {
-      const response = await fetch("https://cineworld.io.vn:7001/api/movies");
+      const response = await fetch(
+        `${MOVIE}/api/movies?OrderBy=-View&PageNumber=1&PageSize=4`
+      );
       const data = await response.json();
       if (data.isSuccess) {
-        const sortedMovies = data.result.sort((a, b) => b.view - a.view); // Sort by view count
-        setTopViewedMovies(sortedMovies.slice(0, 4)); // Get top 4 movies
+        setTopViewedMovies(data.result);
       } else {
         console.error("Failed to fetch movies:", data.message);
       }
@@ -38,7 +39,7 @@ const HomePage = () => {
 
       <section className="product spad">
         <div className="custom-container">
-          <div className="row">
+          <div className="row" style={{ margin: "20px" }}>
             <div className="col-lg-9 col-md-8 fixed-left">
               <ListProduct />
             </div>
@@ -50,7 +51,6 @@ const HomePage = () => {
                   <div className="section-title">
                     <h5>Top Views</h5>
                   </div>
-
                   <TopViewProduct movies={topViewedMovies} />
                 </div>
               </div>

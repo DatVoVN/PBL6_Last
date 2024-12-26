@@ -10,7 +10,7 @@ const ProductItem = ({ movie, width, height }) => {
         className="product__item__pic"
         style={{
           backgroundImage: `url(${
-            movie.movie.imageUrl || "img/trending/trend-1.jpg"
+            movie?.movie?.imageUrl || "img/trending/trend-1.jpg"
           })`,
           backgroundRepeat: "no-repeat",
           backgroundPosition: "top center",

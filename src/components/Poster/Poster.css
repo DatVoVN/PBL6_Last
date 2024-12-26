@@ -1,113 +1,155 @@
-/* Poster.css */
-
+/* Hero Section */
 .hero {
-  position: relative; /* Ensure the hero section is positioned relative */
+  position: relative;
+  width: 100%;
 }
 
 .hero__slider {
-  width: 100%; /* Set the slider width to full */
+  width: 100%;
 }
 
+/* Hero Item */
 .hero__items1 {
+  /* width: 1200px; */
   height: 500px; /* Fixed height */
   background-size: cover;
-  background-position: center; 
+  background-position: center;
   background-repeat: no-repeat;
-  display: flex; 
+  display: flex;
   justify-content: center;
-  align-items: center; 
-  position: relative; 
+  align-items: center;
+  position: relative;
+}
+/* Owl Carousel Dots */
+.owl-dots {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
 }
 
-/* Center navigation buttons vertically */
+.owl-dots .owl-dot {
+  width: 12px; 
+  height: 12px;
+  background: rgba(0, 0, 0, 0.4); /* Màu đen mờ cho chấm chưa kích hoạt */
+  margin: 0 2px;
+  border-radius: 50%;
+  transition:  0.3s ease; /* Hiệu ứng chuyển màu khi kích hoạt */
+}
+
+
+
+/* Hero Text */
+.hero__text1 {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  color: white;
+  z-index: 10;
+  padding-left: 20px;
+}
+
+.hero__text1 .label {
+  font-size: 13px;
+  color: #e53637;
+  background: #ffffff;
+  padding: 5px 14px 3px;
+  display: inline-block;
+  position: relative;
+}
+
+.hero__text1 .h2-title {
+  width: 500px;
+  font-size: 42px;
+  font-weight: 700;
+}
+
+.hero__text1 .ah {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: #fff;
+  background-color: rgba(255, 0, 0, 0.8);
+  padding: 12px 20px;
+  border-radius: 30px;
+  transition: background-color 0.3s, transform 0.3s ease;
+  font-size: 18px;
+  font-weight: bold;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Thêm bóng cho nút */
+}
+
+.hero__text1 .ah:hover {
+  background-color: rgba(255, 0, 0, 1); /* Thay đổi màu khi hover */
+  transform: scale(1.1); /* Tăng nhẹ kích thước khi hover */
+}
+
+.hero__text1 .ah i {
+  margin-left: 10px; 
+  font-size: 20px; /* Kích thước icon */
+  transition: transform 0.3s ease, margin-left 0.3s ease;
+}
+
+.hero__text1 .ah:hover i {
+  transform: translateX(5px); /* Di chuyển icon sang phải khi hover */
+  margin-left: 15px; /* Điều chỉnh khoảng cách khi hover */
+}
 .owl-nav {
   display: flex;
   justify-content: space-between;
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 100%;
+  width: 120%; 
+  left: -10%; 
   z-index: 10;
 }
 
-.owl-nav button {
-  background-color: rgba(255, 255, 255, 0.5);
-  border: none;
-  color: #333;
-  padding: 10px 15px;
-  border-radius: 20px;
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: bold;
-  text-transform: uppercase;
+.owl-nav {
+  display: flex;
+  justify-content: space-between;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 120%; /* Đặt chiều rộng là 120% */
+  left: -10%; /* Để phần tử không bị tràn, chỉnh sửa khoảng cách */
+  z-index: 10;
 }
 
-.owl-nav button:hover {
-  background-color: rgba(255, 255, 255, 0.8);
-}
-.owl-dots {
-  position: absolute; /* Position the dots absolutely */
-  bottom: 20px; /* Adjust the distance from the bottom to align with the center of the image */
-  left: 50%; /* Center horizontally */
-  transform: translateX(-50%); /* Centering adjustment */
-  z-index: 10; /* Ensure they are above other elements */
-}
-
-.owl-dots .owl-dot {
-  background: black; 
-  margin: 0 2px; 
-  border-radius: 50%;  
+.custom-nav {
+  background-color: red; /* Màu nền đỏ */
+  border: solid 4px #070720 ;
+  width: 40px; /* Chiều rộng của hình vuông */
+  height: 40px; /* Chiều cao của hình vuông */
+  display: flex; /* Sử dụng flexbox để căn chỉnh nội dung */
+  justify-content: center; /* Căn giữa biểu tượng mũi tên theo chiều ngang */
+  align-items: center; /* Căn giữa biểu tượng mũi tên theo chiều dọc */
+  transform: rotate(45deg); /* Xoay hình vuông 45 độ */
 }
 
-.owl-dots .owl-dot.active {
-  background: black; /* White background for the active dot */
-}
-/* Adjust text styles if needed */
-.hero__text1 {
-  position: absolute; /* Position text absolutely */
-  bottom: 20px; /* Position it from the bottom */
-  left: 20px; /* Position it from the left */
-  color: white; /* Change text color to white for better contrast */
-  z-index: 10; /* Ensure it is above other elements */
-  padding-left: 20px;
+.custom-nav i {
+  color: white; /* Màu của biểu tượng mũi tên */
+  font-size: 20px; /* Kích thước biểu tượng */
+  transform: rotate(-45deg); /* Không xoay mũi tên */
 }
 
-.hero__text1 .label{
-  font-size: 13px;
-    color: #e53637;
-    background: #ffffff;
-    padding: 5px 14px 3px;
-    display: inline-block;
-    position: relative;
-}
-.hero__text1 .h2-title{
-  width: 500px;
-  font-size: 42px;
-  font-weight: 700;
-}
-.hero__text1 .ah {
-  display: inline-flex; /* Use flexbox for alignment */
-  align-items: center; /* Vertically center the text and icon */
-  text-decoration: none; /* Remove underline */
-  color: #ffffff; /* Set text color */
-  background-color: rgba(255, 0, 0, 0.7); /* Semi-transparent red background */
-  padding: 10px 15px; /* Add padding around the text */
-  border-radius: 5px; /* Slightly rounded corners */
-  transition: background-color 0.3s, transform 0.3s; /* Smooth transition for background and scale effect */
-  font-size: 16px; /* Set font size */
-  font-weight: bold; /* Make text bold */
+/* Dịch chuyển .left-nav sang phải 10px */
+.owl-nav .left-nav {
+  margin-left: 93px;  /* Dịch chuyển phần tử bên trái sang phải 10px */
 }
 
-.hero__text1 .ah:hover {
-  background-color: rgba(255, 0, 0, 1); /* Solid red on hover */
-  transform: scale(1.05); /* Slightly enlarge on hover for emphasis */
+.owl-nav .right-nav {
+  margin-left: 610px; /* Cách phần tử bên trái 600px và dịch chuyển sang phải thêm 10px */
+  margin-right: 93px; /* Giảm margin-right đi 10px (93px - 10px) */
 }
-
-.hero__text1 .ah i {
-  margin-left: 8px; /* Space between text and icon */
-  transition: transform 0.3s; /* Smooth transition for icon */
+.owl-next:hover {
+  background: none !important;  /* Loại bỏ hiệu ứng nền khi hover */
+  color: inherit !important;    /* Loại bỏ thay đổi màu sắc khi hover */
+  cursor: default !important;   /* Đảm bảo con trỏ không thay đổi */
 }
-
-.hero__text1 .ah:hover i {
-  transform: translateX(3px); /* Move icon slightly to the right on hover */
+.owl-prev:hover {
+  background: none !important;  /* Loại bỏ hiệu ứng nền khi hover */
+  color: inherit !important;    /* Loại bỏ thay đổi màu sắc khi hover */
+  cursor: default !important;   /* Đảm bảo con trỏ không thay đổi */
 }

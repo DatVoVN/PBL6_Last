@@ -12,6 +12,7 @@ const Register = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const navigate = useNavigate();
+  const USER = import.meta.env.VITE_USER;
   const handleRegister = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
@@ -21,7 +22,7 @@ const Register = () => {
 
     try {
       const response = await axios.post(
-        "https://cineworld.io.vn:7000/api/auth/register",
+        `${USER}/api/auth/register`,
         {
           email,
           fullName,
@@ -67,7 +68,9 @@ const Register = () => {
         />
         <div className="text-content">
           <h1>REGISTER</h1>
-          <p>WELCOME TO THE OFFICIAL ANIME BLOG</p>
+          <p style={{ color: "white", fontWeight: "bold", fontSize: "50" }}>
+            WELCOME TO THE OFFICIAL ANIME BLOG
+          </p>
         </div>
       </div>
       <div className="register-form">
@@ -90,7 +93,7 @@ const Register = () => {
                   <div className="input__item">
                     <input
                       type="text"
-                      placeholder="fullName"
+                      placeholder="Full Name"
                       value={fullName}
                       onChange={(e) => setfullName(e.target.value)}
                       required
@@ -121,6 +124,9 @@ const Register = () => {
                   <select
                     value={gender}
                     onChange={(e) => setGender(e.target.value)}>
+                    <option value="" disabled>
+                      Gender
+                    </option>
                     <option className="options" value="Male">
                       Male
                     </option>

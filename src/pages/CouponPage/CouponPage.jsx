@@ -1,25 +1,27 @@
 import React, { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
-import "./CouponPage.css";
 
 function CouponPage() {
   const { packageId } = useParams();
   const [couponCode, setCouponCode] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState("PAYOS"); // Default payment method
   const token = Cookies.get("authToken");
   const [validationResult, setValidationResult] = useState(null);
   const [selectedPackage, setSelectedPackage] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
+  const MEMBERSHIP = import.meta.env.VITE_MEMBERSHIP;
+  const fullName = Cookies.get("fullName");
+  const userData = Cookies.get("userData");
+  const [user, setUser] = useState(null);
 
   // Function to fetch the selected package details
   const fetchSelectedPackage = async () => {
     try {
-      const response = await fetch(
-        `https://cineworld.io.vn:7002/api/packages/${packageId}`
-      );
+      const response = await fetch(`${MEMBERSHIP}/api/packages/${packageId}`);
       const data = await response.json();
       if (data.isSuccess && data.result) {
         setSelectedPackage(data.result);
@@ -40,17 +42,27 @@ function CouponPage() {
   // Function to create Receipt
   const createReceipt = async (data) => {
     try {
-      const response = await fetch(
-        "https://cineworld.io.vn:7002/api/receipts",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(data),
-        }
-      );
+      const response = await fetch(`${MEMBERSHIP}/api/receipts`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          receiptId: 0, // You can set it to 0 as it's not generated yet
+          userId: data.userId, // Passing the userId
+          email: "", // Can be fetched from user session or input field
+          packageId: data.packageId,
+          couponCode: data.couponCode || null,
+          discountAmount: 0, // You can calculate if necessary
+          packagePrice: selectedPackage?.price || 0, // Using selected package price
+          termInMonths: 1, // Default term, can be updated based on selection
+          createdDate: new Date().toISOString(),
+          status: "pending", // or any other status
+          stripeSessionId: "string", // Placeholder for Stripe session ID
+          paymentMethod: paymentMethod, // Use selected payment method
+        }),
+      });
 
       const result = await response.json();
       console.log(result);
@@ -61,7 +73,7 @@ function CouponPage() {
 
       const receiptStatus = result?.result?.status;
       if (receiptStatus === "pending") {
-        window.location.href = "http://localhost:5173/payment";
+        window.location.href = "http://localhost:5173/payment"; // Redirect to payment page
       }
 
       localStorage.setItem("receiptId", result.result.receiptId);
@@ -72,28 +84,29 @@ function CouponPage() {
     }
   };
 
-  // Function to create Stripe session
-  const createStripeSession = async (stripeSessionData) => {
+  // Function to create payment session (Stripe or PayOS)
+  const createPaymentSession = async (sessionData) => {
     try {
-      const response = await fetch(
-        "https://cineworld.io.vn:7002/api/receipts/CreateStripeSession",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(stripeSessionData),
-        }
-      );
+      const response = await fetch(`${MEMBERSHIP}/api/receipts/CreateSession`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          receiptId: sessionData.receiptId,
+          paymentSessionUrl: "string", // The URL for the payment session (can be generated dynamically)
+          approvedUrl: "http://localhost:5173/payment-success", // Approved URL
+          cancelUrl:
+            "https://drive.google.com/file/d/1BjNcczy3hcsiLWNdzywwM8ay30MLJdyR/view?usp=sharing", // Cancel URL
+        }),
+      });
+
       const result = await response.json();
       if (!response.ok) {
-        throw new Error(result?.message || "Failed to create Stripe session");
+        throw new Error(result?.message || "Failed to create payment session");
       }
-      localStorage.setItem(
-        "stripeSessionData",
-        JSON.stringify(stripeSessionData)
-      );
+
       return result;
     } catch (error) {
       setError(error.message);
@@ -101,7 +114,9 @@ function CouponPage() {
     }
   };
 
-  const handleCouponSubmit = async () => {
+  const handleCouponSubmit = async (e) => {
+    e.preventDefault(); // Prevent the default form submission
+
     setError("");
     setLoading(true);
 
@@ -128,64 +143,92 @@ function CouponPage() {
 
     const newlyCreatedReceipt = receiptResponse.result;
 
-    const stripeSessionData = {
-      stripeSessionUrl: "string",
-      stripeSessionId: "string",
-      approvedUrl: "http://localhost:5173/payment-success",
-      cancelUrl: "https://example.com/cancel",
+    const paymentSessionData = {
       receiptId: newlyCreatedReceipt.receiptId,
+      // Additional session details can be included here
     };
 
-    const stripeSessionResponse = await createStripeSession(stripeSessionData);
-    if (!stripeSessionResponse) {
+    const sessionResponse = await createPaymentSession(paymentSessionData);
+    if (!sessionResponse) {
       setLoading(false);
       return;
     }
 
-    window.location.href = stripeSessionResponse.result.stripeSessionUrl;
+    // Redirecting to payment session URL
+    window.location.href = sessionResponse.result.paymentSessionUrl;
   };
 
   return (
-    <div className="coupon-page">
-      <h2 className="h2">
+    <div>
+      <h2>
         <i className="fas fa-gift"></i> Coupon Page
       </h2>
+      <div>
+        <p>
+          <strong>Full Name: </strong> {fullName}
+        </p>
+      </div>
       {selectedPackage && (
-        <div className="selected-package-details">
+        <div>
           <p>
-            <strong>Name:</strong> {selectedPackage.name}{" "}
-            <i className="fas fa-cogs"></i>
+            <strong>Name:</strong> {selectedPackage.name}
           </p>
           <p>
-            <strong>Price:</strong> ${selectedPackage.price}{" "}
-            <i className="fas fa-tag"></i>
+            <strong>Price:</strong> ${selectedPackage.price}
           </p>
           <p>
-            <strong>Description:</strong> {selectedPackage.description}{" "}
-            <i className="fas fa-info-circle"></i>
+            <strong>Description:</strong> {selectedPackage.description}
           </p>
+          <p></p>
         </div>
       )}
+      <form onSubmit={handleCouponSubmit}>
+        <div>
+          <h3>Enter Coupon Code</h3>
+          <input
+            type="text"
+            value={couponCode}
+            onChange={(e) => setCouponCode(e.target.value)}
+            placeholder="Enter coupon code (optional)"
+            disabled={loading}
+          />
+        </div>
 
-      {/* Coupon Code Input */}
-      <div className="coupon-input">
-        <h3>
-          <i className="fas fa-barcode"></i> Enter Coupon Code
-        </h3>
-        <input
-          type="text"
-          value={couponCode}
-          onChange={(e) => setCouponCode(e.target.value)}
-          placeholder="Enter coupon code (optional)"
-          disabled={loading}
-        />
-        <button onClick={handleCouponSubmit} disabled={loading}>
+        {/* Payment Method Selection */}
+        <div>
+          <h3>Select Payment Method</h3>
+          <div>
+            <label>
+              <input
+                type="radio"
+                value="STRIPE"
+                checked={paymentMethod === "STRIPE"}
+                onChange={(e) => setPaymentMethod(e.target.value)}
+              />
+              Stripe
+            </label>
+          </div>
+          <div>
+            <label>
+              <input
+                type="radio"
+                value="PAYOS"
+                checked={paymentMethod === "PAYOS"}
+                onChange={(e) => setPaymentMethod(e.target.value)}
+              />
+              PayOS
+            </label>
+          </div>
+        </div>
+
+        {/* Submit Button */}
+        <button type="submit" disabled={loading}>
           {loading ? <i className="fas fa-spinner fa-spin"></i> : "Submit"}
         </button>
-      </div>
+      </form>
 
       {error && (
-        <p className="error-message">
+        <p>
           <i className="fas fa-exclamation-circle"></i> {error}
         </p>
       )}

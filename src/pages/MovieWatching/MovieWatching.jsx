@@ -4,6 +4,9 @@ import Cookies from "js-cookie";
 import "./MovieWatching.css";
 import BackButton from "../../components/BackButton/BackButton";
 import Comments from "../../components/Comments/Comments";
+import Rating from "../../components/Rating/Rating";
+import TopViewProduct from "../../components/TopViewProduct/TopViewProduct";
+import Spinner from "../../components/Spinner/Spinner";
 
 const MovieWatching = () => {
   const location = useLocation();
@@ -14,15 +17,17 @@ const MovieWatching = () => {
   const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
   const { movieData } = location.state || {};
   const navigate = useNavigate();
-
+  const [topViewedMovies, setTopViewedMovies] = useState([]);
+  const MEMBERSHIP = import.meta.env.VITE_MEMBERSHIP;
+  const MOVIE = import.meta.env.VITE_MOVIE;
+  const REACTION = import.meta.env.VITE_REACTION;
+  // Fetch membership status for the current user
   const fetchMembershipStatus = async () => {
     try {
       const userId = Cookies.get("userId");
       if (!userId) return;
 
-      const response = await fetch(
-        "https://cineworld.io.vn:7002/api/memberShips"
-      );
+      const response = await fetch(`${MEMBERSHIP}/api/memberShips`);
       const data = await response.json();
 
       if (data.isSuccess) {
@@ -36,11 +41,10 @@ const MovieWatching = () => {
     }
   };
 
+  // Fetch episode details
   const fetchEpisodesDetails = async (episodeId) => {
     try {
-      const response = await fetch(
-        `https://cineworld.io.vn:7001/api/episodes/${episodeId}`
-      );
+      const response = await fetch(`${MOVIE}/api/episodes/${episodeId}`);
       const data = await response.json();
 
       if (data.isSuccess) {
@@ -54,27 +58,116 @@ const MovieWatching = () => {
     }
   };
 
+  // Save watch history silently
+  const saveWatchHistory = async (episode) => {
+    const authToken = Cookies.get("authToken");
+    if (!authToken) {
+      setMessage("You must be logged in to view ratings.");
+      return;
+    }
+    try {
+      const watchedDuration = "00:00:00";
+      const lastWatched = new Date().toISOString();
+
+      const body = JSON.stringify({
+        id: 0,
+        movieId: movieData.movie.movieId,
+        movieName: movieData.movie.name,
+        movieImageUrl: movieData.movie.imageUrl,
+        episodeName: episode.name,
+        episodeId: episode.episodeId,
+        watchedDuration,
+        lastWatched,
+      });
+
+      console.log("Request body for saveWatchHistory:", body);
+
+      const response = await fetch(`${REACTION}/api/watch_histories`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authToken}`,
+        },
+        body,
+      });
+
+      if (!response.ok) {
+        console.error("Failed to save watch history:", response.statusText);
+      } else {
+        const data = await response.json();
+        console.log("Watch history saved successfully:", data);
+      }
+    } catch (error) {
+      console.error("Error saving watch history:", error);
+    }
+  };
+
+  // Handle click on an episode
   const handleEpisodeClick = (episode) => {
     if (episode.isFree === false && !isMember) {
       setShowSubscriptionModal(true);
     } else {
-      fetchEpisodesDetails(episode.episodeId);
+      saveWatchHistory(episode); // Save watch history
+      fetchEpisodesDetails(episode.episodeId); // Fetch episode details
       setSelectedEpisode(episode.episodeId);
     }
   };
-
+  const fetchMovies = async () => {
+    try {
+      const response = await fetch(
+        `${MOVIE}/api/movies?OrderBy=-View&PageNumber=1&PageSize=3`
+      );
+      const data = await response.json();
+      if (data.isSuccess) {
+        setTopViewedMovies(data.result);
+      } else {
+        console.error("Failed to fetch movies:", data.message);
+      }
+    } catch (error) {
+      console.error("Error fetching movies:", error);
+    }
+  };
+  // Automatically select the newest episode when movie data is loaded
   useEffect(() => {
-    fetchMembershipStatus();
-  }, []);
+    const fetchData = async () => {
+      await fetchMembershipStatus();
+
+      if (movieData) {
+        const newestEpisode = movieData.episodes
+          .slice()
+          .sort((a, b) => b.episodeNumber - a.episodeNumber)[0];
+
+        if (newestEpisode) {
+          if (newestEpisode.isFree === false && !isMember) {
+            setShowSubscriptionModal(true);
+          } else {
+            setShowSubscriptionModal(false);
+            fetchEpisodesDetails(newestEpisode.episodeId);
+            setSelectedEpisode(newestEpisode.episodeId);
+          }
+        }
+      }
+    };
+
+    fetchData();
+    fetchMovies();
+  }, [movieData, isMember]);
 
   if (!movieData) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <Spinner />
+      </div>
+    );
   }
-  console.log("movieData", movieData);
+
+  const handleRatingChange = (newRating) => {
+    console.log("New Rating:", newRating);
+  };
 
   return (
-    <section className="anime-details spad">
-      <div className="back">
+    <section className="anime-details spad" style={{ height: "1800px" }}>
+      <div className="back" style={{ marginBottom: "20px" }}>
         <BackButton />
       </div>
       <div className="container">
@@ -121,15 +214,15 @@ const MovieWatching = () => {
                         }}
                         style={{
                           position: "relative",
-                          color: isSelected ? "red" : "inherit",
+                          color: isSelected ? "red" : "white",
                         }}>
-                        {episode.isFree === false && !isMember && (
+                        {episode.isFree === false && (
                           <span
                             className="crown-icon"
                             style={{
                               position: "absolute",
                               top: "-10px",
-                              left: "10px",
+                              left: "40px",
                             }}>
                             👑
                           </span>
@@ -143,6 +236,13 @@ const MovieWatching = () => {
           </div>
         </div>
 
+        <div className="rating-section">
+          <Rating
+            currentRating={movieData.movie.rating}
+            movieId={movieData.movie.movieId}
+            onRatingChange={handleRatingChange}
+          />
+        </div>
         {showSubscriptionModal && (
           <div className="subscription-modal">
             <div className="modal-content">
@@ -155,7 +255,7 @@ const MovieWatching = () => {
                 Cancel
               </button>
               <button
-                lassName="button1"
+                className="button1"
                 style={{ paddingLeft: "5px" }}
                 onClick={() => navigate("/membership")}>
                 Subscribe Now
@@ -163,11 +263,28 @@ const MovieWatching = () => {
             </div>
           </div>
         )}
-
-        {/* Reviews Section */}
-        <div className="row">
+        <div className="row" style={{ position: "relative" }}>
           <div className="col-lg-8">
             <Comments movieId={movieData.movie.movieId} />
+          </div>
+          <div
+            className="col-lg-3 custom-sidebar"
+            style={{ paddingRight: "-10px" }}>
+            <div
+              className="product__sidebar"
+              style={{
+                position: "absolute",
+                top: "0",
+                width: "30%",
+                marginBottom: "50px",
+              }}>
+              <div className="product__sidebar__view1">
+                <div className="section-title">
+                  <h5>Top Views</h5>
+                </div>
+                <TopViewProduct movies={topViewedMovies} />
+              </div>
+            </div>
           </div>
         </div>
       </div>

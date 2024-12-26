@@ -7,7 +7,7 @@
 }
 
 .container {
-    max-width: 1200px; 
+    /* max-width: 1200px;  */
     margin: 0 auto;
 }
 
@@ -52,7 +52,7 @@
     justify-content: center;
     align-items: center;
     padding: 10px 0; /* Adjust top/bottom padding */
-    background-color: #333344;
+    background-color: black;
     color: white;
     font-weight: 500;
     border-radius: 6px;
@@ -67,39 +67,13 @@
     background-color: #ff5733;
     transform: translateY(-2px);
 }
-/* Reviews Section */
-.anime__details__review {
-    margin-top: 30px; 
-}
 
-.anime__review__item {
-    display: flex; 
-    margin-bottom: 20px; 
-    background-color: #070720; 
-    padding: 15px; 
-    border-radius: 5px; 
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); 
-}
 
-.anime__review__item__pic {
-    margin-right: 15px; 
-}
-
-.anime__review__item__pic img {
-    width: 80px; 
-    height: auto;
-    border-radius: 4px;
-}
-
-.anime__review__item__text h6 {
-    margin: 0 0 5px; 
-}
 
 /* Comment Form */
 .anime__details__form {
     margin-top: 30px; 
     background-color: #070720; 
-    padding: 20px;
     border-radius: 5px; 
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
 }
@@ -116,6 +90,7 @@
 
 .anime__details__form button {
     padding: 10px 20px; 
+    width: 100%;
     background-color: #ff7f50; 
     color: white; 
     border: none; 
@@ -127,14 +102,14 @@
 .anime__details__form button:hover {
     background-color: #ff5733;
 }
-/* Modal Overlay */
+
 .subscription-modal {
-    position: fixed; /* Đảm bảo modal luôn ở trên màn hình */
+    position: fixed; 
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.7); /* Làm mờ phần còn lại của màn hình với độ mờ tối hơn */
+    background-color: rgba(0, 0, 0, 0.7); 
     display: flex;
     justify-content: center;
     align-items: center;

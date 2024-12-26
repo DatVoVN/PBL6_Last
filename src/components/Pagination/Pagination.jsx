@@ -1,51 +1,91 @@
 import React, { useState, useEffect } from "react";
 import "./Pagination.css";
+const Pagination = ({ currentPage, totalPages, onPageChange }) => {
+  const [inputPage, setInputPage] = useState(currentPage);
 
-const Pagination = ({ totalItems, itemsPerPage, onPageChange }) => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
-
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-    onPageChange(pageNumber);
+  const handleClick = (page) => {
+    if (page >= 1 && page <= totalPages) {
+      onPageChange(page);
+    }
   };
 
-  const renderPageNumbers = () => {
-    const pageNumbers = [];
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    if (value >= 1 && value <= totalPages) {
+      setInputPage(value);
+    }
+  };
+
+  const handleInputSubmit = (e) => {
+    e.preventDefault();
+    handleClick(inputPage);
+  };
+
+  const pageNumbers = [];
+  const maxVisiblePages = 4; // Max number of page numbers to display
+  const ellipsis = "...";
+
+  if (totalPages <= maxVisiblePages) {
+    // Show all pages if total pages are less than the limit
     for (let i = 1; i <= totalPages; i++) {
-      pageNumbers.push(
-        <button
-          key={i}
-          onClick={() => handlePageChange(i)}
-          className={`page-btn ${currentPage === i ? "active" : ""}`}>
-          {i}
-        </button>
-      );
+      pageNumbers.push(i);
     }
-    return pageNumbers;
-  };
+  } else {
+    // Show first few, last few, and the current page with ellipsis
+    pageNumbers.push(1);
+    if (currentPage > 3) pageNumbers.push(ellipsis);
+    for (let i = currentPage - 1; i <= currentPage + 1; i++) {
+      if (i > 1 && i < totalPages) pageNumbers.push(i);
+    }
+    if (currentPage < totalPages - 2) pageNumbers.push(ellipsis);
+    pageNumbers.push(totalPages);
+  }
 
+  // UseEffect to prevent page from scrolling to the top when navigating pages
   useEffect(() => {
-    if (currentPage > totalPages) {
-      handlePageChange(totalPages);
-    }
-  }, [totalPages]);
+    window.scrollTo(0, 0); // Optionally, you can change this to another position if you want to keep the scroll position
+  }, [currentPage]);
 
   return (
     <div className="pagination">
       <button
-        onClick={() => handlePageChange(currentPage - 1)}
-        className="page-btn"
+        onClick={() => handleClick(currentPage - 1)}
         disabled={currentPage === 1}>
-        Prev
+        Previous
       </button>
-      {renderPageNumbers()}
+
+      {pageNumbers.map((number, index) =>
+        number === ellipsis ? (
+          <span key={index} className="ellipsis">
+            ...
+          </span>
+        ) : (
+          <button
+            key={number}
+            onClick={() => handleClick(number)}
+            className={currentPage === number ? "active" : ""}>
+            {number}
+          </button>
+        )
+      )}
+
       <button
-        onClick={() => handlePageChange(currentPage + 1)}
-        className="page-btn"
+        onClick={() => handleClick(currentPage + 1)}
         disabled={currentPage === totalPages}>
         Next
       </button>
+
+      {/* Input for direct page number */}
+      <form onSubmit={handleInputSubmit} className="page-input-form">
+        <input
+          type="number"
+          value={inputPage}
+          onChange={handleInputChange}
+          min="1"
+          max={totalPages}
+        />
+        <button type="submit">Go</button>
+      </form>
     </div>
   );
 };

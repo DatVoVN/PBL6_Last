@@ -11,7 +11,7 @@ const ChangePassword = () => {
   const [error, setError] = useState("");
   const authToken = Cookies.get("authToken");
   const navigate = useNavigate(); // Hook to navigate
-
+  const USER = import.meta.env.VITE_USER;
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -30,7 +30,7 @@ const ChangePassword = () => {
     try {
       // API request to change password
       const response = await axios.post(
-        "https://cineworld.io.vn:7000/api/auth/change-password",
+        `${USER}/api/auth/change-password`,
         {
           currentPassword,
           newPassword,

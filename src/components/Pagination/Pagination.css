@@ -1,32 +1,73 @@
+/* Pagination Container */
 .pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-    margin-top: 20px;
-  }
-  
-  .page-btn {
-    padding: 8px 12px;
-    border: none;
-    background-color: #333;
-    color: white;
-    cursor: pointer;
-    border-radius: 4px;
-    transition: background-color 0.3s;
-  }
-  
-  .page-btn:hover {
-    background-color: #555;
-  }
-  
-  .page-btn:disabled {
-    background-color: #999;
-    cursor: not-allowed;
-  }
-  
-  .page-btn.active {
-    background-color: #ff7f50;
-    font-weight: bold;
-  }
-  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+/* Pagination Button Styles */
+.pagination button {
+  padding: 8px 12px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.pagination button:disabled {
+  cursor: not-allowed;
+  background-color: #f5f5f5;
+  border-color: #ddd;
+}
+
+.pagination button.active {
+  background-color: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
+
+.pagination button:hover:not(:disabled):not(.active) {
+  background-color: #f0f0f0;
+  border-color: #aaa;
+}
+
+/* Ellipsis Style */
+.ellipsis {
+  font-size: 16px;
+  font-weight: bold;
+  color: #888;
+}
+
+/* Page Input Form */
+.page-input-form {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.page-input-form input {
+  padding: 5px;
+  font-size: 16px;
+  width: 50px;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.page-input-form button {
+  padding: 5px 10px;
+  font-size: 14px;
+  background-color: #007bff;
+  color: white;
+  border: 1px solid #007bff;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.page-input-form button:hover {
+  background-color: #0056b3;
+}

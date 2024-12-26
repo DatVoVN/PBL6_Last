@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./SearchResult.css";
 import ProductItem from "../../components/ProductItem/ProductItem";
-
+import NoMovieComponent from "../../components/NoMovieComponent/NoMovieComponent";
+import Pagination from "../../components/Pagination/Pagination";
+const MOVIE = import.meta.env.VITE_MOVIE;
 const normalizeString = (str) => {
   if (!str) return ""; // Return empty string if str is undefined or null
   return str
@@ -17,11 +19,14 @@ const SearchResults = () => {
   const [query, setQuery] = useState("");
   const location = useLocation();
   const navigate = useNavigate();
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const response = await fetch("https://cineworld.io.vn:7001/api/movies");
+        const response = await fetch(
+          `${MOVIE}/api/movies?PageNumber=1&PageSize=2000`
+        );
         const data = await response.json();
 
         setMovies(data.result);
@@ -41,7 +46,9 @@ const SearchResults = () => {
       filterMovies(searchQuery);
     }
   }, [location, movies]);
-
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
   const filterMovies = (searchQuery) => {
     const normalizedQuery = normalizeString(searchQuery);
 
@@ -63,7 +70,9 @@ const SearchResults = () => {
   };
 
   return (
-    <div className="search-results-container">
+    <div
+      className="search-results-container"
+      style={{ backgroundColor: "#070720", width: "100%", height: "auto" }}>
       {filteredMovies.length > 0 ? (
         <div className="movies-list">
           {filteredMovies.map((movie) => (
@@ -76,7 +85,7 @@ const SearchResults = () => {
           ))}
         </div>
       ) : (
-        <p className="no-results">No movies found.</p>
+        <NoMovieComponent />
       )}
     </div>
   );

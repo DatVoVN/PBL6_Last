@@ -6,10 +6,11 @@ function PaymentSuccessPage() {
   const [error, setError] = useState(""); // State to store error messages
   const token = Cookies.get("authToken"); // Get token from cookies
   const [validationResult, setValidationResult] = useState(null); // New state to display validation result
+  const MEMBERSHIP = import.meta.env.VITE_MEMBERSHIP;
   const validateStripeSession = async (receiptId) => {
     try {
       const response = await fetch(
-        `https://cineworld.io.vn:7002/api/receipts/ValidateStripeSession/${receiptId}`,
+        `${MEMBERSHIP}/api/receipts/ValidateSession/${receiptId}`,
         {
           method: "POST",
           headers: {

@@ -60,6 +60,7 @@
   flex: 1; /* Allow the inputs to grow equally */
   margin-right: 5px; /* Right margin for spacing */
   position: relative; /* Relative positioning for the icon */
+
 }
 
 .input__item:last-child {
@@ -85,7 +86,7 @@
   height: 40px; 
   width: 100%; 
   font-size: 15px; 
-  color: #b7b7b7; 
+  color: #333; 
   background: white; 
   border: 1px solid #ccc; 
   border-radius: 4px; 
@@ -93,7 +94,6 @@
   appearance: none; 
 }
 .site-btn {
-  display: block; 
   padding: 10px; 
   border: none; 
   cursor: pointer; 
@@ -102,11 +102,14 @@
   border-radius: 0;
   margin-top: 10px;
   color: #fff;
-  font-size: 20px;
+  font-size: 13px;
   font-weight: 700;
   background-color: #ff4343;
   height: 50px;
   transform: translateX(-10px);
+  border-radius: 4px;
+  margin-left: 10px;
+  letter-spacing: 2px;
 }
 
 .text1 {
@@ -126,4 +129,7 @@
   font-size: 15px;
   color: red;
   text-decoration: none;
+}
+.options{
+  color: black;
 }

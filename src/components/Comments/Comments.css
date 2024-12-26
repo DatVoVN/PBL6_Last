@@ -1,0 +1,219 @@
+/* Reviews Section */
+.anime__details__review {
+  margin-top: 30px;
+  padding: 20px;
+  background-color: #12141e; /* Dark background for the review section */
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Review Item */
+.anime__review__item {
+  display: flex;
+  margin-bottom: 20px;
+  background-color: #070720; /* Dark background for each comment */
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  margin-top: 10px;
+}
+
+/* Profile Picture */
+.anime__review__item__pic {
+  margin-right: 15px;
+}
+
+.anime__review__item__pic img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #fff; /* White border for the profile picture */
+}
+
+/* Text Section */
+.anime__review__item__text {
+  flex: 1;
+  background: #1d1e39; /* Dark background for the text container */
+  padding: 18px 30px 16px 20px;
+  border-radius: 10px;
+}
+
+/* Review Header */
+.anime__review__item__text h6 {
+  color: #ffffff;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+/* Review Timestamp */
+.anime__review__item__text span {
+  color: #b7b7b7;
+  font-weight: 400;
+}
+
+/* Review Content */
+.anime__review__item__text p {
+  color: #b7b7b7;
+  line-height: 23px;
+  margin-bottom: 10px;
+}
+
+/* Reply Button */
+.anime__review__item__text button {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+  margin-left: 10px;
+}
+
+.anime__review__item__text button:hover {
+  background-color: #0056b3;
+}
+
+/* Reply Input */
+.anime__review__item__text form {
+  margin-top: 15px;
+  background-color: #2e3141; /* Slightly lighter background for the reply form */
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.anime__review__item__text form textarea {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 5px;
+  border: 1px solid #333;
+  background-color: #1d1e39;
+  color: #fff;
+  margin-bottom: 10px;
+  resize: vertical;
+}
+
+.anime__review__item__text form button {
+  padding: 10px 20px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.anime__review__item__text form button:hover {
+  background-color: #218838;
+}
+
+/* Nested (Child) Comments Styling */
+.anime__review__item__reply {
+  margin-left: 30px;
+  background-color: #2e3141;
+  border-left: 3px solid #007bff;
+  padding-left: 20px;
+  margin-top: 15px;
+}
+
+.anime__review__item__reply .anime__review__item {
+  margin-bottom: 10px;
+}
+
+.anime__review__item__reply .anime__review__item__pic img {
+  width: 50px;
+  height: 50px;
+}
+
+.anime__review__item__reply .anime__review__item__text {
+  font-size: 13px;
+  background-color: #3b3f55;
+  padding: 12px 20px;
+  border-radius: 8px;
+}
+
+/* Additional adjustments for better contrast and spacing */
+.anime__details__review,
+.anime__review__item,
+.anime__review__item__text {
+  background-color: #1a1d28; /* Adjusted to be slightly darker */
+}
+
+.anime__review__item__pic img {
+  border: 2px solid #444; /* Darker border for profile image */
+}
+
+.anime__review__item__text h6 {
+  font-size: 16px; /* Adjusted font size for better readability */
+}
+
+.anime__review__item__text p {
+  font-size: 14px; /* Adjusted font size for better readability */
+}
+/* Reply Form Container */
+.form_area {
+  margin-top: 15px;
+  background-color: #2e3141; /* Slightly lighter background for the reply form */
+  padding: 20px;
+  border-radius: 10px; /* Rounded corners */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+  width: 100%; /* Full width for the form */
+}
+
+/* Textarea Styling */
+.text_area {
+  width: 100%;
+  padding: 12px;
+  font-size: 14px;
+  border-radius: 5px;
+  border: 1px solid #333;
+  background-color: white;
+  color: black;
+  margin-bottom: 15px; /* Space between the textarea and the button */
+  resize: vertical; /* Allow the user to resize vertically */
+  outline: none; /* Remove default outline */
+}
+
+/* Textarea Focus Styling */
+.text_area:focus {
+  border-color: #007bff; /* Blue border when focused */
+  box-shadow: 0 0 3px rgba(0, 123, 255, 0.8); /* Soft glow effect */
+}
+
+/* Submit Button Styling */
+.form_area button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+/* Button Hover Effect */
+.form_area button:hover {
+  background-color: #007bff;
+}
+
+/* Button Focus Effect */
+.form_area button:focus {
+  outline: none;
+  border: 2px solid #007bff; /* Add a blue outline for better accessibility */
+}
+
+/* Additional focus effect for better accessibility */
+.form_area textarea:focus,
+.form_area button:focus {
+  outline: none; /* Remove default focus outline */
+}
+
+/* Error styling or required field indication */
+.text_area:invalid {
+  border-color: #ff4d4d; /* Red border for invalid input */
+}

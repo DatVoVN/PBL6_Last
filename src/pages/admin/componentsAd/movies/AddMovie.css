@@ -1,0 +1,164 @@
+/* AddMovie.css */
+.add-movie-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  overflow-y: auto; /* Allow modal to scroll */
+}
+
+.add-movie-form {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 800px;
+  max-height: 90vh;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  scroll-behavior: smooth;  /* Smooth scroll */
+}
+
+/* Hide scrollbar for Webkit browsers (Chrome, Safari) */
+.add-movie-form::-webkit-scrollbar {
+  display: none;
+}
+
+.add-movie-form h2 {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.add-movie-form label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #333;
+}
+
+.add-movie-form input,
+.add-movie-form select,
+.add-movie-form textarea,
+.add-movie-form .genres-select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #333;
+}
+
+.add-movie-form input[type="checkbox"] {
+  margin-left: 10px;
+}
+
+.add-movie-form textarea {
+  height: 120px;
+  resize: vertical;
+}
+
+.add-movie-form .genres-select {
+  margin-top: 10px;
+}
+
+.add-movie-form .input-row {
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
+}
+
+.add-movie-form .input-row > div {
+  flex: 1;
+}
+
+.add-movie-form button {
+  background-color: #28a745;
+  color: #fff;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  margin: 10px 0;
+  width: 100%;
+}
+
+.add-movie-form button[type="button"] {
+  background-color: #dc3545;
+}
+
+.add-movie-form button:hover {
+  background-color: #218838;
+}
+
+.add-movie-form button[type="button"]:hover {
+  background-color: #c82333;
+}
+
+.add-movie-form .form-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.add-movie-form .image-preview {
+  position: relative;
+  margin-top: 15px;
+}
+
+.add-movie-form .image-preview img {
+  max-width: 200px;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.add-movie-form .image-preview button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: red;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.add-movie-form .form-buttons button[type="button"] {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.add-movie-form .form-buttons button[type="button"]:hover {
+  background-color: #e0e0e0;
+}
+
+@media (max-width: 768px) {
+  .add-movie-form {
+    padding: 15px;
+    max-width: 100%;
+    margin: 10px;
+  }
+
+  .add-movie-form h2 {
+    font-size: 20px;
+  }
+
+  .add-movie-form .form-buttons {
+    flex-direction: column;
+    gap: 15px;
+  }
+}

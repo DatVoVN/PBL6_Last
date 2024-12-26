@@ -1,4 +1,10 @@
-
+.categorypage{
+  background-color: #070720;
+  margin-top: -20px;
+  margin-bottom: -20px;
+  padding-bottom: 20px;
+  padding-top: 20px;
+}
 .movies-list {
     display: grid;
     grid-template-columns: repeat(5, 1fr); 
@@ -25,7 +31,7 @@
     margin-bottom: 20px;
   }
   
-  .filter-dropdown {
+  .filter-dropdown1 {
     padding: 6px 50px; 
     font-size: 16px; 
     border: 1px solid #ddd;
@@ -37,7 +43,7 @@
     transition: all 0.2s ease;
   }
   
-  .filter-dropdown:hover {
+  .filter-dropdown1:hover {
     border-color: #aaa;
     background-color: gray;
   }
@@ -55,4 +61,14 @@
   
   .search-button1:hover {
     background-color: #0056b3;
+  }
+  .reset-button1 {
+    padding: 8px 30px; 
+    font-size: 16px; 
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
   }

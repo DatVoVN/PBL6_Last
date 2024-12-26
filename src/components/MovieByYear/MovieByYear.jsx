@@ -9,10 +9,12 @@ const MovieByYear = () => {
   const isMouseDown = useRef(false);
   const startX = useRef(0);
   const scrollLeft = useRef(0);
-
+  const MOVIE = import.meta.env.VITE_MOVIE;
   const fetchMovies = async () => {
     try {
-      const response = await fetch("https://cineworld.io.vn:7001/api/movies");
+      const response = await fetch(
+        `${MOVIE}/api/movies?PageNumber=1&PageSize=2000`
+      );
       const data = await response.json();
       if (data.isSuccess) {
         setMovies(data.result);
@@ -76,7 +78,6 @@ const MovieByYear = () => {
             key={year}
             onClick={() => handleYearSelect(year)}
             className={`year-btn ${selectedYear === year ? "active" : ""}`}>
-            {" "}
             {year}
           </button>
         ))}

@@ -9,7 +9,7 @@ export default function App() {
   const isLoggedIn = !!Cookies.get("authToken");
 
   return (
-    <div className="App">
+    <div className="App" style={{ backgroundColor: "#070720" }}>
       {isLoggedIn && <Header />}
       {isLoggedIn ? (
         <>

@@ -1,0 +1,340 @@
+.content-area-table {
+  background: var(--secondary-color);
+  border-radius: 5px;
+  box-shadow: var(--light-shadow1);
+  padding: 12px 16px;
+}
+
+@media (max-width: 768px) {
+  .content-area-table {
+    padding: 12px;
+  }
+}
+
+.content-area-table .data-table-title {
+  font-size: 18px;
+  color: var(--xl-text-color);
+  margin-bottom: 12px;
+}
+
+.content-area-table .data-table-diagram {
+  border-radius: 6px;
+  border: 1px solid var(--tbl-border-color) !important;
+  overflow-x: scroll;
+}
+
+.content-area-table .data-table-diagram::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+
+.content-area-table .data-table-diagram::-webkit-scrollbar-track {
+  background-color: var(--scroll-track-bg-color);
+}
+
+.content-area-table .data-table-diagram::-webkit-scrollbar-thumb {
+  border-radius: 100vh !important;
+  background-color: #e9e9e9;
+  outline: 1px solid rgba(0, 0, 0, 0.02);
+  outline-offset: -1px;
+}
+
+.content-area-table .data-table-diagram table {
+  min-width: 900px;
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--text-color-inverted);
+}
+
+.content-area-table .data-table-diagram table td,
+.content-area-table .data-table-diagram table th {
+  padding: 14px 12px;
+}
+
+@media (max-width: 768px) {
+  .content-area-table .data-table-diagram table td,
+  .content-area-table .data-table-diagram table th {
+    font-size: 15px;
+    padding: 12px 10px;
+  }
+}
+
+.content-area-table .data-table-diagram table thead {
+  text-align: left;
+  font-size: 17px;
+  background-color: var(--thead-bg-color);
+}
+
+.content-area-table .data-table-diagram table thead th:last-child {
+  text-align: center;
+}
+
+.content-area-table .data-table-diagram table .dt-cell-action {
+  text-align: center;
+}
+
+.content-area-table .action-dropdown {
+  position: relative;
+}
+
+.content-area-table .action-dropdown .action-dropdown-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  font-size: 18px;
+  color: #555;
+  transition: color 0.3s;
+}
+
+.content-area-table .action-dropdown .action-dropdown-btn:hover {
+  color: #333;
+}
+
+.content-area-table .action-dropdown .action-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 150px;
+  z-index: 1000;
+  display: block;
+  margin-top: 10px;
+  max-height: 400px;  /* Ensure dropdown doesn't exceed this height */
+  overflow-y: auto;  /* Add vertical scroll when items exceed the height */
+}
+
+.content-area-table .action-dropdown .dropdown-menu-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.content-area-table .action-dropdown .dropdown-menu-item {
+  border-bottom: 1px solid #ddd;
+}
+
+.content-area-table .action-dropdown .dropdown-menu-item:last-child {
+  border-bottom: none;
+}
+
+.content-area-table .action-dropdown .dropdown-menu-item .dropdown-menu-link {
+  display: block;
+  padding: 8px 16px;
+  color: #333;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.content-area-table .action-dropdown .dropdown-menu-item .dropdown-menu-link:hover {
+  background-color: #f0f0f0;
+  color: #000;
+}
+
+.content-area-table .add-category-btn {
+  padding: 8px 16px;
+  margin-bottom: 10px;
+  background-color: #007bff;
+  color: var(--text-color-inverted);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: var(--default-transition);
+}
+
+.content-area-table .add-category-btn:hover {
+  opacity: 0.9;
+}
+
+/* Modal Background */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);  /* Slightly darker for a more subtle effect */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  transition: opacity 0.3s ease-in-out;
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Softer, more spread shadow */
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  animation: slideIn 0.3s ease-out;
+}
+
+/* Modal Header */
+.modal-content h2 {
+  text-align: center;
+  font-size: 26px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+/* Input Fields */
+.modal-content input,
+.modal-content select {
+  padding: 14px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+.modal-content select:disabled {
+  background-color: #f0f0f0;
+  color: #888;
+}
+
+.modal-content input:focus {
+  border-color: #5c6bc0;  /* Highlight color when focused */
+  outline: none;
+}
+
+.modal-content input:disabled {
+  background-color: #f9f9f9;
+  color: #999;
+}
+
+/* Buttons */
+.modal-content button {
+  padding: 12px 20px;
+  font-size: 16px;
+  background-color: #333;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.modal-content button:hover {
+  background-color: #444;
+  transform: scale(1.05);
+}
+
+.modal-content button[type="button"] {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.modal-content button[type="button"]:hover {
+  background-color: #e0e0e0;
+  transform: scale(1.05);
+}
+
+.modal-content button[type="submit"] {
+  background-color: #5c6bc0;  /* Button for submitting */
+  margin-top: 20px;
+}
+
+.modal-content button[type="submit"]:hover {
+  background-color: #3f51b5;
+}
+
+/* Modal Animation */
+@keyframes slideIn {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* New Section for Filter and Add Category Button */
+.content-area-table .buttons-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;  /* Optional, for spacing between buttons */
+}
+
+.filter-container {
+  position: relative;
+}
+
+.filter-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  font-size: 18px;
+  color: #555;
+}
+
+.filter-dropdown {
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  top: 30px;
+  left: 0;
+  width: 200px;
+}
+
+.filter-select {
+  width: 100%;
+  padding: 5px;
+  font-size: 14px;
+}
+.content-area-table .search-input {
+  padding: 8px 16px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 200px;
+  transition: border-color 0.3s ease;
+}
+
+.content-area-table .search-input:focus {
+  border-color: #5c6bc0;
+  outline: none;
+}
+.status-cell {
+  text-align: center;
+  font-weight: bold;
+  padding: 10px;
+  border-radius: 20px;
+  display: inline-block;
+  min-width: 100px;
+  margin-top: 10px;
+}
+
+.status-active {
+  background-color: #e8f5e9; /* Màu nền xanh nhạt */
+  color: #2e7d32; /* Màu chữ xanh đậm */
+  border: 1px solid #2e7d32; /* Viền xanh đậm */
+}
+
+.status-inactive {
+  background-color: #ffebee; /* Màu nền đỏ nhạt */
+  color: #c62828; /* Màu chữ đỏ đậm */
+  border: 1px solid #c62828; /* Viền đỏ đậm */
+}

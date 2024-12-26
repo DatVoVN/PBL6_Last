@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import ProductItem from "../../components/ProductItem/ProductItem";
 import Pagination from "../../components/Pagination/Pagination"; // Import the Pagination component
 import "./CategoryPage.css";
+import Spinner from "../../components/Spinner/Spinner";
+import NoMovieComponent from "../../components/NoMovieComponent/NoMovieComponent";
 
 const CategoryPage = () => {
   const { id } = useParams();
@@ -12,19 +14,19 @@ const CategoryPage = () => {
   const [countries, setCountries] = useState([]);
   const [genres, setGenres] = useState([]);
 
-  const [sortOrder, setSortOrder] = useState("Mới nhất");
+  const [sortOrder, setSortOrder] = useState("Thời gian");
   const [selectedCountry, setSelectedCountry] = useState("");
   const [selectedGenre, setSelectedGenre] = useState("");
   const [selectedYear, setSelectedYear] = useState("");
 
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
-
+  const itemsPerPage = 20;
+  const MOVIE = import.meta.env.VITE_MOVIE;
   useEffect(() => {
     const fetchMoviesByCategory = async () => {
       try {
         const response = await fetch(
-          `https://cineworld.io.vn:7001/api/movies?categoryId=${id}`
+          `${MOVIE}/api/movies?categoryId=${id}&PageNumber=1&PageSize=2000`
         );
         const data = await response.json();
         const moviesData = data.result || [];
@@ -53,6 +55,7 @@ const CategoryPage = () => {
 
     fetchMoviesByCategory();
   }, [id]);
+  console.log(movies);
 
   const applyFilters = () => {
     let filteredMovies = [...movies];
@@ -84,7 +87,7 @@ const CategoryPage = () => {
   };
 
   const resetFilters = () => {
-    setSortOrder("Mới nhất");
+    setSortOrder("");
     setSelectedCountry("");
     setSelectedGenre("");
     setSelectedYear("");
@@ -105,21 +108,22 @@ const CategoryPage = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Spinner />;
   }
 
   return (
     <div className="categorypage">
       <div className="filter-section">
         <select
-          className="filter-dropdown"
+          className="filter-dropdown1"
           value={sortOrder}
           onChange={(e) => setSortOrder(e.target.value)}>
+          <option value="">Thời gian</option>
           <option value="Mới nhất">Mới nhất</option>
           <option value="Cũ nhất">Cũ nhất</option>
         </select>
         <select
-          className="filter-dropdown"
+          className="filter-dropdown1"
           value={selectedCountry}
           onChange={(e) => setSelectedCountry(e.target.value)}>
           <option value="">Quốc gia</option>
@@ -130,7 +134,7 @@ const CategoryPage = () => {
           ))}
         </select>
         <select
-          className="filter-dropdown"
+          className="filter-dropdown1"
           value={selectedGenre}
           onChange={(e) => setSelectedGenre(e.target.value)}>
           <option value="">Thể loại</option>
@@ -141,7 +145,7 @@ const CategoryPage = () => {
           ))}
         </select>
         <select
-          className="filter-dropdown"
+          className="filter-dropdown1"
           value={selectedYear}
           onChange={(e) => setSelectedYear(e.target.value)}>
           <option value="">Năm</option>
@@ -154,7 +158,7 @@ const CategoryPage = () => {
         <button className="search-button1" onClick={applyFilters}>
           🔍 Duyệt
         </button>
-        <button className="reset-button" onClick={resetFilters}>
+        <button className="reset-button1" onClick={resetFilters}>
           🔄 Toàn bộ phim
         </button>
       </div>
@@ -170,7 +174,7 @@ const CategoryPage = () => {
             />
           ))
         ) : (
-          <p>No movies found in this category.</p>
+          <NoMovieComponent />
         )}
       </div>
 

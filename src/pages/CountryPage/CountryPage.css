@@ -1,4 +1,8 @@
-
+.countrypage{
+  background-color: #070720;
+  margin-bottom: -20px;
+  padding-bottom: 20px;
+}
 .movies-list {
   padding-top: 10px;
     display: grid;

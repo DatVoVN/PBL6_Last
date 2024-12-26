@@ -290,4 +290,47 @@
     background-color: #f8d7da;
     color: #721c24;
   }
+  .search-results {
+    background-color: #070720;
+    border: 1px solid #111137;
+    max-height: 300px; /* Limit the height of the dropdown */
+    overflow-y: auto; /* Enable vertical scrolling */
+    width: 28%; /* Adjust width to fit under the search box */
+    position: absolute;
+    z-index: 1000;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 300px; /* Adjusted to provide space between the search box and results */
+    border-radius: 5px; /* Optional: Rounded corners for a smoother look */
+  }
+  
+  .search-results ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .search-results li {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .search-results li:hover {
+    background-color: black;
+  }
+  
+  .search-results img {
+    margin-right: 10px;
+    width: 20px;
+    height: 20px;
+  }
+  .search-results li a {
+    color: white;  /* Đặt màu chữ thành trắng */
+    text-decoration: none;  /* Loại bỏ gạch chân mặc định của link */
+  }
+  
+  .search-results li a:hover {
+    color: #f0f0f0;  /* Màu chữ khi hover (có thể thay đổi nếu muốn) */
+  }
   
