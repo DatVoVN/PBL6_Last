@@ -21,7 +21,7 @@ import PaymentSuccessPage from "./pages/PaymentSuccessPage/PaymentSuccessPage.js
 import ChangePassword from "./pages/ChangePassword/ChangePassword.jsx";
 import Profile from "./pages/Profile/Profile.jsx";
 import Admin from "./pages/admin/Admin.jsx";
-import { ThemeProvider } from "./pages/Admin/contextAd/ThemeContext.jsx";
+import { ThemeProvider } from "./pages/admin/contextAd/ThemeContext.jsx";
 import { SidebarProvider } from "./pages/Admin/contextAd/SidebarContext.jsx";
 import Receipt from "./pages/Receipt/Receipt.jsx";
 import Favorites from "./pages/Favorites/Favorites.jsx";
