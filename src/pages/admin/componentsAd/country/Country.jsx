@@ -6,7 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "font-awesome/css/font-awesome.min.css";
 import { FaFilter } from "react-icons/fa";
 const TABLE_HEADS = ["Country ID", "Name", "Status", "Action"];
-const PAGE_SIZE = 7;
+const PAGE_SIZE = 6;
 
 const Country = () => {
   const [countries, setCountries] = useState([]);
@@ -98,18 +98,10 @@ const Country = () => {
       toast.error(`Error adding country: ${error.message}`);
     }
   };
-  const handleSearchChange = (event) => {
-    const searchValue = event.target.value;
-    setSearchQuery(searchValue); // Update search query
-    setCurrentPage(1); // Reset to first page when search changes
-
-    // Fetch categories with the search query
-    fetchCountries(1, filter, searchValue); // Fetch from the first page with the search query
-  };
   const handleSearchClick = () => {
-    setSearchQuery(searchInput); // Cập nhật giá trị thực tế để tìm kiếm
-    setCurrentPage(1); // Reset về trang đầu tiên
-    fetchCountries(1, filter, searchInput); // Gọi API với giá trị tìm kiếm
+    setSearchQuery(searchInput);
+    setCurrentPage(1);
+    fetchCountries(1, filter, searchInput);
   };
   const handleViewCountry = async (countryId) => {
     try {
@@ -210,7 +202,21 @@ const Country = () => {
     <section className="content-area-table">
       <ToastContainer autoClose={2000} />
       <div className="data-table-info">
-        <h4 className="data-table-title">COUNTRIES</h4>
+        <h4
+          className="data-table-title"
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            fontSize: "30px",
+            color: "#1fc3f9",
+            background: "linear-gradient(to right, #00ffe8, #db8e00)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            fontWeight: "bold",
+          }}>
+          COUNTRIES
+        </h4>
         <div className="buttons-container">
           <button
             className="add-category-btn"
@@ -255,7 +261,14 @@ const Country = () => {
               </div>
             )}
           </div>
-          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              marginBottom: "12px",
+              marginLeft: "30px",
+            }}>
             <input
               type="text"
               style={{
@@ -347,7 +360,10 @@ const Country = () => {
               onClick={() => goToPage(currentPage - 1)}>
               Previous
             </button>
-            <span>{`Page ${currentPage} of ${totalPagesCountries}`}</span>
+            <span
+              style={{
+                color: "red",
+              }}>{`Page ${currentPage} of ${totalPagesCountries}`}</span>
             <button
               disabled={currentPage === totalPagesCountries}
               onClick={() => goToPage(currentPage + 1)}>
@@ -358,11 +374,58 @@ const Country = () => {
       )}
       {isViewModalOpen && countryToView && (
         <div className="modal">
-          <div className="modal-content">
-            <h2>{countryToView.name}</h2>
-            <p>ID: {countryToView.countryId}</p>
-            <p>Status: {countryToView.status ? "Active" : "Inactive"}</p>
-            <button onClick={() => setIsViewModalOpen(false)}>Close</button>
+          <div
+            className="modal-content"
+            style={{
+              backgroundColor: "#fff",
+              padding: "20px",
+              borderRadius: "8px",
+              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+              maxWidth: "500px",
+              margin: "auto",
+            }}>
+            <h3 style={{ textAlign: "center" }}>Country Details</h3>
+            <table
+              style={{
+                width: "100%",
+                borderCollapse: "collapse",
+                marginTop: "10px",
+              }}>
+              <tbody>
+                <tr>
+                  <td style={{ padding: "8px", fontWeight: "bold" }}>
+                    Country ID
+                  </td>
+                  <td style={{ padding: "8px" }}>{countryToView.countryId}</td>
+                </tr>
+                <tr>
+                  <td style={{ padding: "8px", fontWeight: "bold" }}>Name:</td>
+                  <td style={{ padding: "8px" }}>{countryToView.name}</td>
+                </tr>
+                <tr>
+                  <td style={{ padding: "8px", fontWeight: "bold" }}>
+                    Status:
+                  </td>
+                  <td style={{ padding: "8px" }}>
+                    {countryToView.status ? "Active" : "Inactive"}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <button
+              onClick={() => setIsViewModalOpen(false)}
+              style={{
+                padding: "10px 20px",
+                backgroundColor: "#007bff",
+                color: "white",
+                border: "none",
+                borderRadius: "5px",
+                cursor: "pointer",
+                fontSize: "16px",
+              }}>
+              Close
+            </button>
           </div>
         </div>
       )}

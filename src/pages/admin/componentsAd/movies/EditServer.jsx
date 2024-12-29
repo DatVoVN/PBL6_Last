@@ -46,13 +46,14 @@ const EditServerModal = ({ episodeId, serverId, onClose }) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
+
     try {
       const response = await axios.put(`${MOVIE}/api/servers`, serverData, {
         headers: {
           Authorization: `Bearer ${authToken}`,
         },
       });
-      if (response.data.isSuccess) {
+      if (response.status === 204) {
         toast.success("Server updated successfully!");
         onClose();
       } else {

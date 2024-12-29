@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import ProductItem from "../../components/ProductItem/ProductItem";
-import Pagination from "../../components/Pagination/Pagination";
-import "./CountryPage.css";
-import Spinner from "../../components/Spinner/Spinner";
 import NoMovieComponent from "../../components/NoMovieComponent/NoMovieComponent";
+import Pagination from "../../components/Pagination/Pagination";
+import Spinner from "../../components/Spinner/Spinner";
 
-const CountryPage = () => {
-  const { id } = useParams();
+const SearchResultDetail = () => {
+  const location = useLocation();
+  const searchResults = location.state?.searchResultsAll || [];
+  console.log("searcRessults", searchResults);
+
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [pagination, setPagination] = useState({
@@ -15,7 +17,6 @@ const CountryPage = () => {
     totalPages: 1,
     totalItems: 0,
   });
-  const [countryName, setCountryName] = useState("");
 
   const itemsPerPage = 25;
   const MOVIE = import.meta.env.VITE_MOVIE;
@@ -24,7 +25,7 @@ const CountryPage = () => {
     setLoading(true);
     try {
       const response = await fetch(
-        `${MOVIE}/api/movies?countryId=${id}&PageNumber=${pageNumber}&PageSize=${itemsPerPage}`
+        `${MOVIE}/api/movies?Name=${searchResults}&PageNumber=${pageNumber}&PageSize=${itemsPerPage}`
       );
       const data = await response.json();
       setMovies(data.result || []);
@@ -36,26 +37,9 @@ const CountryPage = () => {
     }
   };
 
-  const fetchCountryName = async () => {
-    try {
-      const response = await fetch(`${MOVIE}/api/countries/${id}`);
-      const data = await response.json();
-      console.log(data); // Log the response to verify its structure
-      if (data.result && data.result.name) {
-        setCountryName(data.result.name); // Access name from result
-      } else {
-        setCountryName("Country not found"); // Fallback if no name exists
-      }
-    } catch (error) {
-      console.error("Failed to fetch country name:", error);
-      setCountryName("Error fetching country name"); // Fallback on error
-    }
-  };
-
   useEffect(() => {
     fetchMoviesByCountry(pagination.currentPage);
-    fetchCountryName(); // Fetch country name when component mounts
-  }, [id, pagination.currentPage]);
+  }, [searchResults, pagination.currentPage]);
 
   // Handle page change
   const handlePageChange = (pageNumber) => {
@@ -84,24 +68,23 @@ const CountryPage = () => {
           fontWeight: "bold",
           textTransform: "uppercase",
         }}>
-        TRANG PHIM CỦA QUỐC GIA:{" "}
+        PHIM VỚI KẾT QUẢ TÌM KIẾM:{" "}
         <span
           style={{
             color: "red",
             WebkitTextFillColor: "purple",
             marginLeft: "10px",
           }}>
-          {countryName}
+          {searchResults}
         </span>
       </h4>
-
       <div className="movies-list">
         {movies.length > 0 ? (
           movies.map((movie) => (
             <ProductItem
               key={movie.movieId}
               movie={movie}
-              width="280px"
+              width="250px"
               height="350px"
             />
           ))
@@ -109,7 +92,6 @@ const CountryPage = () => {
           <NoMovieComponent />
         )}
       </div>
-
       <div className="pagination-container" style={{ marginBottom: "20px" }}>
         <Pagination
           currentPage={pagination.currentPage}
@@ -120,5 +102,4 @@ const CountryPage = () => {
     </div>
   );
 };
-
-export default CountryPage;
+export default SearchResultDetail;

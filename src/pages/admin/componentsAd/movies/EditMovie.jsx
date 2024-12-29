@@ -45,8 +45,6 @@ const EditMovie = ({ movieToEdit, onClose, fetchMovies }) => {
       });
     }
   }, [movieToEdit]);
-  console.log("Movie Data", movieData);
-  console.log("Movie Edit", movieToEdit);
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -117,9 +115,8 @@ const EditMovie = ({ movieToEdit, onClose, fetchMovies }) => {
 
   const selectedGenres = movieData.genreIds.map((id) => {
     const genre = genres.find((g) => g.value === id);
-    return genre || { value: id, label: `Unknown (${id})` }; // Nếu không tìm thấy, tạo label mặc định
+    return genre || { value: id, label: `Unknown (${id})` };
   });
-  console.log(genres);
   const handleCheckboxChange = (e) => {
     const { name, checked } = e.target;
     setMovieData((prev) => ({
@@ -134,10 +131,7 @@ const EditMovie = ({ movieToEdit, onClose, fetchMovies }) => {
       console.error("Authorization token is missing");
       return;
     }
-
     const updatedMovieData = { ...movieData, genreIds: movieData.genreIds };
-    console.log("Data being sent to update movie:", updatedMovieData);
-
     try {
       const response = await fetch(`${MOVIE}/api/movies`, {
         method: "PUT",
@@ -148,7 +142,6 @@ const EditMovie = ({ movieToEdit, onClose, fetchMovies }) => {
         body: JSON.stringify(updatedMovieData),
       });
 
-      // Kiểm tra phản hồi từ API
       if (!response.ok) {
         const errorResponse = await response.json();
         toast.error(
@@ -156,24 +149,13 @@ const EditMovie = ({ movieToEdit, onClose, fetchMovies }) => {
         );
         return;
       }
-
-      // Nếu cập nhật thành công
       toast.success("Movie updated successfully!");
-      fetchMovies(); // Làm mới danh sách phim
-      onClose(); // Đóng modal
+      fetchMovies(1, "", "", "", "");
+      onClose();
     } catch (error) {
-      // Bắt lỗi nếu có
       toast.error(`Error editing movie: ${error.message}`);
     }
   };
-
-  const selectedCategory = categories.find(
-    (cat) => cat.categoryId === movieData.categoryId
-  );
-  const selectedCountry = countries.find(
-    (country) => country.countryId === movieData.countryId
-  );
-  console.log(movieToEdit);
 
   return (
     <div className="modal1">
@@ -358,14 +340,45 @@ const EditMovie = ({ movieToEdit, onClose, fetchMovies }) => {
             />
           </div>
 
-          <div className="form-group">
-            <button type="button" onClick={handleSaveChanges}>
+          <div
+            className="form-group"
+            style={{
+              backgroundColor: "green",
+              padding: "10px",
+              borderRadius: "5px",
+              textAlign: "center",
+            }}>
+            <button
+              type="button"
+              onClick={handleSaveChanges}
+              style={{
+                color: "white",
+                padding: "10px 10px",
+                borderRadius: "5px",
+                cursor: "pointer",
+                fontWeight: "bold",
+              }}>
               Save Changes
             </button>
           </div>
         </form>
 
-        <button className="close-button" onClick={onClose}>
+        <button
+          className="close-button"
+          onClick={onClose}
+          style={{
+            width: "100%",
+            backgroundColor: "red",
+            color: "white",
+            border: "none",
+            padding: "20px 30px",
+            borderRadius: "5px",
+            cursor: "pointer",
+            fontSize: "16px",
+            fontWeight: "bold",
+            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+            transition: "background-color 0.3s ease",
+          }}>
           Close
         </button>
       </div>

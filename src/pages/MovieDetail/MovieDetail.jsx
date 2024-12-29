@@ -250,9 +250,9 @@ const MovieDetail = () => {
           {/* Rating Section */}
           <div className="rating-section">
             <Rating
-              currentRating={productData.movie.rating} // Pass the current rating from movie data
-              movieId={productData.movie.movieId} // Pass the movie ID for rating
-              onRatingChange={handleRatingChange} // Handle rating change
+              currentRating={productData.movie.rating}
+              movieId={productData.movie.movieId}
+              onRatingChange={handleRatingChange}
             />
           </div>
           <div className="row" style={{ position: "relative" }}>

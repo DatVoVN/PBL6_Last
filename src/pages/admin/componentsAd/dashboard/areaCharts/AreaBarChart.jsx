@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   BarChart,
   Bar,
@@ -13,78 +13,100 @@ import { FaArrowUpLong } from "react-icons/fa6";
 import { LIGHT_THEME } from "../../../constants/themeConstants";
 import "./AreaCharts.scss";
 
-const data = [
-  {
-    month: "Jan",
-    loss: 70,
-    profit: 100,
-  },
-  {
-    month: "Feb",
-    loss: 55,
-    profit: 85,
-  },
-  {
-    month: "Mar",
-    loss: 35,
-    profit: 90,
-  },
-  {
-    month: "April",
-    loss: 90,
-    profit: 70,
-  },
-  {
-    month: "May",
-    loss: 55,
-    profit: 80,
-  },
-  {
-    month: "Jun",
-    loss: 30,
-    profit: 50,
-  },
-  {
-    month: "Jul",
-    loss: 32,
-    profit: 75,
-  },
-  {
-    month: "Aug",
-    loss: 62,
-    profit: 86,
-  },
-  {
-    month: "Sep",
-    loss: 55,
-    profit: 78,
-  },
+// Giữ nguyên dữ liệu cho các tháng từ 1 đến tháng 11
+const fakeData = [
+  { month: "Jan", csiRenew: 70 },
+  { month: "Feb", csiRenew: 55 },
+  { month: "Mar", csiRenew: 35 },
+  { month: "April", csiRenew: 90 },
+  { month: "May", csiRenew: 55 },
+  { month: "Jun", csiRenew: 30 },
+  { month: "Jul", csiRenew: 32 },
+  { month: "Aug", csiRenew: 62 },
+  { month: "Sep", csiRenew: 55 },
+  { month: "Oct", csiRenew: 50 },
+  { month: "Nov", csiRenew: 60 },
 ];
 
 const AreaBarChart = () => {
   const { theme } = useContext(ThemeContext);
+  const [data, setData] = useState(fakeData); // Dữ liệu cho tháng 1 đến tháng 11
+  const [isLoading, setIsLoading] = useState(true);
+  const [isDecemberFetched, setIsDecemberFetched] = useState(false); // Flag to track if December data has been fetched
+
+  // Fetch dữ liệu từ API cho tháng 12
+  useEffect(() => {
+    const fetchDecemberData = async () => {
+      if (isDecemberFetched) return; // If December data is already fetched, don't fetch again
+
+      try {
+        const response = await fetch(
+          "https://cineworld.io.vn:7002/api/receipts/ReceiptStat?From=2024-12-01T00%3A00%3A00&To=2024-12-31T23%3A59%3A59"
+        );
+        const result = await response.json();
+        if (result.isSuccess && result.result.receiptStat) {
+          const decemberData = result.result.receiptStat.reduce(
+            (total, item) => {
+              return total + item.total;
+            },
+            0
+          );
+
+          // Cập nhật dữ liệu tháng 12 chỉ nếu chưa có
+          setData((prevData) => {
+            const decemberExists = prevData.some(
+              (item) => item.month === "Dec"
+            );
+            if (!decemberExists) {
+              return [
+                ...prevData,
+                {
+                  month: "Dec",
+                  csiRenew: decemberData,
+                },
+              ];
+            }
+            return prevData;
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching December data", error);
+      } finally {
+        setIsLoading(false);
+        setIsDecemberFetched(true); // Set flag to true once data is fetched
+      }
+    };
+
+    fetchDecemberData();
+  }, [isDecemberFetched]); // Only run effect when `isDecemberFetched` changes
+
+  // Calculate the total revenue for all months
+  const totalRevenue = data.reduce((total, item) => total + item.csiRenew, 0);
 
   const formatTooltipValue = (value) => {
-    return `${value}k`;
+    return `${value}`; // Không thêm 'k' cho tháng 12
   };
 
   const formatYAxisLabel = (value) => {
-    return `${value}k`;
+    return `${value}`; // Không thêm 'k' cho YAxis
   };
 
   const formatLegendValue = (value) => {
     return value.charAt(0).toUpperCase() + value.slice(1);
   };
 
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className="bar-chart">
       <div className="bar-chart-info">
-        <h5 className="bar-chart-title">Total Revenue</h5>
+        <h5 className="bar-chart-title">Total Revenue Receipt</h5>
         <div className="chart-info-data">
-          <div className="info-data-value">$50.4K</div>
+          <div className="info-data-value">{totalRevenue.toFixed(1)}</div>
           <div className="info-data-text">
             <FaArrowUpLong />
-            <p>5% than last month.</p>
           </div>
         </div>
       </div>
@@ -132,16 +154,8 @@ const AreaBarChart = () => {
               formatter={formatLegendValue}
             />
             <Bar
-              dataKey="profit"
+              dataKey="csiRenew"
               fill="#475be8"
-              activeBar={false}
-              isAnimationActive={false}
-              barSize={24}
-              radius={[4, 4, 4, 4]}
-            />
-            <Bar
-              dataKey="loss"
-              fill="#e3e7fc"
               activeBar={false}
               isAnimationActive={false}
               barSize={24}

@@ -44,13 +44,8 @@ const Sidebar = () => {
   }, []);
 
   const handleLogout = () => {
-    // Clear the user data from localStorage/sessionStorage or cookies
-    localStorage.removeItem("userToken"); // Example: remove token from localStorage
-    sessionStorage.removeItem("userToken"); // Example: remove token from sessionStorage
-
-    // Optionally, you can also clear other user-related data if stored
-
-    // Redirect to the login page
+    localStorage.removeItem("userToken");
+    sessionStorage.removeItem("userToken");
     navigate("/login");
   };
 
@@ -61,7 +56,7 @@ const Sidebar = () => {
       <div className="sidebar-top">
         <div className="sidebar-brand">
           <img src={theme === LIGHT_THEME ? LogoBlue : LogoWhite} alt="" />
-          <span className="sidebar-brand-text">tabernam.</span>
+          <span className="sidebar-brand-text">PBL6.</span>
         </div>
         <button className="sidebar-close-btn" onClick={closeSidebar}>
           <MdOutlineClose size={24} />
@@ -167,6 +162,18 @@ const Sidebar = () => {
                 <span className="menu-link-text">Packages</span>
               </NavLink>
             </li>
+            <li className="menu-item">
+              <NavLink
+                to="/admin/membership"
+                className={({ isActive }) =>
+                  isActive ? "menu-link active" : "menu-link"
+                }>
+                <span className="menu-link-icon">
+                  <MdOutlineMessage size={18} />
+                </span>
+                <span className="menu-link-text">Membership</span>
+              </NavLink>
+            </li>
           </ul>
         </div>
 
@@ -174,14 +181,14 @@ const Sidebar = () => {
           <ul className="menu-list">
             <li className="menu-item">
               <NavLink
-                to="/admin/settings"
+                to="/admin/coupon"
                 className={({ isActive }) =>
                   isActive ? "menu-link active" : "menu-link"
                 }>
                 <span className="menu-link-icon">
                   <MdOutlineSettings size={20} />
                 </span>
-                <span className="menu-link-text">Settings</span>
+                <span className="menu-link-text">Coupon</span>
               </NavLink>
             </li>
             <li className="menu-item">

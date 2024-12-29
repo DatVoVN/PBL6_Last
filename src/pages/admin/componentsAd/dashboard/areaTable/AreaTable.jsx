@@ -30,7 +30,6 @@ const AreaTable = () => {
   const fetchCategories = async (pageNumber, orderBy, query = "") => {
     setIsLoading(true);
     try {
-      // Modify the API request to include the `Name` parameter for searching
       const response = await fetch(
         `${MOVIE}/api/categories?Name=${query}&PageNumber=${pageNumber}&PageSize=${PAGE_SIZE}&OrderBy=${orderBy}`
       );
@@ -54,7 +53,7 @@ const AreaTable = () => {
 
   const handleFilterChange = (event) => {
     setFilter(event.target.value);
-    setCurrentPage(1); // Reset to the first page when filter changes
+    setCurrentPage(1);
   };
 
   const handleAddCategory = async () => {
@@ -103,19 +102,108 @@ const AreaTable = () => {
     }
   };
   const handleSearchClick = () => {
-    setSearchQuery(searchInput); // Cập nhật giá trị thực tế để tìm kiếm
-    setCurrentPage(1); // Reset về trang đầu tiên
-    fetchCategories(1, filter, searchInput); // Gọi API với giá trị tìm kiếm
+    setSearchQuery(searchInput);
+    setCurrentPage(1);
+    fetchCategories(1, filter, searchInput);
   };
-  const handleSearchChange = (event) => {
-    const searchValue = event.target.value;
-    setSearchQuery(searchValue); // Update search query
-    setCurrentPage(1); // Reset to first page when search changes
+  const handleEditCategory = async () => {
+    const authToken = Cookies.get("authToken");
+    if (!authToken) {
+      console.error("Authorization token is missing");
+      return;
+    }
 
-    // Fetch categories with the search query
-    fetchCategories(1, filter, searchValue); // Fetch from the first page with the search query
+    const slug = categoryToEdit.name
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, "");
+
+    const requestData = {
+      categoryId: categoryToEdit.categoryId,
+      name: categoryToEdit.name,
+      slug,
+      status: categoryToEdit.status,
+    };
+
+    try {
+      const response = await fetch(`${MOVIE}/api/categories`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authToken}`,
+        },
+        body: JSON.stringify(requestData),
+      });
+
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        toast.error(
+          `Error editing category: ${errorResponse.message || "Unknown error"}`
+        );
+        return;
+      }
+
+      toast.success("Category updated successfully!");
+      fetchCategories(currentPage, filter, searchQuery);
+      setIsEditModalOpen(false);
+      setCategoryToEdit(null); // Clear the category data after update
+    } catch (error) {
+      toast.error(`Error editing category: ${error.message}`);
+    }
   };
+  const handleDeleteCategory = async () => {
+    const authToken = Cookies.get("authToken");
+    if (!authToken) {
+      console.error("Authorization token is missing");
+      return;
+    }
 
+    try {
+      const response = await fetch(
+        `${MOVIE}/api/categories?id=${categoryToDelete}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        toast.error(
+          `Error deleting category: ${errorResponse.message || "Unknown error"}`
+        );
+        return;
+      }
+
+      toast.success("Category deleted successfully!");
+      fetchCategories(currentPage, filter, searchQuery);
+      setIsDeleteModalOpen(false);
+      setCategoryToDelete(null);
+    } catch (error) {
+      toast.error(`Error deleting category: ${error.message}`);
+    }
+  };
+  const handleViewCategory = async (categoryId) => {
+    try {
+      const response = await fetch(`${MOVIE}/api/categories/${categoryId}`);
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        toast.error(
+          `Error fetching category details: ${
+            errorResponse.message || "Unknown error"
+          }`
+        );
+        return;
+      }
+      const categoryData = await response.json();
+      setCategoryToView(categoryData);
+      setIsViewModalOpen(true);
+    } catch (error) {
+      toast.error(`Error fetching category details: ${error.message}`);
+    }
+  };
   const goToPage = (page) => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
@@ -127,7 +215,21 @@ const AreaTable = () => {
       <ToastContainer autoClose={2000} />
 
       <div className="data-table-info">
-        <h4 className="data-table-title">CATEGORIES</h4>
+        <h4
+          className="data-table-title"
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            fontSize: "30px",
+            color: "#1fc3f9",
+            background: "linear-gradient(to right, #00ffe8, #db8e00)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            fontWeight: "bold",
+          }}>
+          CATEGORIES
+        </h4>
         <div className="buttons-container">
           <button
             className="add-category-btn"
@@ -172,7 +274,14 @@ const AreaTable = () => {
               </div>
             )}
           </div>
-          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              marginBottom: "12px",
+              marginLeft: "30px",
+            }}>
             <input
               type="text"
               style={{
@@ -264,7 +373,10 @@ const AreaTable = () => {
               onClick={() => goToPage(currentPage - 1)}>
               Previous
             </button>
-            <span>{`Page ${currentPage} of ${totalPages}`}</span>
+            <span
+              style={{
+                color: "red",
+              }}>{`Page ${currentPage} of ${totalPages}`}</span>
             <button
               disabled={currentPage === totalPages}
               onClick={() => goToPage(currentPage + 1)}>
@@ -275,31 +387,73 @@ const AreaTable = () => {
       )}
       {isViewModalOpen && categoryToView && (
         <div className="modal">
-          <div className="modal-content">
-            <h3>Category Details</h3>
-            <p style={{ fontSize: "16px", margin: "10px 0px" }}>
-              <strong>Category ID:</strong> {categoryToView.categoryId}
-            </p>
-            <p style={{ fontSize: "16px", margin: "10px 0px" }}>
-              <strong>Name:</strong> {categoryToView.name}
-            </p>
-            <p style={{ fontSize: "16px", margin: "10px 0px" }}>
-              <strong>Status:</strong>{" "}
-              {categoryToView.status ? "Active" : "Inactive"}
-            </p>
-            <button
-              className="close-modal-btn"
-              onClick={() => setIsViewModalOpen(false)}>
-              <i className="fa fa-times"></i> Close
-            </button>
+          <div
+            className="modal-content"
+            style={{
+              backgroundColor: "#fff",
+              padding: "20px",
+              borderRadius: "8px",
+              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+              maxWidth: "500px",
+              margin: "auto",
+            }}>
+            <h3 style={{ textAlign: "center" }}>Category Details</h3>
+            <table
+              style={{
+                width: "100%",
+                borderCollapse: "collapse",
+                marginTop: "10px",
+              }}>
+              <tbody>
+                <tr>
+                  <td style={{ padding: "8px", fontWeight: "bold" }}>
+                    Category ID:
+                  </td>
+                  <td style={{ padding: "8px" }}>
+                    {categoryToView.result.categoryId}
+                  </td>
+                </tr>
+                <tr>
+                  <td style={{ padding: "8px", fontWeight: "bold" }}>Name:</td>
+                  <td style={{ padding: "8px" }}>
+                    {categoryToView.result.name}
+                  </td>
+                </tr>
+                <tr>
+                  <td style={{ padding: "8px", fontWeight: "bold" }}>
+                    Status:
+                  </td>
+                  <td style={{ padding: "8px" }}>
+                    {categoryToView.result.status ? "Active" : "Inactive"}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div style={{ textAlign: "center", marginTop: "20px" }}>
+              <button
+                className="close-modal-btn"
+                onClick={() => setIsViewModalOpen(false)}
+                style={{
+                  padding: "10px 20px",
+                  backgroundColor: "#007bff",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "5px",
+                  cursor: "pointer",
+                  fontSize: "16px",
+                }}>
+                <i className="fa fa-times" style={{ marginRight: "8px" }}></i>{" "}
+                Close
+              </button>
+            </div>
           </div>
         </div>
       )}
+
       {isModalOpen && (
         <div className="modal">
           <div className="modal-content">
             <h2>Add Category</h2>
-
             <input
               type="text"
               value={newCategory.name}
@@ -324,8 +478,6 @@ const AreaTable = () => {
           </div>
         </div>
       )}
-
-      {/* Edit Category Modal */}
       {isEditModalOpen && categoryToEdit && (
         <div className="modal">
           <div className="modal-content">
@@ -353,8 +505,6 @@ const AreaTable = () => {
           </div>
         </div>
       )}
-
-      {/* Delete Confirmation Modal */}
       {isDeleteModalOpen && categoryToDelete !== null && (
         <div className="modal">
           <div className="modal-content">

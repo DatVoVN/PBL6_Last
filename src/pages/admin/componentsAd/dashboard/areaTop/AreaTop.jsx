@@ -4,16 +4,21 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { SidebarContext } from "../../../contextAd/SidebarContext";
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
-import { addDays } from "date-fns";
+import { addDays, startOfMonth, endOfMonth } from "date-fns"; // Updated to import required date functions
 import { DateRange } from "react-date-range";
+import AreaCharts from "../areaCharts/AreaCharts"; // Import AreaCharts component
 
 const AreaTop = () => {
   const { openSidebar } = useContext(SidebarContext);
 
+  // Set startDate to the 1st day of the current month and endDate to the 30th or last day of the month
+  const currentMonthStart = startOfMonth(new Date());
+  const currentMonthEnd = endOfMonth(new Date());
+
   const [state, setState] = useState([
     {
-      startDate: new Date(),
-      endDate: addDays(new Date(), 7),
+      startDate: currentMonthStart,
+      endDate: currentMonthEnd,
       key: "selection",
     },
   ]);
@@ -47,10 +52,10 @@ const AreaTop = () => {
           onClick={openSidebar}>
           <MdOutlineMenu size={24} />
         </button>
-        <h2 className="area-top-title">Dashboard</h2>
       </div>
       <div className="area-top-r">
         <div
+          style={{ marginTop: "10px" }}
           ref={dateRangeRef}
           className={`date-range-wrapper ${
             !showDatePicker ? "hide-date-range" : ""
@@ -65,6 +70,8 @@ const AreaTop = () => {
           />
         </div>
       </div>
+      {/* Pass state[0].startDate and state[0].endDate to AreaCharts */}
+      <AreaCharts startDate={state[0].startDate} endDate={state[0].endDate} />
     </section>
   );
 };

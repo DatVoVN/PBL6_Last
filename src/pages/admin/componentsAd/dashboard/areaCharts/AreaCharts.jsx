@@ -1,13 +1,14 @@
-import AreaBarChart from "./AreaBarChart"
-import AreaProgressChart from "./AreaProgressChart"
+import AreaBarChart from "./AreaBarChart";
+import AreaProgressChart from "./AreaProgressChart";
 
-const AreaCharts = () => {
+const AreaCharts = ({ startDate, endDate }) => {
   return (
     <section className="content-area-charts">
       <AreaBarChart />
-      <AreaProgressChart />
+      {/* Pass the startDate and endDate as props to AreaProgressChart */}
+      <AreaProgressChart startDate={startDate} endDate={endDate} />
     </section>
-  )
-}
+  );
+};
 
-export default AreaCharts
+export default AreaCharts;

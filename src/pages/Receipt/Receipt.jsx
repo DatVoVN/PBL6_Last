@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
+import Spinner from "../../components/Spinner/Spinner";
 
 const Receipt = () => {
   const [receipts, setReceipts] = useState([]);
@@ -55,7 +56,7 @@ const Receipt = () => {
   };
 
   if (loading) {
-    return <div>Loading receipts...</div>;
+    return <Spinner />;
   }
 
   if (error) {

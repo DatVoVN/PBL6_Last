@@ -212,8 +212,9 @@ const Rating = ({ currentRating = 0, movieId, onRatingChange }) => {
   }
 
   return (
-    <div className="rating-container">
+    <div className="rating-container" style={{ display: "flex" }}>
       <h3 style={{ fontWeight: "bold", color: "white" }}>RATING</h3>
+      <div></div>
       <div
         className="rating-text"
         style={{
@@ -233,13 +234,13 @@ const Rating = ({ currentRating = 0, movieId, onRatingChange }) => {
 
       {!isEditable ? (
         <button onClick={enableEditing} className="edit-button">
-          {ratingId ? "Update Rating" : "Add Rating"}
+          {ratingId ? "CHANGE RATE" : "RATE"}
         </button>
       ) : (
         <button
           onClick={ratingId ? handleUpdateRating : handleAddRating}
           className="rate-button">
-          Submit {ratingId ? "Update" : "Add"}
+          SUBMIT {ratingId ? "CHANGE" : "RATE"}
         </button>
       )}
       {message && <div className="rating-message">{message}</div>}

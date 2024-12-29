@@ -26,6 +26,9 @@ import Receipt from "./pages/Receipt/Receipt.jsx";
 import Favorites from "./pages/Favorites/Favorites.jsx";
 import History from "./pages/History/History.jsx";
 import { SidebarProvider } from "./pages/admin/contextAd/SidebarContext.jsx";
+import SearchResultDetail from "./pages/SearchResultDetail/SearchResultDetail.jsx";
+import { ToastContainer } from "react-toastify"; // Import ToastContainer
+import "react-toastify/dist/ReactToastify.css"; // Import the ToastContainer styles
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -67,8 +70,10 @@ createRoot(document.getElementById("root")).render(
               <Route path="/receipt" element={<Receipt />} />
               <Route path="/favorites" element={<Favorites />} />
               <Route path="/history" element={<History />} />
+              <Route path="/search-results" element={<SearchResultDetail />} />
             </Route>
           </Routes>
+          {/* <ToastContainer /> */}
         </BrowserRouter>
       </UserProvider>
     </ThemeProvider>

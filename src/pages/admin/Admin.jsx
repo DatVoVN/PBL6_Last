@@ -1,6 +1,6 @@
 import { useContext, useEffect } from "react";
 import "./Admin.scss";
-import { Routes, Route } from "react-router-dom"; // Chỉ cần Routes và Route
+import { Routes, Route } from "react-router-dom";
 import MoonIcon from "./assets/icons/moon.svg";
 import SunIcon from "./assets/icons/sun.svg";
 import BaseLayout from "./layout/BaseLayout";
@@ -14,11 +14,13 @@ import User from "./componentsAd/user/User";
 import Movies from "./componentsAd/movies/Movies";
 import Packages from "./componentsAd/packages/Packages";
 import Episodes from "./componentsAd/episodes/Episodes";
+import Membership from "./componentsAd/membership/Membership";
+import Coupon from "./componentsAd/coupon/Coupon";
+import { ToastContainer } from "react-toastify"; // Đặt ToastContainer ở đây
 
 function Admin() {
   const { theme, toggleTheme } = useContext(ThemeContext);
 
-  // adding dark-mode class if the dark mode is set on to the body tag
   useEffect(() => {
     if (theme === DARK_THEME) {
       document.body.classList.add("dark-mode");
@@ -40,9 +42,10 @@ function Admin() {
           <Route path="/movies" element={<Movies />} />
           <Route path="/packages" element={<Packages />} />
           <Route path="/episodes" element={<Episodes />} />
+          <Route path="/membership" element={<Membership />} />
+          <Route path="/coupon" element={<Coupon />} />
         </Route>
       </Routes>
-
       <button type="button" className="theme-toggle-btn" onClick={toggleTheme}>
         <img
           className="theme-icon"

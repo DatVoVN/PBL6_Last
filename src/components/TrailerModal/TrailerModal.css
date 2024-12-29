@@ -1,44 +1,109 @@
-.video-container{
-    width: 100%;
-    height: 600px;
+/* TrailerModal.css */
+
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8); /* Slightly darker background */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000; /* Ensures it appears above all content */
+  overflow: hidden; /* Prevents scroll during modal display */
 }
 
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.8);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-  }
-  
-  .modal-content {
-    position: relative;
-    width: 80%;
-    max-width: 800px;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 10px;
-  }
-  
-  .close-btn {
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    font-size: 30px;
-    cursor: pointer;
-    background: none;
-    border: none;
-    color: #fff;
-  }
-  
-  .video-container iframe {
-    width: 100%;
-    height: 100%;
-    border-radius: 10px;
-  }
-  
+/* Modal Content */
+.modal-content2 {
+  position: relative;
+  background-color: #fff; /* White background for the modal */
+  border-radius: 12px; /* Smoother corners */
+  padding: 0;
+  width: 80%; /* Adjusted for responsiveness */
+  max-width: 800px;
+  height: 70%; /* Adjusted for better view on smaller screens */
+  max-height: 500px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3); /* Enhanced shadow for depth */
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Close Button */
+.close-btn1 {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  width: 40px; /* Fixed width for better alignment */
+  height: 40px; /* Fixed height */
+  color: #555; /* Neutral color for the icon */
+  cursor: pointer;
+  transition: transform 0.2s, color 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-btn1:hover {
+  color: #ff4d4d; /* Red on hover */
+  transform: scale(1.1); /* Slight zoom on hover */
+}
+
+/* Video Container */
+.video-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: #000; /* Black background */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none; /* Remove iframe border */
+  border-radius: 12px; /* Matches modal border for seamless look */
+}
+/* TrailerModal.css */
+
+/* Close Button */
+/* TrailerModal.css */
+
+/* Close Button */
+.close-btn2 {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent black background */
+  color: white;
+  border: none;
+  font-size: 30px;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%; /* Round shape */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.close-btn2:hover {
+  background-color: rgba(0, 0, 0, 0.8); /* Darker background on hover */
+  transform: scale(1.1); /* Slight zoom-in effect on hover */
+}
+
+.close-btn2:focus {
+  outline: none; /* Remove default focus outline */
+}
+

@@ -35,32 +35,24 @@ function AddEpisode({ movieId, setIsModalOpen, fetchEpisodes }) {
     setIsLoading(true);
 
     try {
-      // Send POST request to the API to add the new episode
-      const response = await axios.post(
-        `${MOVIE}/api/episodes`, // Your API endpoint
-        newEpisode, // Data being sent to the API
-        {
-          headers: {
-            Authorization: `Bearer ${authToken}`, // Authentication token in headers
-          },
-        }
-      );
-
-      // Handle successful response
+      const response = await axios.post(`${MOVIE}/api/episodes`, newEpisode, {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      });
       if (response.status === 201) {
-        fetchEpisodes(movieId); // Refresh the episodes list after adding
-        setIsModalOpen(false); // Close the modal on success
-        toast.success("Episode added successfully!"); // Hiển thị thông báo thành công
+        fetchEpisodes(movieId, 1);
+        setIsModalOpen(false);
+        toast.success("Episode added successfully!");
       }
     } catch (error) {
-      // Handle error response
       console.error(
         "Error adding episode:",
         error.response ? error.response.data : error.message
       );
-      toast.error("Failed to add episode!"); // Hiển thị thông báo lỗi
+      toast.error("Failed to add episode!");
     } finally {
-      setIsLoading(false); // Reset loading state
+      setIsLoading(false);
     }
   };
 

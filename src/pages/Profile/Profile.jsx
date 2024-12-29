@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { Link } from "react-router-dom"; // Import Link for navigation
 import "./Profile.css";
+import Spinner from "../../components/Spinner/Spinner";
 
 const Profile = () => {
   const [profileData, setProfileData] = useState(null);
   const [updatedInfo, setUpdatedInfo] = useState({
-    id: "",
+    id: null,
     fullName: "",
     avatar: "",
     gender: "",
@@ -17,55 +18,81 @@ const Profile = () => {
   const [error, setError] = useState(null);
   const [isEditing, setIsEditing] = useState(false); // State to control form visibility
   const [avatarPreview, setAvatarPreview] = useState(""); // State for avatar preview
-  const userId = Cookies.get("userId");
-  useEffect(() => {
-    // Retrieve user data from the cookie
-    const userData = Cookies.get("userData");
+  const [showAvatarEdit, setShowAvatarEdit] = useState(false); // Show the edit option on hover
 
-    if (userData) {
-      try {
-        const parsedData = JSON.parse(userData);
-        setProfileData(parsedData.result.user);
-        setUpdatedInfo((prev) => ({
-          ...prev,
-          id: userId,
-          fullName: parsedData.result.user.fullName,
-          avatar: parsedData.result.user.avatar,
-          gender: parsedData.result.user.gender,
-          dateOfBirth: parsedData.result.user.dateOfBirth,
-        }));
-        setAvatarPreview(parsedData.result.user.avatar); // Set initial avatar preview
-      } catch (error) {
-        console.error("Error parsing user data:", error);
-      }
+  useEffect(() => {
+    // Retrieve userId from the cookie
+    const userId = Cookies.get("userId");
+    const tokenAuth = Cookies.get("authToken"); // Retrieve token from cookies
+
+    if (userId && tokenAuth) {
+      const fetchUserData = async () => {
+        try {
+          const response = await fetch(
+            `https://cineworld.io.vn:7000/api/users/GetById?id=${userId}`,
+            {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${tokenAuth}`, // Include Bearer token
+              },
+            }
+          );
+
+          if (!response.ok) {
+            throw new Error("Failed to fetch user data");
+          }
+
+          const data = await response.json();
+          if (data && data.result) {
+            const user = data.result; // Assuming the response structure contains the user object
+
+            setProfileData(user);
+            setUpdatedInfo({
+              id: user.id,
+              fullName: user.fullName,
+              avatar: user.avatar,
+              gender: user.gender,
+              dateOfBirth: user.dateOfBirth,
+              createdDate: user.createdDate,
+            });
+            setAvatarPreview(user.avatar); // Set avatar preview to the user's current avatar
+          }
+        } catch (error) {
+          setError("Failed to fetch user information");
+          console.error(error);
+        }
+      };
+
+      fetchUserData();
     }
-  }, []);
+  }, []); // Run once on component mount
 
   const handleUpdate = async () => {
     setLoading(true);
     setError(null);
 
     const tokenAuth = Cookies.get("authToken"); // Retrieve token from cookies
-    console.log("Token Auth:", tokenAuth); // Log the token for debugging
 
-    console.log("Updating with data:", updatedInfo); // Log the data being sent
+    updatedInfo.dateOfBirth = new Date(updatedInfo.dateOfBirth).toISOString(); // Ensure date format
+
+    const { createdDate, ...updatedInfoWithoutCreatedDate } = updatedInfo;
 
     try {
       const response = await fetch(
-        "https://localhost:7000/api/users/UpdateInformation",
+        "https://cineworld.io.vn:7000/api/users/UpdateInformation",
         {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${tokenAuth}`, // Include the token in the Authorization header
           },
-          body: JSON.stringify(updatedInfo),
+          body: JSON.stringify(updatedInfoWithoutCreatedDate),
         }
       );
 
       if (!response.ok) {
-        const errorData = await response.json(); // Get error details from response
-        console.error("Error response:", errorData); // Log error details
+        const errorData = await response.json();
+        console.error("Error response:", errorData);
         throw new Error(
           "Failed to update information: " +
             (errorData.message || "Unknown error")
@@ -73,12 +100,20 @@ const Profile = () => {
       }
 
       const data = await response.json();
-      console.log("Update successful:", data);
-      setProfileData((prev) => ({ ...prev, ...updatedInfo }));
-      setIsEditing(false); // Hide the form after successful update
+      setProfileData((prev) => ({ ...prev, ...updatedInfoWithoutCreatedDate }));
+      setIsEditing(false);
+
+      // Reload the page after successful update
+      window.location.reload();
     } catch (error) {
       console.error("Error updating information:", error);
-      setError(error.message);
+      if (error instanceof TypeError) {
+        setError(
+          "Network error: Failed to fetch. Please check your connection or the server."
+        );
+      } else {
+        setError(error.message);
+      }
     } finally {
       setLoading(false);
     }
@@ -87,17 +122,47 @@ const Profile = () => {
   const handleAvatarChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setAvatarPreview(reader.result); // Set the preview URL
-        setUpdatedInfo({ ...updatedInfo, avatar: reader.result }); // Store the image data in updatedInfo
-      };
-      reader.readAsDataURL(file); // Read the file as a data URL
+      const formData = new FormData();
+
+      // Append the file with additional details like name and type
+      formData.append("file", file, "avatar.jpg");
+
+      setLoading(true);
+      const tokenAuth = Cookies.get("authToken"); // Retrieve token from cookies
+
+      // Send the FormData object to the server via POST request
+      fetch(
+        `https://cineworld.io.vn:7000/api/users/updateAvatar?folder=user_avatars`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${tokenAuth}`, // Add token to headers
+          },
+          body: formData, // Attach the FormData object to the body
+        }
+      )
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Failed to update avatar");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log("Avatar updated successfully:", data);
+          setAvatarPreview(URL.createObjectURL(file)); // Preview the uploaded avatar
+        })
+        .catch((error) => {
+          console.error("Error updating avatar:", error);
+          setError("Failed to update avatar");
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     }
   };
 
   if (!profileData) {
-    return <p>Loading profile...</p>;
+    return <Spinner />;
   }
 
   const { email, fullName, gender, dateOfBirth } = profileData;
@@ -105,12 +170,27 @@ const Profile = () => {
   return (
     <div className="profile">
       <div className="profile-header">
-        <div className="avatar-wrapper">
+        <div
+          className="avatar-wrapper"
+          onMouseEnter={() => setShowAvatarEdit(true)} // Show edit button on hover
+          onMouseLeave={() => setShowAvatarEdit(false)} // Hide edit button on hover out
+        >
           <img
-            src={avatarPreview || "https://via.placeholder.com/150"} // Use the preview or fallback
+            src={avatarPreview || "https://via.placeholder.com/150"} // Use preview or fallback
             alt="User Avatar"
             className="profile-avatar"
           />
+          {showAvatarEdit && ( // Display edit button on hover
+            <label className="avatar-edit-button">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleAvatarChange} // Handle avatar change
+                style={{ display: "none" }}
+              />
+              Change Avatar
+            </label>
+          )}
         </div>
       </div>
       <div className="profile-details">
@@ -158,14 +238,6 @@ const Profile = () => {
                   setUpdatedInfo({ ...updatedInfo, fullName: e.target.value })
                 }
                 required
-              />
-            </div>
-            <div>
-              <label>Avatar:</label>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleAvatarChange} // Handle file selection
               />
             </div>
             <div>

@@ -12,14 +12,14 @@ const Login = () => {
   const [email, setEmail] = useState("dat246642@gmail.com");
   const [password, setPassword] = useState("01278983568aB@");
   const [error, setError] = useState(null);
-  const [modalIsOpen, setModalIsOpen] = useState(false); // Modal state
-  const [modalEmail, setModalEmail] = useState(""); // Email for modal
-  const [modalMessage, setModalMessage] = useState(""); // Modal success/error message
-  const [loading, setLoading] = useState(false); // Loading state
-  const [resetToken, setResetToken] = useState(""); // Reset token state
-  const [newPassword, setNewPassword] = useState(""); // New password state
-  const [confirmNewPassword, setConfirmNewPassword] = useState(""); // Confirm new password state
-  const [resetModalIsOpen, setResetModalIsOpen] = useState(false); // Reset modal state
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [modalEmail, setModalEmail] = useState("");
+  const [modalMessage, setModalMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [resetToken, setResetToken] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmNewPassword, setConfirmNewPassword] = useState("");
+  const [resetModalIsOpen, setResetModalIsOpen] = useState(false);
   const navigate = useNavigate();
   const { setUserData } = useContext(UserContext);
 
@@ -37,6 +37,8 @@ const Login = () => {
         const role = user.role;
         const id = user.id;
         const fullName = user.fullName;
+
+        console.log("User Role:", role);
 
         setUserData(id, token, fullName);
         Cookies.set("Bearer", token, { expires: 1 });
@@ -59,7 +61,7 @@ const Login = () => {
     setModalMessage(""); // Clear previous messages
     try {
       const response = await axios.post(
-        `https://localhost:7000/api/auth/forgot-password?email=${modalEmail}`,
+        `${USER}/api/auth/forgot-password?email=${modalEmail}`,
         { email: modalEmail } // Send email in the request body
       );
       setTimeout(() => {
@@ -85,15 +87,12 @@ const Login = () => {
     }
 
     try {
-      const response = await axios.post(
-        `https://localhost:7000/api/auth/reset-password`,
-        {
-          email: modalEmail,
-          token: resetToken,
-          newPassword,
-          confirmNewPassword,
-        }
-      );
+      const response = await axios.post(`${USER}/api/auth/reset-password`, {
+        email: modalEmail,
+        token: resetToken,
+        newPassword,
+        confirmNewPassword,
+      });
 
       if (response.status === 200) {
         setModalMessage("Password has been reset successfully!");

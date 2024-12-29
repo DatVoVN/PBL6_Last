@@ -6,7 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "font-awesome/css/font-awesome.min.css";
 import { FaFilter } from "react-icons/fa";
 const TABLE_HEADS = ["Genre ID", "Name", "Status", "Action"];
-const PAGE_SIZE = 7;
+const PAGE_SIZE = 6;
 
 const Genre = () => {
   const [genres, setGenres] = useState([]);
@@ -53,16 +53,8 @@ const Genre = () => {
     setFilter(event.target.value);
     setCurrentPage(1); // Reset to first page when filter changes
   };
-  const handleSearchChange = (event) => {
-    const searchValue = event.target.value;
-    setSearchQuery(searchValue); // Update search query
-    setCurrentPage(1); // Reset to first page when search changes
-
-    // Fetch categories with the search query
-    fetchGenres(1, filter, searchValue); // Fetch from the first page with the search query
-  };
   const handleSearchClick = () => {
-    setSearchQuery(searchInput); // Cập nhật giá trị thực tế để tìm kiếm
+    setSearchQuery(searchInput);
     setCurrentPage(1); // Reset về trang đầu tiên
     fetchGenres(1, filter, searchInput); // Gọi API với giá trị tìm kiếm
   };
@@ -201,14 +193,6 @@ const Genre = () => {
       toast.error(`Error deleting genre: ${error.message}`);
     }
   };
-
-  // const startIndex = (currentPage - 1) * GENRES_PER_PAGE;
-  // const paginatedGenres = genres.slice(
-  //   startIndex,
-  //   startIndex + GENRES_PER_PAGE
-  // );
-  // const totalPages = Math.ceil(genres.length / GENRES_PER_PAGE);
-
   const goToPage = (page) => {
     if (page >= 1 && page <= totalPagesGenres) {
       setCurrentPage(page);
@@ -219,7 +203,21 @@ const Genre = () => {
     <section className="content-area-table">
       <ToastContainer autoClose={2000} />
       <div className="data-table-info">
-        <h4 className="data-table-title">GENRES</h4>
+        <h4
+          className="data-table-title"
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            fontSize: "30px",
+            color: "#1fc3f9",
+            background: "linear-gradient(to right, #00ffe8, #db8e00)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            fontWeight: "bold",
+          }}>
+          GENRES
+        </h4>
         <div className="buttons-container">
           <button
             className="add-category-btn"
@@ -264,7 +262,14 @@ const Genre = () => {
               </div>
             )}
           </div>
-          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              marginBottom: "12px",
+              marginLeft: "30px",
+            }}>
             <input
               type="text"
               style={{
@@ -356,7 +361,10 @@ const Genre = () => {
               onClick={() => goToPage(currentPage - 1)}>
               Previous
             </button>
-            <span>{`Page ${currentPage} of ${totalPagesGenres}`}</span>
+            <span
+              style={{
+                color: "red",
+              }}>{`Page ${currentPage} of ${totalPagesGenres}`}</span>
             <button
               disabled={currentPage === totalPagesGenres}
               onClick={() => goToPage(currentPage + 1)}>
@@ -369,16 +377,62 @@ const Genre = () => {
       {/* Modal for viewing genre */}
       {isViewModalOpen && genreToView && (
         <div className="modal">
-          <div className="modal-content">
-            <h2>{genreToView.name}</h2>
-            <p>ID: {genreToView.genreId}</p>
-            <p>Status: {genreToView.status ? "Active" : "Inactive"}</p>
-            <button onClick={() => setIsViewModalOpen(false)}>Close</button>
+          <div
+            className="modal-content"
+            style={{
+              backgroundColor: "#fff",
+              padding: "20px",
+              borderRadius: "8px",
+              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+              maxWidth: "500px",
+              margin: "auto",
+            }}>
+            <h3 style={{ textAlign: "center" }}>Genre Details</h3>
+            <table
+              style={{
+                width: "100%",
+                borderCollapse: "collapse",
+                marginTop: "10px",
+              }}>
+              <tbody>
+                <tr>
+                  <td style={{ padding: "8px", fontWeight: "bold" }}>
+                    Country ID
+                  </td>
+                  <td style={{ padding: "8px" }}>{genreToView.genreId}</td>
+                </tr>
+                <tr>
+                  <td style={{ padding: "8px", fontWeight: "bold" }}>Name:</td>
+                  <td style={{ padding: "8px" }}>{genreToView.name}</td>
+                </tr>
+                <tr>
+                  <td style={{ padding: "8px", fontWeight: "bold" }}>
+                    Status:
+                  </td>
+                  <td style={{ padding: "8px" }}>
+                    {genreToView.status ? "Active" : "Inactive"}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <button
+              onClick={() => setIsViewModalOpen(false)}
+              style={{
+                padding: "10px 20px",
+                backgroundColor: "#007bff",
+                color: "white",
+                border: "none",
+                borderRadius: "5px",
+                cursor: "pointer",
+                fontSize: "16px",
+              }}>
+              <i className="fa fa-times" style={{ marginRight: "8px" }}></i>{" "}
+              Close
+            </button>
           </div>
         </div>
       )}
 
-      {/* Modal for adding genre */}
       {isModalOpen && (
         <div className="modal">
           <div className="modal-content">
@@ -390,16 +444,12 @@ const Genre = () => {
               onChange={(e) =>
                 setNewGenre({ ...newGenre, name: e.target.value })
               }
-              placeholder="Country Genre"
+              placeholder="Genre"
             />
 
             <label>
-              <select
-                value="true" // Always set the value to "true"
-                disabled // Disable the select to prevent changes
-              >
-                <option value="true">Active</option>{" "}
-                {/* Display 'Active' as the only option */}
+              <select value="true" disabled>
+                <option value="true">Active</option>
               </select>
             </label>
 
@@ -412,7 +462,6 @@ const Genre = () => {
           </div>
         </div>
       )}
-      {/* Modal for editing genre */}
       {isEditModalOpen && genreToEdit && (
         <div className="modal">
           <div className="modal-content">
@@ -440,15 +489,14 @@ const Genre = () => {
           </div>
         </div>
       )}
-
-      {/* Modal for deleting genre */}
       {isDeleteModalOpen && genreToDelete && (
         <div className="modal">
           <div className="modal-content">
             <h2>Are you sure you want to delete this genre?</h2>
-            <p>Genre ID: {genreToDelete}</p>
-            <button onClick={() => handleDeleteGenre(genreToDelete)}>
-              Yes, Delete
+            <button
+              onClick={() => handleDeleteGenre(genreToDelete)}
+              style={{ backgroundColor: "red" }}>
+              Yes
             </button>
             <button onClick={() => setIsDeleteModalOpen(false)}>Cancel</button>
           </div>

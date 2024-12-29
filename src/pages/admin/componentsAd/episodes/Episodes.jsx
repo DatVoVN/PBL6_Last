@@ -4,12 +4,20 @@ import Cookies from "js-cookie";
 import AddEpisode from "./AddEpisode";
 import EditEpisode from "./EditEpisode";
 import DeleteEpisode from "./DeleteEpisode";
-import FetchServer from "./FetchServer"; // Import FetchServer
+import FetchServer from "./FetchServer";
 import "./Episode.css";
 import { ToastContainer } from "react-toastify";
 import { HiEye, HiPencilAlt, HiFire } from "react-icons/hi";
+import ViewEpisode from "./ViewEpisode";
 
-const TABLE_HEADS = ["Episode ID", "Name", "isFree", "Status", "Action"];
+const TABLE_HEADS = [
+  "Episode ID",
+  "Name",
+  "isFree",
+  "Status",
+  "Action",
+  "Fetch Server",
+];
 
 function Episodes() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -20,11 +28,13 @@ function Episodes() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [episodeToEdit, setEpisodeToEdit] = useState(null);
+  const [totalPagesEpisodes, setTotalPagesEpisodes] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
   const MOVIE = import.meta.env.VITE_MOVIE;
   const fetchMovies = async (name) => {
     try {
       const response = await axios.get(
-        `${MOVIE}/api/movies?Name=${name}&PageNumber=1&PageSize=25`
+        `${MOVIE}/api/movies?Name=${name}&PageNumber=1&PageSize=2000`
       );
       setMovies(response.data.result || []);
     } catch (error) {
@@ -32,7 +42,7 @@ function Episodes() {
     }
   };
 
-  const fetchEpisodes = async (movieId) => {
+  const fetchEpisodes = async (movieId, pageNumber) => {
     const authToken = Cookies.get("authToken");
     if (!authToken) {
       console.error("Token not found.");
@@ -41,7 +51,7 @@ function Episodes() {
 
     try {
       const response = await axios.get(
-        `${MOVIE}/api/episodes?MovieId=${movieId}&PageNumber=1&PageSize=50`,
+        `${MOVIE}/api/episodes?MovieId=${movieId}&PageNumber=${pageNumber}&PageSize=4`,
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
@@ -49,11 +59,16 @@ function Episodes() {
         }
       );
       setEpisodes(response.data.result || []);
+      setTotalPagesEpisodes(response.data.pagination?.totalPages || 1);
     } catch (error) {
       console.error("Error fetching episodes:", error);
     }
   };
-
+  useEffect(() => {
+    if (selectedMovie) {
+      fetchEpisodes(selectedMovie.movie.movieId, currentPage);
+    }
+  }, [selectedMovie, currentPage]);
   useEffect(() => {
     if (!searchTerm.trim()) {
       setMovies([]);
@@ -69,7 +84,7 @@ function Episodes() {
 
   const handleSelectMovie = (movie) => {
     setSelectedMovie(movie);
-    fetchEpisodes(movie.movie.movieId);
+    fetchEpisodes(movie.movie.movieId, currentPage);
     setSearchTerm("");
     setMovies([]);
   };
@@ -84,12 +99,31 @@ function Episodes() {
       episodes.filter((episode) => episode.episodeId !== deletedEpisodeId)
     );
   };
-
+  const goToPage = (page) => {
+    if (page >= 1 && page <= totalPagesEpisodes) {
+      setCurrentPage(page);
+    }
+  };
   return (
     <div className="episodes-page">
-      <h1>Search Movies</h1>
+      <h4
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          fontSize: "30px",
+          color: "#1fc3f9",
+          background: "linear-gradient(to right, #00ffe8, #db8e00)",
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+          fontWeight: "bold",
+        }}>
+        SEARCH MOVIES
+      </h4>
 
-      <div className="search-bar">
+      <div
+        className="search-bar"
+        style={{ position: "relative", marginTop: "20px" }}>
         <input
           type="text"
           placeholder="Enter movie name"
@@ -99,6 +133,13 @@ function Episodes() {
             setIsTyping(true);
           }}
           className="search-input"
+          style={{
+            width: "100%",
+            padding: "10px",
+            fontSize: "16px",
+            border: "1px solid #ccc",
+            borderRadius: "5px",
+          }}
         />
       </div>
 
@@ -107,7 +148,13 @@ function Episodes() {
           {movies.map((movie) => (
             <li
               key={movie.movie.movieId}
-              onClick={() => handleSelectMovie(movie)}>
+              onClick={() => handleSelectMovie(movie)}
+              style={{
+                padding: "10px",
+                cursor: "pointer",
+                fontSize: "16px",
+                fontWeight: "bold",
+              }}>
               {movie.movie.name}
             </li>
           ))}
@@ -116,11 +163,19 @@ function Episodes() {
 
       {selectedMovie && (
         <div className="movie-detail">
-          <h2>{selectedMovie.movie.name}</h2>
+          <h2
+            style={{
+              textAlign: "center",
+              fontSize: "2rem",
+              fontWeight: "bold",
+              color: "#475be8",
+              margin: "20px 0",
+            }}>
+            {selectedMovie.movie.name}
+          </h2>
           <section className="content-area-table">
             <ToastContainer autoClose={2000} />
             <div className="data-table-info">
-              <h4>EPISODES</h4>
               <div className="buttons-container">
                 <button
                   className="add-category-btn"
@@ -153,15 +208,23 @@ function Episodes() {
                           {episode.status ? "Active" : "Inactive"}
                         </td>
                         <td>
-                          <HiEye size={20} />
+                          <ViewEpisode episodeId={episode.episodeId} />
                           <HiPencilAlt
                             size={20}
+                            style={{ marginRight: "10px", color: "gold" }}
                             onClick={() => handleEditEpisode(episode)}
                           />
                           <DeleteEpisode
                             episodeId={episode.episodeId}
                             onDeleteSuccess={handleDeleteEpisodeSuccess}
                           />
+                        </td>
+                        <td
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                          }}>
                           <FetchServer episodeId={episode.episodeId} />
                         </td>
                       </tr>
@@ -174,7 +237,22 @@ function Episodes() {
                 </tbody>
               </table>
             </div>
-
+            <div className="pagination">
+              <button
+                disabled={currentPage === 1}
+                onClick={() => goToPage(currentPage - 1)}>
+                Previous
+              </button>
+              <span
+                style={{
+                  color: "red",
+                }}>{`Page ${currentPage} of ${totalPagesEpisodes}`}</span>
+              <button
+                disabled={currentPage === totalPagesEpisodes}
+                onClick={() => goToPage(currentPage + 1)}>
+                Next
+              </button>
+            </div>
             {isModalOpen && (
               <AddEpisode
                 movieId={selectedMovie.movie.movieId}

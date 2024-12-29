@@ -15,7 +15,7 @@ const TABLE_HEADS = [
   "Currency",
   "Action",
 ];
-const PAGE_SIZE = 7;
+const PAGE_SIZE = 6;
 
 const Packages = () => {
   const [genres, setGenres] = useState([]);
@@ -59,8 +59,6 @@ const Packages = () => {
       setIsLoading(false);
     }
   };
-  console.log(genres);
-
   useEffect(() => {
     fetchPackages(
       currentPage,
@@ -79,46 +77,12 @@ const Packages = () => {
   };
   const handleSearchChange = (event) => {
     const { name, value } = event.target;
-
-    // Update state based on which input field is changed
     if (name === "Name") {
       setSearchQuery(value);
     } else if (name === "Price") {
       setSearchQueryPrice(value);
     } else if (name === "TermInMonths") {
       setSearchTermInMonths(value);
-    }
-  };
-
-  const handleSearch = (field) => {
-    // Reset to first page when a search is performed
-    setCurrentPage(1);
-
-    // Fetch the data with the updated search parameters
-    if (field === "Name") {
-      fetchPackages(
-        1,
-        filter,
-        searchQuery,
-        searchQueryPrice,
-        searchTermInMonths
-      );
-    } else if (field === "Price") {
-      fetchPackages(
-        1,
-        filter,
-        searchQuery,
-        searchQueryPrice,
-        searchTermInMonths
-      );
-    } else if (field === "TermInMonths") {
-      fetchPackages(
-        1,
-        filter,
-        searchQuery,
-        searchQueryPrice,
-        searchTermInMonths
-      );
     }
   };
 
@@ -161,7 +125,7 @@ const Packages = () => {
       toast.success("Genre added successfully!");
       fetchPackages(currentPage, "");
       setIsModalOpen(false);
-      setNewGenre({ name: "", status: true });
+      setNewPackage({ name: "", status: true });
     } catch (error) {
       toast.error(`Error adding genre: ${error.message}`);
     }
@@ -187,14 +151,14 @@ const Packages = () => {
     }
 
     const requestData = {
-      packageId: packageToEdit.packageId, // ID of the package being edited
-      name: packageToEdit.name, // Package name
-      description: packageToEdit.description, // Package description
-      price: packageToEdit.price, // Package price
-      termInMonths: packageToEdit.termInMonths, // Package term
-      currency: packageToEdit.currency || "USD", // Default to USD if not provided
-      status: packageToEdit.status, // Package status (true/false)
-      updatedDate: new Date().toISOString(), // Automatically set updated date
+      packageId: packageToEdit.packageId,
+      name: packageToEdit.name,
+      description: packageToEdit.description,
+      price: packageToEdit.price,
+      termInMonths: packageToEdit.termInMonths,
+      currency: packageToEdit.currency || "USD",
+      status: packageToEdit.status,
+      updatedDate: new Date().toISOString(),
     };
 
     try {
@@ -216,9 +180,9 @@ const Packages = () => {
       }
 
       toast.success("Package updated successfully!");
-      fetchPackages(currentPage, ""); // Refresh the package list
-      setIsEditModalOpen(false); // Close the edit modal
-      setPackageToEdit(null); // Clear the packageToEdit state
+      fetchPackages(currentPage, "");
+      setIsEditModalOpen(false);
+      setPackageToEdit(null);
     } catch (error) {
       toast.error(`Error editing package: ${error.message}`);
     }
@@ -268,7 +232,21 @@ const Packages = () => {
     <section className="content-area-table">
       <ToastContainer autoClose={2000} />
       <div className="data-table-info">
-        <h4 className="data-table-title">PACKAGES</h4>
+        <h4
+          className="data-table-title"
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            fontSize: "30px",
+            color: "#1fc3f9",
+            background: "linear-gradient(to right, #00ffe8, #db8e00)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            fontWeight: "bold",
+          }}>
+          PACKAGES
+        </h4>
         <div
           className="buttons-container"
           style={{
@@ -332,6 +310,7 @@ const Packages = () => {
               gap: "10px",
               justifyContent: "flex-end",
               alignItems: "center",
+              marginLeft: "50px",
             }}>
             <input
               type="text"
@@ -431,7 +410,10 @@ const Packages = () => {
               onClick={() => goToPage(currentPage - 1)}>
               Previous
             </button>
-            <span>{`Page ${currentPage} of ${totalPagesGenres}`}</span>
+            <span
+              style={{
+                color: "red",
+              }}>{`Page ${currentPage} of ${totalPagesGenres}`}</span>
             <button
               disabled={currentPage === totalPagesGenres}
               onClick={() => goToPage(currentPage + 1)}>
@@ -440,130 +422,108 @@ const Packages = () => {
           </div>
         </div>
       )}
-
-      {/* Modal for viewing genre */}
       {isViewModalOpen && packageToView && (
         <div
+          className="modal"
           style={{
             position: "fixed",
             top: 0,
             left: 0,
             right: 0,
             bottom: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.7)", // Darker background for more contrast
+            backgroundColor: "rgba(0, 0, 0, 0.7)",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
             zIndex: 1000,
-            animation: "fadeIn 0.5s", // Fade-in effect for the modal appearance
           }}>
           <div
+            className="modal-content"
             style={{
               backgroundColor: "#fff",
-              padding: "30px 40px",
-              borderRadius: "12px", // More rounded corners
-              width: "450px", // A bit wider
-              boxShadow: "0 6px 15px rgba(0, 0, 0, 0.2)", // Larger shadow for a more lifted effect
-              overflowY: "auto",
-              animation: "slideIn 0.5s ease-out", // Slide-in effect for the content
+              padding: "20px",
+              borderRadius: "8px",
+              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+              maxWidth: "500px",
+              margin: "auto",
+              animation: "fadeIn 0.5s",
             }}>
-            <h2
+            <h3 style={{ textAlign: "center" }}>Package Details</h3>
+            <table
               style={{
-                fontSize: "28px", // Larger font size for the title
-                color: "#333",
-                fontWeight: "bold",
-                marginBottom: "20px",
-                textAlign: "center",
-                textTransform: "uppercase",
-                letterSpacing: "1px",
+                width: "100%",
+                borderCollapse: "collapse",
+                marginTop: "10px",
               }}>
-              {packageToView.name}
-            </h2>
-            <p
-              style={{
-                fontSize: "18px",
-                color: "#555",
-                marginBottom: "12px",
-                lineHeight: "1.6",
-              }}>
-              <strong>ID:</strong> {packageToView.packageId}
-            </p>
-            <p
-              style={{
-                fontSize: "18px",
-                color: "#555",
-                marginBottom: "12px",
-                lineHeight: "1.6",
-              }}>
-              <strong>Description:</strong> {packageToView.description}
-            </p>
-            <p
-              style={{
-                fontSize: "18px",
-                color: "#555",
-                marginBottom: "12px",
-                lineHeight: "1.6",
-              }}>
-              <strong>Price:</strong> {packageToView.price}
-            </p>
-            <p
-              style={{
-                fontSize: "18px",
-                color: "#555",
-                marginBottom: "12px",
-                lineHeight: "1.6",
-              }}>
-              <strong>Term in Months:</strong> {packageToView.termInMonths}
-            </p>
-            <p
-              style={{
-                fontSize: "18px",
-                color: "#555",
-                marginBottom: "12px",
-                lineHeight: "1.6",
-              }}>
-              <strong>Status:</strong>{" "}
-              {packageToView.status ? "Active" : "Inactive"}
-            </p>
-            <p
-              style={{
-                fontSize: "18px",
-                color: "#555",
-                marginBottom: "20px",
-                lineHeight: "1.6",
-              }}>
-              <strong>Currency:</strong> {packageToView.currency}
-            </p>
+              <tbody>
+                <tr>
+                  <td style={{ padding: "8px", fontWeight: "bold" }}>
+                    Package ID
+                  </td>
+                  <td style={{ padding: "8px" }}>{packageToView.packageId}</td>
+                </tr>
+                <tr>
+                  <td style={{ padding: "8px", fontWeight: "bold" }}>Name</td>
+                  <td style={{ padding: "8px" }}>{packageToView.name}</td>
+                </tr>
+                <tr>
+                  <td style={{ padding: "8px", fontWeight: "bold" }}>
+                    Description
+                  </td>
+                  <td style={{ padding: "8px" }}>
+                    {packageToView.description}
+                  </td>
+                </tr>
+                <tr>
+                  <td style={{ padding: "8px", fontWeight: "bold" }}>Price</td>
+                  <td style={{ padding: "8px" }}>{packageToView.price}</td>
+                </tr>
+                <tr>
+                  <td style={{ padding: "8px", fontWeight: "bold" }}>
+                    Term in Months
+                  </td>
+                  <td style={{ padding: "8px" }}>
+                    {packageToView.termInMonths}
+                  </td>
+                </tr>
+                <tr>
+                  <td style={{ padding: "8px", fontWeight: "bold" }}>Status</td>
+                  <td style={{ padding: "8px" }}>
+                    {packageToView.status ? "Active" : "Inactive"}
+                  </td>
+                </tr>
+                <tr>
+                  <td style={{ padding: "8px", fontWeight: "bold" }}>
+                    Currency
+                  </td>
+                  <td style={{ padding: "8px" }}>{packageToView.currency}</td>
+                </tr>
+              </tbody>
+            </table>
+
             <button
               onClick={() => setIsViewModalOpen(false)}
               style={{
-                backgroundColor: "#FF5733", // Bright accent color for the button
+                padding: "10px 20px",
+                backgroundColor: "#007bff",
                 color: "white",
-                padding: "12px 24px",
-                borderRadius: "8px",
                 border: "none",
+                borderRadius: "5px",
                 cursor: "pointer",
-                fontSize: "18px",
-                width: "100%",
-                transition: "background-color 0.3s, transform 0.2s",
-                boxShadow: "0 4px 10px rgba(0, 0, 0, 0.15)",
-              }}
-              onMouseOver={(e) => (e.target.style.backgroundColor = "#C0392B")} // Darker button color on hover
-              onMouseOut={(e) => (e.target.style.backgroundColor = "#FF5733")} // Reset button color on hover out
-            >
+                fontSize: "16px",
+                marginTop: "15px",
+              }}>
+              <i className="fa fa-times" style={{ marginRight: "8px" }}></i>{" "}
               Close
             </button>
           </div>
         </div>
       )}
 
-      {/* Modal for adding genre */}
       {isModalOpen && (
         <div className="modal">
           <div className="modal-content">
             <h2>Add Package</h2>
-
-            {/* Input for Package Name */}
             <input
               type="text"
               value={newPackage.name}
@@ -572,8 +532,6 @@ const Packages = () => {
               }
               placeholder="Package Name"
             />
-
-            {/* Input for Package Description */}
             <textarea
               value={newPackage.description}
               style={{ padding: "10px" }}
@@ -583,7 +541,6 @@ const Packages = () => {
               placeholder="Package Description"
             />
 
-            {/* Input for Package Price */}
             <input
               type="number"
               value={newPackage.price}
@@ -592,8 +549,6 @@ const Packages = () => {
               }
               placeholder="Package Price"
             />
-
-            {/* Input for Term in Months */}
             <input
               type="number"
               value={newPackage.termInMonths}
@@ -603,15 +558,12 @@ const Packages = () => {
               placeholder="Term in Months"
             />
 
-            {/* Input for Currency */}
             <select
               value={newPackage.currency}
               onChange={(e) =>
                 setNewPackage({ ...newPackage, currency: e.target.value })
               }>
               <option value="USD">USD</option>
-              <option value="EUR">EUR</option>
-              <option value="VND">VND</option>
             </select>
 
             {/* Status */}
@@ -693,8 +645,6 @@ const Packages = () => {
                 setPackageToEdit({ ...packageToEdit, currency: e.target.value })
               }>
               <option value="USD">USD</option>
-              <option value="EUR">EUR</option>
-              <option value="VND">VND</option>
             </select>
             <button
               onClick={handleEditPackage}
@@ -705,8 +655,6 @@ const Packages = () => {
           </div>
         </div>
       )}
-
-      {/* Modal for deleting genre */}
       {isDeleteModalOpen && packageToDelete && (
         <div className="modal">
           <div className="modal-content">
@@ -714,7 +662,7 @@ const Packages = () => {
             <button
               style={{ backgroundColor: "red" }}
               onClick={() => handleDeletePackage(packageToDelete)}>
-              Yes, Delete
+              Yes
             </button>
             <button onClick={() => setIsDeleteModalOpen(false)}>Cancel</button>
           </div>

@@ -5,10 +5,10 @@ const TrailerModal = ({ trailerUrl, onClose }) => {
   const embedUrl = trailerUrl.replace("watch?v=", "embed/");
   return (
     <div className="modal-overlay">
-      <div className="modal-content">
-        <button className="close-btn" onClick={onClose}>
-          &times;
-        </button>
+      <button className="close-btn2" onClick={onClose}>
+        &times;
+      </button>
+      <div className="modal-content2">
         <div className="video-container">
           <iframe
             width="100%"

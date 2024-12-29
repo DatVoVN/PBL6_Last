@@ -1,8 +1,7 @@
-import { HiPencilAlt } from "react-icons/hi";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { toast } from "react-toastify"; // Import toastify
+import { toast } from "react-toastify";
 
 function EditEpisode({ episodeId, setIsModalOpen, fetchEpisodes }) {
   const [episodeData, setEpisodeData] = useState({
@@ -17,14 +16,14 @@ function EditEpisode({ episodeId, setIsModalOpen, fetchEpisodes }) {
   });
   const [isLoading, setIsLoading] = useState(false);
   const MOVIE = import.meta.env.VITE_MOVIE;
-  // Fetch episode details based on episodeId
+
   useEffect(() => {
     const fetchEpisodeDetails = async () => {
       setIsLoading(true);
       try {
         const authToken = Cookies.get("authToken");
         if (!authToken) {
-          console.error("Token not found. Please log in again.");
+          toast.error("Token not found. Please log in again.");
           return;
         }
 
@@ -48,8 +47,7 @@ function EditEpisode({ episodeId, setIsModalOpen, fetchEpisodes }) {
           });
         }
       } catch (error) {
-        console.error("Error fetching episode details:", error);
-        toast.error("Failed to fetch episode details"); // Hiển thị thông báo lỗi
+        toast.error("Failed to fetch episode details");
       } finally {
         setIsLoading(false);
       }
@@ -65,14 +63,12 @@ function EditEpisode({ episodeId, setIsModalOpen, fetchEpisodes }) {
 
     const authToken = Cookies.get("authToken");
     if (!authToken) {
-      console.error("Token not found. Please log in again.");
-      toast.error("Token not found. Please log in again."); // Hiển thị thông báo lỗi nếu không có token
+      toast.error("Token not found. Please log in again.");
       return;
     }
 
     setIsLoading(true);
 
-    // Prepare data only with necessary fields
     const updatedEpisodeData = {
       episodeId: episodeData.episodeId,
       movieId: episodeData.movieId,
@@ -96,13 +92,12 @@ function EditEpisode({ episodeId, setIsModalOpen, fetchEpisodes }) {
       );
 
       if (response.status === 200) {
-        fetchEpisodes(episodeData.movieId); // Refresh the episode list after updating
-        setIsModalOpen(false); // Close the modal after success
-        toast.success("Episode updated successfully!"); // Hiển thị thông báo thành công
+        fetchEpisodes(episodeData.movieId, 1);
+        setIsModalOpen(false);
+        toast.success("Episode updated successfully!");
       }
     } catch (error) {
-      console.error("Error updating episode:", error);
-      toast.error("Error updating episode"); // Hiển thị thông báo lỗi
+      toast.error("Error updating episode");
     } finally {
       setIsLoading(false);
     }
@@ -113,12 +108,38 @@ function EditEpisode({ episodeId, setIsModalOpen, fetchEpisodes }) {
   }
 
   return (
-    <div className="modal-overlay" onClick={() => setIsModalOpen(false)}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <h2>Edit Episode</h2>
+    <div
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        zIndex: 1000,
+      }}
+      onClick={() => setIsModalOpen(false)}>
+      <div
+        style={{
+          backgroundColor: "#fff",
+          borderRadius: "8px",
+          padding: "20px",
+          width: "400px",
+          boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
+          position: "relative",
+        }}
+        onClick={(e) => e.stopPropagation()}>
+        <h2 style={{ marginBottom: "20px", textAlign: "center" }}>
+          Edit Episode
+        </h2>
         <form onSubmit={handleSubmit}>
-          <div>
-            <label>Episode Name</label>
+          <div style={{ marginBottom: "15px" }}>
+            <label style={{ display: "block", fontWeight: "bold" }}>
+              Episode Name
+            </label>
             <input
               type="text"
               value={episodeData.name}
@@ -126,10 +147,18 @@ function EditEpisode({ episodeId, setIsModalOpen, fetchEpisodes }) {
                 setEpisodeData({ ...episodeData, name: e.target.value })
               }
               required
+              style={{
+                width: "100%",
+                padding: "10px",
+                border: "1px solid #ccc",
+                borderRadius: "4px",
+              }}
             />
           </div>
-          <div>
-            <label>Episode Number</label>
+          <div style={{ marginBottom: "15px" }}>
+            <label style={{ display: "block", fontWeight: "bold" }}>
+              Episode Number
+            </label>
             <input
               type="number"
               value={episodeData.episodeNumber}
@@ -140,20 +169,31 @@ function EditEpisode({ episodeId, setIsModalOpen, fetchEpisodes }) {
                 })
               }
               required
+              style={{
+                width: "100%",
+                padding: "10px",
+                border: "1px solid #ccc",
+                borderRadius: "4px",
+              }}
             />
           </div>
-          <div>
-            <label>Is Free</label>
+          <div style={{ marginBottom: "15px" }}>
+            <label style={{ display: "block", fontWeight: "bold" }}>
+              Is Free
+            </label>
             <input
               type="checkbox"
               checked={episodeData.isFree}
               onChange={() =>
                 setEpisodeData({ ...episodeData, isFree: !episodeData.isFree })
               }
+              style={{ marginLeft: "10px" }}
             />
           </div>
-          <div>
-            <label>Status</label>
+          <div style={{ marginBottom: "15px" }}>
+            <label style={{ display: "block", fontWeight: "bold" }}>
+              Status
+            </label>
             <select
               value={episodeData.status}
               onChange={(e) =>
@@ -161,15 +201,42 @@ function EditEpisode({ episodeId, setIsModalOpen, fetchEpisodes }) {
                   ...episodeData,
                   status: e.target.value === "true" ? true : false,
                 })
-              }>
+              }
+              style={{
+                width: "100%",
+                padding: "10px",
+                border: "1px solid #ccc",
+                borderRadius: "4px",
+              }}>
               <option value={true}>Active</option>
-              <option value={false}>Inactive</option>
             </select>
           </div>
-          <button type="submit" disabled={isLoading}>
+          <button
+            type="submit"
+            disabled={isLoading}
+            style={{
+              padding: "10px 15px",
+              margin: "5px",
+              border: "none",
+              borderRadius: "4px",
+              cursor: "pointer",
+              backgroundColor: "#4CAF50",
+              color: "white",
+            }}>
             {isLoading ? "Saving..." : "Save Changes"}
           </button>
-          <button type="button" onClick={() => setIsModalOpen(false)}>
+          <button
+            type="button"
+            onClick={() => setIsModalOpen(false)}
+            style={{
+              padding: "10px 15px",
+              margin: "5px",
+              border: "none",
+              borderRadius: "4px",
+              cursor: "pointer",
+              backgroundColor: "#f44336",
+              color: "white",
+            }}>
             Cancel
           </button>
         </form>

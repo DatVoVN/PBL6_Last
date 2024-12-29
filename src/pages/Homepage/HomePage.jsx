@@ -29,7 +29,8 @@ const HomePage = () => {
   }, []);
 
   return (
-    <div style={{ backgroundColor: "#070720", paddingTop: "10px" }}>
+    <div
+      style={{ backgroundColor: "#070720", paddingTop: "10px", width: "100%" }}>
       <div>
         <Poster />
       </div>

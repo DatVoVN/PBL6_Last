@@ -11,6 +11,7 @@
 /* Hero Item */
 .hero__items1 {
   /* width: 1200px; */
+  border-radius: 20px;
   height: 500px; /* Fixed height */
   background-size: cover;
   background-position: center;
@@ -136,12 +137,12 @@
 
 /* Dịch chuyển .left-nav sang phải 10px */
 .owl-nav .left-nav {
-  margin-left: 93px;  /* Dịch chuyển phần tử bên trái sang phải 10px */
+  margin-left: 104px;  /* Dịch chuyển phần tử bên trái sang phải 10px */
 }
 
 .owl-nav .right-nav {
   margin-left: 610px; /* Cách phần tử bên trái 600px và dịch chuyển sang phải thêm 10px */
-  margin-right: 93px; /* Giảm margin-right đi 10px (93px - 10px) */
+  margin-right: 104px; /* Giảm margin-right đi 10px (93px - 10px) */
 }
 .owl-next:hover {
   background: none !important;  /* Loại bỏ hiệu ứng nền khi hover */

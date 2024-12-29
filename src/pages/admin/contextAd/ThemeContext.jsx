@@ -6,7 +6,7 @@ export const ThemeContext = createContext({});
 
 export const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState(window.localStorage.getItem("themeMode"));
-  window.localStorage.setItem("themeMode", theme); // storing in the local storage
+  window.localStorage.setItem("themeMode", theme);
 
   const toggleTheme = () => {
     setTheme((prevTheme) =>

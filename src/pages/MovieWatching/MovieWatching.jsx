@@ -15,12 +15,14 @@ const MovieWatching = () => {
   const [isMember, setIsMember] = useState(false);
   const [selectedEpisode, setSelectedEpisode] = useState(null);
   const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
+  const [elapsedTime, setElapsedTime] = useState(0); // Track elapsed time in seconds
   const { movieData } = location.state || {};
   const navigate = useNavigate();
   const [topViewedMovies, setTopViewedMovies] = useState([]);
   const MEMBERSHIP = import.meta.env.VITE_MEMBERSHIP;
   const MOVIE = import.meta.env.VITE_MOVIE;
   const REACTION = import.meta.env.VITE_REACTION;
+
   // Fetch membership status for the current user
   const fetchMembershipStatus = async () => {
     try {
@@ -112,6 +114,7 @@ const MovieWatching = () => {
       setSelectedEpisode(episode.episodeId);
     }
   };
+
   const fetchMovies = async () => {
     try {
       const response = await fetch(
@@ -127,6 +130,7 @@ const MovieWatching = () => {
       console.error("Error fetching movies:", error);
     }
   };
+
   // Automatically select the newest episode when movie data is loaded
   useEffect(() => {
     const fetchData = async () => {
@@ -152,6 +156,26 @@ const MovieWatching = () => {
     fetchData();
     fetchMovies();
   }, [movieData, isMember]);
+
+  // Listen for time update from the iframe
+  useEffect(() => {
+    const iframe = document.getElementById("player");
+    const onTimeUpdate = (event) => {
+      const currentTime = event.data.currentTime; // Get current time in seconds
+      setElapsedTime(currentTime);
+      console.log(`Current time: ${currentTime} seconds`);
+    };
+
+    if (iframe) {
+      iframe.contentWindow.addEventListener("timeupdate", onTimeUpdate);
+    }
+
+    return () => {
+      if (iframe) {
+        iframe.contentWindow.removeEventListener("timeupdate", onTimeUpdate);
+      }
+    };
+  }, []);
 
   if (!movieData) {
     return (
@@ -236,13 +260,11 @@ const MovieWatching = () => {
           </div>
         </div>
 
-        <div className="rating-section">
-          <Rating
-            currentRating={movieData.movie.rating}
-            movieId={movieData.movie.movieId}
-            onRatingChange={handleRatingChange}
-          />
-        </div>
+        <Rating
+          currentRating={movieData.movie.rating}
+          movieId={movieData.movie.movieId}
+          onRatingChange={handleRatingChange}
+        />
         {showSubscriptionModal && (
           <div className="subscription-modal">
             <div className="modal-content">

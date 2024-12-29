@@ -11,21 +11,48 @@ const Header = () => {
   const [availableCountries, setAvailableCountries] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [isProfileMenuVisible, setProfileMenuVisible] = useState(false);
-  const [favorites, setFavorites] = useState([]);
   const [userName, setUserName] = useState("");
+  const [userId, setUserId] = useState("");
   const [searchResults, setSearchResults] = useState([]); // Add a state for search results
+  const [searchResultsAll, setSearchResultsAll] = useState([]);
+
   const navigate = useNavigate();
   const location = useLocation();
   const MOVIE = import.meta.env.VITE_MOVIE;
-  const REACTION = import.meta.env.VITE_REACTION;
-
   useEffect(() => {
     const token = Cookies.get("authToken");
     setIsLoggedIn(!!token);
 
     if (token) {
-      const name = Cookies.get("fullName");
-      setUserName(name || "");
+      const userId = Cookies.get("userId");
+      setUserId(userId);
+
+      const fetchUser = async () => {
+        try {
+          const response = await fetch(
+            `https://cineworld.io.vn:7000/api/users/GetById?id=${userId}`,
+            {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${token}`, // Add Bearer token to the headers
+              },
+            }
+          );
+
+          const data = await response.json();
+
+          if (data && data.result) {
+            const userData = data.result;
+            setUserName(userData);
+          } else {
+            console.error("Dữ liệu không hợp lệ:", data);
+          }
+        } catch (error) {
+          console.error("Failed to fetch user data:", error);
+        }
+      };
+
+      fetchUser();
     }
   }, []);
 
@@ -117,21 +144,23 @@ const Header = () => {
       if (searchQuery.trim() !== "") {
         try {
           const response = await fetch(
-            `${MOVIE}/api/movies?Name=${searchQuery}&PageNumber=1&PageSize=25`
+            `${MOVIE}/api/movies?Name=${searchQuery}&PageNumber=1&PageSize=2000`
           );
           const data = await response.json();
           if (Array.isArray(data.result)) {
-            setSearchResults(data.result); // Update search results state
+            setSearchResultsAll(searchQuery);
+            setSearchResults(data.result);
           } else {
             console.error("Dữ liệu không phải là một mảng:", data.result);
-            setSearchResults([]); // Clear the results if not valid
+            setSearchResults([]);
           }
         } catch (error) {
           console.error("Failed to fetch movies:", error);
-          setSearchResults([]); // Clear the results in case of error
+          setSearchResults([]);
         }
       } else {
-        setSearchResults([]); // Clear results if the search query is empty
+        setSearchResults([]); // Reset search results when query is empty
+        setSearchResultsAll(""); // Reset the search term
       }
     };
 
@@ -157,18 +186,15 @@ const Header = () => {
 
   const handleSearchSubmit = (event) => {
     event.preventDefault();
-    navigate(
-      `/api/movies?Name=${encodeURIComponent(
-        searchQuery
-      )}&PageNumber=1&PageSize=25`
-    );
+    navigate("/search-results", {
+      state: { searchResultsAll },
+    });
+    setSearchQuery(""); // Clear the search input field after submitting
   };
 
   if (location.pathname === "/login") {
     return null;
   }
-  console.log(availableCategories);
-  console.log(availableCountries);
 
   return (
     <header className="header">
@@ -265,9 +291,11 @@ const Header = () => {
               {searchResults.length > 0 && (
                 <div className="search-results">
                   <ul>
-                    {searchResults.slice(0, 5).map((movie) => (
+                    {searchResults.map((movie) => (
                       <li key={movie.movie.movieId}>
-                        <Link to={`/detail-watching/${movie.movie.movieId}`}>
+                        <Link
+                          to={`/detail-watching/${movie.movie.movieId}`}
+                          onClick={() => setSearchQuery("")}>
                           <img
                             src={movie.movie.imageUrl}
                             alt={movie.movie.name}
@@ -293,7 +321,7 @@ const Header = () => {
                   <i
                     className="bi bi-person-circle"
                     style={{ marginRight: "20px" }}></i>
-                  {userName && <span>{userName}</span>}
+                  {userName.fullName}
                   {isProfileMenuVisible && (
                     <div className="profile-menu">
                       <ul>

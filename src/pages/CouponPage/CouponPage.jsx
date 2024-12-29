@@ -159,77 +159,186 @@ function CouponPage() {
   };
 
   return (
-    <div>
-      <h2>
-        <i className="fas fa-gift"></i> Coupon Page
+    <div
+      style={{
+        maxWidth: "400px",
+        margin: "20px auto",
+        padding: "20px",
+        backgroundColor: "#ffffff",
+        borderRadius: "10px",
+        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+        fontFamily: "Arial, sans-serif",
+      }}>
+      <h2
+        style={{
+          textAlign: "center",
+          fontSize: "20px",
+          color: "#007bff",
+          marginBottom: "20px",
+          borderBottom: "2px solid #007bff",
+          paddingBottom: "10px",
+        }}>
+        <i
+          className="fas fa-gift"
+          style={{
+            marginRight: "8px",
+            color: "#ff4081",
+          }}></i>
+        Coupon Page
       </h2>
-      <div>
-        <p>
+
+      <div
+        style={{
+          backgroundColor: "#f9f9f9",
+          borderRadius: "8px",
+          padding: "10px",
+          marginBottom: "15px",
+          border: "1px solid #e0e0e0",
+        }}>
+        <p style={{ fontSize: "14px", margin: "0" }}>
+          <i
+            className="fas fa-user"
+            style={{ marginRight: "6px", color: "#007bff" }}></i>
           <strong>Full Name: </strong> {fullName}
         </p>
       </div>
+
       {selectedPackage && (
-        <div>
-          <p>
+        <div
+          style={{
+            backgroundColor: "#f9f9f9",
+            borderRadius: "8px",
+            padding: "10px",
+            marginBottom: "15px",
+            border: "1px solid #e0e0e0",
+          }}>
+          <p style={{ fontSize: "14px", margin: "5px 0" }}>
+            <i
+              className="fas fa-tag"
+              style={{ marginRight: "6px", color: "#ff5722" }}></i>
             <strong>Name:</strong> {selectedPackage.name}
           </p>
-          <p>
+          <p style={{ fontSize: "14px", margin: "5px 0" }}>
+            <i
+              className="fas fa-dollar-sign"
+              style={{ marginRight: "6px", color: "#4caf50" }}></i>
             <strong>Price:</strong> ${selectedPackage.price}
           </p>
-          <p>
+          <p style={{ fontSize: "14px", margin: "5px 0" }}>
+            <i
+              className="fas fa-info-circle"
+              style={{ marginRight: "6px", color: "#ffc107" }}></i>
             <strong>Description:</strong> {selectedPackage.description}
           </p>
-          <p></p>
         </div>
       )}
+
       <form onSubmit={handleCouponSubmit}>
-        <div>
-          <h3>Enter Coupon Code</h3>
+        <div style={{ marginBottom: "15px" }}>
+          <h3
+            style={{
+              marginBottom: "8px",
+              fontSize: "16px",
+              color: "#007bff",
+            }}>
+            <i
+              className="fas fa-ticket-alt"
+              style={{ marginRight: "6px", color: "#007bff" }}></i>
+            Enter Coupon Code
+          </h3>
           <input
             type="text"
             value={couponCode}
             onChange={(e) => setCouponCode(e.target.value)}
-            placeholder="Enter coupon code (optional)"
+            placeholder="Coupon code (optional)"
             disabled={loading}
+            style={{
+              padding: "8px",
+              width: "100%",
+              border: "1px solid #ccc",
+              borderRadius: "5px",
+              fontSize: "14px",
+            }}
           />
         </div>
 
-        {/* Payment Method Selection */}
-        <div>
-          <h3>Select Payment Method</h3>
-          <div>
-            <label>
-              <input
-                type="radio"
-                value="STRIPE"
-                checked={paymentMethod === "STRIPE"}
-                onChange={(e) => setPaymentMethod(e.target.value)}
-              />
-              Stripe
-            </label>
-          </div>
-          <div>
-            <label>
-              <input
-                type="radio"
-                value="PAYOS"
-                checked={paymentMethod === "PAYOS"}
-                onChange={(e) => setPaymentMethod(e.target.value)}
-              />
-              PayOS
-            </label>
-          </div>
+        <div style={{ marginBottom: "15px" }}>
+          <h3
+            style={{
+              marginBottom: "8px",
+              fontSize: "16px",
+              color: "#007bff",
+            }}>
+            <i
+              className="fas fa-credit-card"
+              style={{ marginRight: "6px", color: "#007bff" }}></i>
+            Payment Method
+          </h3>
+          <label
+            style={{ display: "block", fontSize: "14px", marginBottom: "5px" }}>
+            <input
+              type="radio"
+              value="STRIPE"
+              checked={paymentMethod === "STRIPE"}
+              onChange={(e) => setPaymentMethod(e.target.value)}
+              style={{ marginRight: "6px" }}
+            />
+            <i
+              className="fas fa-stripe"
+              style={{ marginRight: "5px", color: "#635bff" }}></i>
+            Stripe
+          </label>
+          <label style={{ display: "block", fontSize: "14px" }}>
+            <input
+              type="radio"
+              value="PAYOS"
+              checked={paymentMethod === "PAYOS"}
+              onChange={(e) => setPaymentMethod(e.target.value)}
+              style={{ marginRight: "6px" }}
+            />
+            <i
+              className="fas fa-wallet"
+              style={{ marginRight: "5px", color: "#4caf50" }}></i>
+            PayOS
+          </label>
         </div>
 
-        {/* Submit Button */}
-        <button type="submit" disabled={loading}>
-          {loading ? <i className="fas fa-spinner fa-spin"></i> : "Submit"}
+        <button
+          type="submit"
+          disabled={loading}
+          style={{
+            width: "100%",
+            padding: "10px",
+            fontSize: "16px",
+            color: "#fff",
+            backgroundColor: loading ? "#ccc" : "#007bff",
+            border: "none",
+            borderRadius: "5px",
+            cursor: loading ? "not-allowed" : "pointer",
+            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+          }}>
+          {loading ? (
+            <i
+              className="fas fa-spinner fa-spin"
+              style={{ marginRight: "5px" }}></i>
+          ) : (
+            "Submit"
+          )}
         </button>
       </form>
 
       {error && (
-        <p>
-          <i className="fas fa-exclamation-circle"></i> {error}
+        <p
+          style={{
+            marginTop: "15px",
+            color: "#ff0000",
+            fontSize: "14px",
+            textAlign: "center",
+          }}>
+          <i
+            className="fas fa-exclamation-circle"
+            style={{ marginRight: "6px" }}></i>
+          {error}
         </p>
       )}
     </div>

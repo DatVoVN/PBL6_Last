@@ -94,6 +94,7 @@ const AddMovie = ({ onClose, fetchMovies }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const authToken = Cookies.get("authToken");
+
     if (!authToken) {
       console.error("Authorization token is missing");
       toast.error("Authorization token is missing!");
@@ -110,14 +111,18 @@ const AddMovie = ({ onClose, fetchMovies }) => {
         body: JSON.stringify(movieData),
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to add movie");
-      }
+      console.log(response.status);
 
-      toast.success("Movie added successfully!");
-      fetchMovies();
-      onClose();
+      if (response.status === 201) {
+        toast.success("Movie added successfully!");
+        fetchMovies(1, "", "", "", "");
+        onClose();
+      } else {
+        const errorResponse = await response.json();
+        toast.error(
+          `Error editing movie: ${errorResponse.message || "Unknown error"}`
+        );
+      }
     } catch (error) {
       console.error("Error adding movie:", error);
       toast.error(error.message || "Failed to add movie!");
@@ -213,7 +218,7 @@ const AddMovie = ({ onClose, fetchMovies }) => {
             <input
               type="file"
               accept="image/*"
-              disabled={movieData.imageUrl} // Disable the file input if URL is already set
+              disabled={movieData.imageUrl}
               onChange={(e) => {
                 const file = e.target.files[0];
                 if (file) {
@@ -235,7 +240,7 @@ const AddMovie = ({ onClose, fetchMovies }) => {
               value={movieData.imageUrl}
               disabled={
                 movieData.imageUrl && !movieData.imageUrl.startsWith("data:")
-              } // Disable the URL input if file input is used
+              }
               onChange={handleChange}
             />
           </label>
@@ -290,7 +295,16 @@ const AddMovie = ({ onClose, fetchMovies }) => {
               max={new Date().getFullYear() + 1}
             />
           </label>
-
+          <label>
+            View:
+            <input
+              type="number"
+              name="view"
+              value={movieData.view}
+              onChange={handleChange}
+              required
+            />
+          </label>
           <label>
             Episode Current:
             <input

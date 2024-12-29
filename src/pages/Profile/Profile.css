@@ -138,3 +138,28 @@
 .update-form button[type="submit"]:hover {
   background-color: #3b7bd9; /* Màu khi hover */
 }
+.avatar-wrapper {
+  position: relative;
+}
+
+.avatar-edit-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  padding: 5px 10px;
+  cursor: pointer;
+  display: none;
+}
+
+.avatar-wrapper:hover .avatar-edit-button {
+  display: block;
+}
+
+.profile-avatar {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+}

@@ -75,21 +75,9 @@ function Comments({ movieId }) {
   // Fetch comments when the component mounts or movieId changes
   useEffect(() => {
     const fetchComments = async () => {
-      const authToken = Cookies.get("authToken");
-
-      if (!authToken) {
-        setError("Authentication token is missing. Please log in.");
-        return;
-      }
-
       try {
         const response = await axios.get(
-          `${REACTION}/api/comments?movieId=${movieId}&PageNumber=1&PageSize=25`,
-          {
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-            },
-          }
+          `${REACTION}/api/comments?movieId=${movieId}&PageNumber=1&PageSize=25`
         );
 
         const { result } = response.data;
@@ -110,7 +98,6 @@ function Comments({ movieId }) {
         );
       }
     };
-
     fetchComments();
   }, [movieId]);
 
@@ -145,13 +132,13 @@ function Comments({ movieId }) {
           <div className="anime__review__item__pic">
             <img
               style={{ borderRadius: "50%" }}
-              src={comment.avatarUrl || `/public/img/avatar.jpg`}
+              src={comment.avatar || `/public/img/avatar.jpg`}
               alt="Review"
             />
           </div>
           <div className="anime__review__item__text">
             <h6>
-              {comment.userName} -{" "}
+              {comment.fullName} -{" "}
               <span>{new Date(comment.createdAt).toLocaleString()}</span>
             </h6>
             <p>{comment.commentContent}</p>

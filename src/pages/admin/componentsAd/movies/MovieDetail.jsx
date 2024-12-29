@@ -1,19 +1,58 @@
 import React from "react";
-import "./MovieDetail.css";
 
 const MovieDetail = ({ movie }) => {
   if (!movie) {
-    return <div className="movie-detail-container">Movie not found!</div>;
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+          fontSize: "20px",
+          color: "red",
+        }}>
+        Movie not found!
+      </div>
+    );
   }
 
   return (
-    <div className="movie-detail-container">
-      <div className="movie-detail-card">
-        <div className="movie-image">
-          <img src={movie.imageUrl} alt={movie.name} />
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        padding: "20px",
+        backgroundColor: "#f9f9f9",
+      }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          gap: "20px",
+          backgroundColor: "#fff",
+          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+          padding: "20px",
+          borderRadius: "8px",
+          width: "80%",
+          maxWidth: "1200px",
+        }}>
+        <div style={{ flex: "1" }}>
+          <img
+            src={movie.imageUrl}
+            alt={movie.name}
+            style={{
+              width: "100%",
+              height: "auto",
+              borderRadius: "8px",
+              objectFit: "cover",
+            }}
+          />
         </div>
-        <div className="movie-details">
-          <h2>{movie.name}</h2>
+        <div style={{ flex: "2", display: "flex", flexDirection: "column" }}>
+          <h2 style={{ marginBottom: "10px", fontSize: "24px", color: "#333" }}>
+            {movie.name}
+          </h2>
           <p>
             <strong>Original Name:</strong> {movie.originName}
           </p>
@@ -29,10 +68,24 @@ const MovieDetail = ({ movie }) => {
           </p>
           <p>
             <strong>Genres:</strong>
-            <span className="genres">
+            <span
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: "5px",
+              }}>
               {movie.genres?.length > 0
                 ? movie.genres.map((genre) => (
-                    <span key={genre.name}>{genre.name}</span>
+                    <span
+                      key={genre.name}
+                      style={{
+                        padding: "5px 10px",
+                        backgroundColor: "#efefef",
+                        borderRadius: "12px",
+                        fontSize: "14px",
+                      }}>
+                      {genre.name}
+                    </span>
                   ))
                 : "N/A"}
             </span>
@@ -41,7 +94,14 @@ const MovieDetail = ({ movie }) => {
             <strong>Year:</strong> {movie.year}
           </p>
           <p>
-            <strong>Status:</strong> {movie.status ? "Active" : "Inactive"}
+            <strong>Status:</strong>{" "}
+            <span
+              style={{
+                color: movie.status ? "green" : "red",
+                fontWeight: "bold",
+              }}>
+              {movie.status ? "Active" : "Inactive"}
+            </span>
           </p>
           <p>
             <strong>Duration:</strong> {movie.duration}
