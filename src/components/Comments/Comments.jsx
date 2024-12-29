@@ -13,6 +13,32 @@ function Comments({ movieId }) {
   const [replyingTo, setReplyingTo] = useState(null);
   const REACTION = import.meta.env.VITE_REACTION;
 
+  // Fetch comments when the component mounts or movieId changes
+  const fetchComments = async () => {
+    try {
+      const response = await axios.get(
+        `${REACTION}/api/comments?movieId=${movieId}&PageNumber=1&PageSize=25`
+      );
+
+      const { result } = response.data;
+
+      if (result && Array.isArray(result.records)) {
+        const sortedComments = result.records.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+        setComments(sortedComments);
+      } else {
+        setError("Invalid data format received from the API.");
+      }
+    } catch (err) {
+      setError("Failed to load comments. Please try again later.");
+      console.error(
+        "Error fetching comments:",
+        err.response?.data || err.message
+      );
+    }
+  };
+
   // Submit a new comment or reply
   const handleCommentSubmit = async (e, parentId = null) => {
     e.preventDefault();
@@ -56,13 +82,10 @@ function Comments({ movieId }) {
         setCommentContent("");
       }
 
-      setComments((prevComments) => {
-        const newComments = [response.data.result, ...prevComments];
-        return newComments.sort(
-          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-        );
-      });
       setReplyingTo(null);
+
+      // After posting the comment, fetch the updated comments
+      fetchComments();
     } catch (error) {
       console.error(
         "Error posting comment:",
@@ -72,49 +95,21 @@ function Comments({ movieId }) {
     }
   };
 
-  // Fetch comments when the component mounts or movieId changes
   useEffect(() => {
-    const fetchComments = async () => {
-      try {
-        const response = await axios.get(
-          `${REACTION}/api/comments?movieId=${movieId}&PageNumber=1&PageSize=25`
-        );
-
-        const { result } = response.data;
-
-        if (result && Array.isArray(result.records)) {
-          const sortedComments = result.records.sort(
-            (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-          );
-          setComments(sortedComments);
-        } else {
-          setError("Invalid data format received from the API.");
-        }
-      } catch (err) {
-        setError("Failed to load comments. Please try again later.");
-        console.error(
-          "Error fetching comments:",
-          err.response?.data || err.message
-        );
-      }
-    };
     fetchComments();
   }, [movieId]);
 
-  // Toggle visibility for child comments
   const toggleChildComments = (commentId) => {
     setVisibleChildComments((prevState) => ({
       ...prevState,
-      [commentId]: !prevState[commentId], // Toggle visibility for the specific comment
+      [commentId]: !prevState[commentId],
     }));
   };
 
-  // Load more comments when clicked
   const loadMoreComments = () => {
     setCommentsToShow((prev) => prev + 5);
   };
 
-  // Render the comments and replies
   const renderComments = (commentsList, parentId = null) => {
     const childComments = commentsList.filter(
       (comment) => comment.commentParentId === parentId
@@ -124,74 +119,76 @@ function Comments({ movieId }) {
       return null;
     }
 
-    return childComments.map((comment) => (
-      <div
-        key={comment.commentId}
-        style={{ marginLeft: parentId ? "20px" : "0" }}>
-        <div className="anime__review__item">
-          <div className="anime__review__item__pic">
-            <img
-              style={{ borderRadius: "50%" }}
-              src={comment.avatar || `/public/img/avatar.jpg`}
-              alt="Review"
-            />
-          </div>
-          <div className="anime__review__item__text">
-            <h6>
-              {comment.fullName} -{" "}
-              <span>{new Date(comment.createdAt).toLocaleString()}</span>
-            </h6>
-            <p>{comment.commentContent}</p>
+    return childComments.map((comment) => {
+      const isChildComment = parentId !== null;
 
-            {/* Show/Hide button for child comments */}
-            {parentId === null && childComments.length > 0 && (
-              <button onClick={() => toggleChildComments(comment.commentId)}>
-                {visibleChildComments[comment.commentId]
-                  ? "Hide Replies"
-                  : "Show Replies"}
-              </button>
-            )}
+      return (
+        <div
+          key={comment.commentId}
+          style={{ marginLeft: isChildComment ? "20px" : "0" }}>
+          <div className="anime__review__item">
+            <div className="anime__review__item__pic">
+              <img
+                style={{ borderRadius: "50%" }}
+                src={comment.avatar || `/public/img/avatar.jpg`}
+                alt="Review"
+              />
+            </div>
+            <div className="anime__review__item__text">
+              <h6>
+                {comment.fullName} -{" "}
+                <span>{new Date(comment.createdAt).toLocaleString()}</span>
+              </h6>
+              <p>{comment.commentContent}</p>
 
-            {/* Reply button */}
-            {parentId === null && (
-              <button
-                onClick={() =>
-                  setReplyingTo(
-                    replyingTo === comment.commentId ? null : comment.commentId
-                  )
-                }>
-                {replyingTo === comment.commentId ? "Cancel Reply" : "Reply"}
-              </button>
-            )}
+              {parentId === null && childComments.length > 0 && (
+                <button onClick={() => toggleChildComments(comment.commentId)}>
+                  {visibleChildComments[comment.commentId]
+                    ? "Hide Replies"
+                    : "Show Replies"}
+                </button>
+              )}
+
+              {parentId === null && (
+                <button
+                  onClick={() =>
+                    setReplyingTo(
+                      replyingTo === comment.commentId
+                        ? null
+                        : comment.commentId
+                    )
+                  }>
+                  {replyingTo === comment.commentId ? "Cancel Reply" : "Reply"}
+                </button>
+              )}
+            </div>
           </div>
+
+          {replyingTo === comment.commentId && (
+            <form
+              className="form_area"
+              onSubmit={(e) => handleCommentSubmit(e, comment.commentId)}>
+              <textarea
+                className="text_area"
+                placeholder="Your Reply"
+                value={replies[comment.commentId] || ""}
+                onChange={(e) =>
+                  setReplies((prevReplies) => ({
+                    ...prevReplies,
+                    [comment.commentId]: e.target.value,
+                  }))
+                }
+                required
+              />
+              <button type="submit">Reply</button>
+            </form>
+          )}
+
+          {visibleChildComments[comment.commentId] &&
+            renderComments(commentsList, comment.commentId)}
         </div>
-
-        {/* Show reply form if replying */}
-        {replyingTo === comment.commentId && (
-          <form
-            className="form_area"
-            onSubmit={(e) => handleCommentSubmit(e, comment.commentId)}>
-            <textarea
-              className="text_area"
-              placeholder="Your Reply"
-              value={replies[comment.commentId] || ""}
-              onChange={(e) =>
-                setReplies((prevReplies) => ({
-                  ...prevReplies,
-                  [comment.commentId]: e.target.value,
-                }))
-              }
-              required
-            />
-            <button type="submit">Reply</button>
-          </form>
-        )}
-
-        {/* Show child comments if visibility is enabled */}
-        {visibleChildComments[comment.commentId] &&
-          renderComments(commentsList, comment.commentId)}
-      </div>
-    ));
+      );
+    });
   };
 
   return (
@@ -199,7 +196,7 @@ function Comments({ movieId }) {
       <div className="section-title">
         <h5 style={{ marginTop: "20px", marginBottom: "20px" }}>Reviews</h5>
         {comments.length === 0 ? (
-          <p>Không có comment nào!</p>
+          <p>No comments available!</p>
         ) : (
           renderComments(comments.slice(0, commentsToShow))
         )}
@@ -216,6 +213,7 @@ function Comments({ movieId }) {
           </div>
           <form onSubmit={handleCommentSubmit}>
             <textarea
+              style={{ color: "black" }}
               placeholder="Your Comment"
               value={commentContent}
               onChange={(e) => setCommentContent(e.target.value)}

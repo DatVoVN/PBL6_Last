@@ -15,14 +15,12 @@ const MovieWatching = () => {
   const [isMember, setIsMember] = useState(false);
   const [selectedEpisode, setSelectedEpisode] = useState(null);
   const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
-  const [elapsedTime, setElapsedTime] = useState(0); // Track elapsed time in seconds
   const { movieData } = location.state || {};
   const navigate = useNavigate();
   const [topViewedMovies, setTopViewedMovies] = useState([]);
   const MEMBERSHIP = import.meta.env.VITE_MEMBERSHIP;
   const MOVIE = import.meta.env.VITE_MOVIE;
   const REACTION = import.meta.env.VITE_REACTION;
-
   // Fetch membership status for the current user
   const fetchMembershipStatus = async () => {
     try {
@@ -114,7 +112,6 @@ const MovieWatching = () => {
       setSelectedEpisode(episode.episodeId);
     }
   };
-
   const fetchMovies = async () => {
     try {
       const response = await fetch(
@@ -130,7 +127,6 @@ const MovieWatching = () => {
       console.error("Error fetching movies:", error);
     }
   };
-
   // Automatically select the newest episode when movie data is loaded
   useEffect(() => {
     const fetchData = async () => {
@@ -157,26 +153,6 @@ const MovieWatching = () => {
     fetchMovies();
   }, [movieData, isMember]);
 
-  // Listen for time update from the iframe
-  useEffect(() => {
-    const iframe = document.getElementById("player");
-    const onTimeUpdate = (event) => {
-      const currentTime = event.data.currentTime; // Get current time in seconds
-      setElapsedTime(currentTime);
-      console.log(`Current time: ${currentTime} seconds`);
-    };
-
-    if (iframe) {
-      iframe.contentWindow.addEventListener("timeupdate", onTimeUpdate);
-    }
-
-    return () => {
-      if (iframe) {
-        iframe.contentWindow.removeEventListener("timeupdate", onTimeUpdate);
-      }
-    };
-  }, []);
-
   if (!movieData) {
     return (
       <div>
@@ -188,6 +164,38 @@ const MovieWatching = () => {
   const handleRatingChange = (newRating) => {
     console.log("New Rating:", newRating);
   };
+  useEffect(() => {
+    const movieId = movieData?.movie?.movieId; // Ví dụ lấy từ movieData
+    const episodeId = selectedEpisode; // Ví dụ lấy từ selectedEpisode
+    if (movieId && episodeId) {
+      const timer = setTimeout(() => {
+        console.log("MovieId:", movieId);
+        console.log("EpisodeId:", episodeId);
+        fetch(
+          `https://cineworld.io.vn:7004/api/views?MovieId=${movieId}&EpisodeId=${episodeId}`,
+          {
+            method: "POST", // Đặt phương thức là POST
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              MovieId: movieId,
+              EpisodeId: episodeId,
+            }),
+          }
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            console.log("API Response:", data);
+          })
+          .catch((error) => {
+            console.error("Error fetching views:", error);
+          });
+      }, 300000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [movieData, selectedEpisode]);
 
   return (
     <section className="anime-details spad" style={{ height: "1800px" }}>
