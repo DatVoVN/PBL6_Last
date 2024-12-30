@@ -29,6 +29,8 @@ import { SidebarProvider } from "./pages/admin/contextAd/SidebarContext.jsx";
 import SearchResultDetail from "./pages/SearchResultDetail/SearchResultDetail.jsx";
 import { ToastContainer } from "react-toastify"; // Import ToastContainer
 import "react-toastify/dist/ReactToastify.css"; // Import the ToastContainer styles
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute.jsx";
+import NoMovieComponent from "./components/NoMovieComponent/NoMovieComponent.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -44,9 +46,11 @@ createRoot(document.getElementById("root")).render(
             <Route
               path="/admin/*"
               element={
-                <SidebarProvider>
-                  <Admin />
-                </SidebarProvider>
+                <ProtectedRoute>
+                  <SidebarProvider>
+                    <Admin />
+                  </SidebarProvider>
+                </ProtectedRoute>
               }
             />
 
@@ -71,6 +75,7 @@ createRoot(document.getElementById("root")).render(
               <Route path="/favorites" element={<Favorites />} />
               <Route path="/history" element={<History />} />
               <Route path="/search-results" element={<SearchResultDetail />} />
+              <Route path="/no-movie" element={<NoMovieComponent />} />
             </Route>
           </Routes>
           {/* <ToastContainer /> */}

@@ -70,6 +70,7 @@ const Receipt = () => {
         padding: "20px",
         color: "#fff",
         fontFamily: "Arial, sans-serif",
+        height: "500px",
       }}>
       <h2 style={{ textAlign: "center" }}>User Receipts</h2>
       {receipts.length === 0 ? (

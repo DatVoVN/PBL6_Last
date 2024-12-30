@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
-import { Link } from "react-router-dom"; // Import Link for navigation
+import { Link } from "react-router-dom";
 import "./Profile.css";
 import Spinner from "../../components/Spinner/Spinner";
 
 const Profile = () => {
   const [profileData, setProfileData] = useState(null);
+  const [membershipData, setMembershipData] = useState(null);
+  const [isMember, setIsMember] = useState(false);
   const [updatedInfo, setUpdatedInfo] = useState({
     id: null,
     fullName: "",
@@ -16,14 +18,13 @@ const Profile = () => {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [isEditing, setIsEditing] = useState(false); // State to control form visibility
-  const [avatarPreview, setAvatarPreview] = useState(""); // State for avatar preview
-  const [showAvatarEdit, setShowAvatarEdit] = useState(false); // Show the edit option on hover
+  const [isEditing, setIsEditing] = useState(false);
+  const [avatarPreview, setAvatarPreview] = useState("");
+  const [showAvatarEdit, setShowAvatarEdit] = useState(false);
 
   useEffect(() => {
-    // Retrieve userId from the cookie
     const userId = Cookies.get("userId");
-    const tokenAuth = Cookies.get("authToken"); // Retrieve token from cookies
+    const tokenAuth = Cookies.get("authToken");
 
     if (userId && tokenAuth) {
       const fetchUserData = async () => {
@@ -33,7 +34,7 @@ const Profile = () => {
             {
               method: "GET",
               headers: {
-                Authorization: `Bearer ${tokenAuth}`, // Include Bearer token
+                Authorization: `Bearer ${tokenAuth}`,
               },
             }
           );
@@ -44,7 +45,7 @@ const Profile = () => {
 
           const data = await response.json();
           if (data && data.result) {
-            const user = data.result; // Assuming the response structure contains the user object
+            const user = data.result;
 
             setProfileData(user);
             setUpdatedInfo({
@@ -55,7 +56,8 @@ const Profile = () => {
               dateOfBirth: user.dateOfBirth,
               createdDate: user.createdDate,
             });
-            setAvatarPreview(user.avatar); // Set avatar preview to the user's current avatar
+            setAvatarPreview(user.avatar);
+            checkMembership(user.email);
           }
         } catch (error) {
           setError("Failed to fetch user information");
@@ -65,15 +67,40 @@ const Profile = () => {
 
       fetchUserData();
     }
-  }, []); // Run once on component mount
+  }, []);
+
+  const checkMembership = async (email) => {
+    try {
+      const response = await fetch(
+        `https://cineworld.io.vn:7002/api/memberships/${email}`
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch membership status");
+      }
+
+      const data = await response.json();
+      if (data && data.isSuccess && data.result) {
+        setIsMember(true);
+        setMembershipData(data.result);
+      } else {
+        setIsMember(false);
+        setMembershipData(null);
+      }
+    } catch (error) {
+      console.error("Error checking membership status:", error);
+      setIsMember(false);
+      setMembershipData(null);
+    }
+  };
 
   const handleUpdate = async () => {
     setLoading(true);
     setError(null);
 
-    const tokenAuth = Cookies.get("authToken"); // Retrieve token from cookies
+    const tokenAuth = Cookies.get("authToken");
 
-    updatedInfo.dateOfBirth = new Date(updatedInfo.dateOfBirth).toISOString(); // Ensure date format
+    updatedInfo.dateOfBirth = new Date(updatedInfo.dateOfBirth).toISOString();
 
     const { createdDate, ...updatedInfoWithoutCreatedDate } = updatedInfo;
 
@@ -84,7 +111,7 @@ const Profile = () => {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${tokenAuth}`, // Include the token in the Authorization header
+            Authorization: `Bearer ${tokenAuth}`,
           },
           body: JSON.stringify(updatedInfoWithoutCreatedDate),
         }
@@ -92,7 +119,6 @@ const Profile = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.error("Error response:", errorData);
         throw new Error(
           "Failed to update information: " +
             (errorData.message || "Unknown error")
@@ -103,17 +129,10 @@ const Profile = () => {
       setProfileData((prev) => ({ ...prev, ...updatedInfoWithoutCreatedDate }));
       setIsEditing(false);
 
-      // Reload the page after successful update
       window.location.reload();
     } catch (error) {
       console.error("Error updating information:", error);
-      if (error instanceof TypeError) {
-        setError(
-          "Network error: Failed to fetch. Please check your connection or the server."
-        );
-      } else {
-        setError(error.message);
-      }
+      setError(error.message);
     } finally {
       setLoading(false);
     }
@@ -123,22 +142,19 @@ const Profile = () => {
     const file = e.target.files[0];
     if (file) {
       const formData = new FormData();
-
-      // Append the file with additional details like name and type
       formData.append("file", file, "avatar.jpg");
 
       setLoading(true);
-      const tokenAuth = Cookies.get("authToken"); // Retrieve token from cookies
+      const tokenAuth = Cookies.get("authToken");
 
-      // Send the FormData object to the server via POST request
       fetch(
         `https://cineworld.io.vn:7000/api/users/updateAvatar?folder=user_avatars`,
         {
           method: "POST",
           headers: {
-            Authorization: `Bearer ${tokenAuth}`, // Add token to headers
+            Authorization: `Bearer ${tokenAuth}`,
           },
-          body: formData, // Attach the FormData object to the body
+          body: formData,
         }
       )
         .then((response) => {
@@ -148,8 +164,7 @@ const Profile = () => {
           return response.json();
         })
         .then((data) => {
-          console.log("Avatar updated successfully:", data);
-          setAvatarPreview(URL.createObjectURL(file)); // Preview the uploaded avatar
+          setAvatarPreview(URL.createObjectURL(file));
         })
         .catch((error) => {
           console.error("Error updating avatar:", error);
@@ -172,20 +187,19 @@ const Profile = () => {
       <div className="profile-header">
         <div
           className="avatar-wrapper"
-          onMouseEnter={() => setShowAvatarEdit(true)} // Show edit button on hover
-          onMouseLeave={() => setShowAvatarEdit(false)} // Hide edit button on hover out
-        >
+          onMouseEnter={() => setShowAvatarEdit(true)}
+          onMouseLeave={() => setShowAvatarEdit(false)}>
           <img
-            src={avatarPreview || "https://via.placeholder.com/150"} // Use preview or fallback
+            src={avatarPreview || "https://via.placeholder.com/150"}
             alt="User Avatar"
             className="profile-avatar"
           />
-          {showAvatarEdit && ( // Display edit button on hover
+          {showAvatarEdit && (
             <label className="avatar-edit-button">
               <input
                 type="file"
                 accept="image/*"
-                onChange={handleAvatarChange} // Handle avatar change
+                onChange={handleAvatarChange}
                 style={{ display: "none" }}
               />
               Change Avatar
@@ -207,13 +221,24 @@ const Profile = () => {
           <strong>Date of Birth:</strong>{" "}
           {new Date(dateOfBirth).toLocaleDateString()}
         </p>
+        <p>
+          <strong>Membership Status:</strong>{" "}
+          {isMember ? (
+            <span>
+              Member (Expires on:{" "}
+              {new Date(membershipData?.expirationDate).toLocaleDateString()})
+            </span>
+          ) : (
+            "You are not a member"
+          )}
+        </p>
       </div>
       <div className="profile-actions">
         <Link to="/change-password" className="change-password-btn">
           Change Password
         </Link>
         <button
-          onClick={() => setIsEditing(!isEditing)} // Toggle editing state
+          onClick={() => setIsEditing(!isEditing)}
           className="change-password-btn"
           style={{ marginLeft: "10px" }}>
           {isEditing ? "Cancel" : "Update Information"}
@@ -221,16 +246,39 @@ const Profile = () => {
         {error && <p style={{ color: "red" }}>{error}</p>}
       </div>
 
-      {isEditing && ( // Show the edit form if isEditing is true
-        <div className="update-form">
-          <h3>Update Profile Information</h3>
+      {isEditing && (
+        <div
+          style={{
+            marginTop: "20px",
+            padding: "20px",
+            border: "1px solid #ddd",
+            borderRadius: "8px",
+            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+            maxWidth: "500px",
+            backgroundColor: "#f9f9f9",
+          }}>
+          <h3
+            style={{
+              marginBottom: "20px",
+              textAlign: "center",
+              color: "#333",
+            }}>
+            Update Profile Information
+          </h3>
           <form
             onSubmit={(e) => {
               e.preventDefault();
               handleUpdate();
             }}>
-            <div>
-              <label>Full Name:</label>
+            <div style={{ marginBottom: "15px" }}>
+              <label
+                style={{
+                  display: "block",
+                  marginBottom: "5px",
+                  fontWeight: "bold",
+                }}>
+                Full Name:
+              </label>
               <input
                 type="text"
                 value={updatedInfo.fullName}
@@ -238,27 +286,55 @@ const Profile = () => {
                   setUpdatedInfo({ ...updatedInfo, fullName: e.target.value })
                 }
                 required
+                style={{
+                  width: "100%",
+                  padding: "10px",
+                  border: "1px solid #ccc",
+                  borderRadius: "4px",
+                  fontSize: "14px",
+                }}
               />
             </div>
-            <div>
-              <label>Gender:</label>
+            <div style={{ marginBottom: "15px" }}>
+              <label
+                style={{
+                  display: "block",
+                  marginBottom: "5px",
+                  fontWeight: "bold",
+                }}>
+                Gender:
+              </label>
               <select
                 value={updatedInfo.gender}
                 onChange={(e) =>
                   setUpdatedInfo({ ...updatedInfo, gender: e.target.value })
                 }
-                required>
+                required
+                style={{
+                  width: "100%",
+                  padding: "10px",
+                  border: "1px solid #ccc",
+                  borderRadius: "4px",
+                  fontSize: "14px",
+                }}>
                 <option value="">Select Gender</option>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
                 <option value="Other">Other</option>
               </select>
             </div>
-            <div>
-              <label>Date of Birth:</label>
+            <div style={{ marginBottom: "15px" }}>
+              <label
+                style={{
+                  display: "block",
+                  marginBottom: "5px",
+                  fontWeight: "bold",
+                }}>
+                Date of Birth:
+              </label>
               <input
                 type="date"
-                value={updatedInfo.dateOfBirth.split("T")[0]} // Format for input date
+                value={updatedInfo.dateOfBirth.split("T")[0]}
                 onChange={(e) =>
                   setUpdatedInfo({
                     ...updatedInfo,
@@ -266,9 +342,28 @@ const Profile = () => {
                   })
                 }
                 required
+                style={{
+                  width: "100%",
+                  padding: "10px",
+                  border: "1px solid #ccc",
+                  borderRadius: "4px",
+                  fontSize: "14px",
+                }}
               />
             </div>
-            <button type="submit" disabled={loading}>
+            <button
+              type="submit"
+              disabled={loading}
+              style={{
+                width: "100%",
+                padding: "10px",
+                backgroundColor: loading ? "#ccc" : "#007BFF",
+                color: "#fff",
+                border: "none",
+                borderRadius: "4px",
+                fontSize: "16px",
+                cursor: loading ? "not-allowed" : "pointer",
+              }}>
               {loading ? "Updating..." : "Save Changes"}
             </button>
           </form>

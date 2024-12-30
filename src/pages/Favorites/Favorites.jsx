@@ -162,10 +162,17 @@ function Favorites() {
             </div>
           ))
         ) : (
-          <NoMovieComponent />
+          <div
+            style={{
+              textAlign: "center",
+              color: "white",
+              fontSize: "18px",
+              height: "500px",
+            }}>
+            No favorite movies yet.
+          </div>
         )}
       </div>
-
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}

@@ -55,20 +55,74 @@ function PaymentSuccessPage() {
   };
 
   return (
-    <div className="success-container">
-      <div className="success-message">
-        <h1>Payment Successful! 🎉</h1>
-        <p>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+        backgroundColor: "#f4f8fb",
+        fontFamily: "Arial, sans-serif",
+        padding: "20px",
+      }}>
+      <div
+        style={{
+          maxWidth: "500px",
+          backgroundColor: "#fff",
+          borderRadius: "10px",
+          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+          padding: "30px",
+          textAlign: "center",
+        }}>
+        <h1 style={{ color: "#28a745", marginBottom: "20px" }}>
+          Payment Successful! 🎉
+        </h1>
+        <p style={{ color: "#555", marginBottom: "15px", lineHeight: "1.5" }}>
           Thank you for your purchase. Your payment was processed successfully.
         </p>
-        <p>
+        <p style={{ color: "#555", marginBottom: "20px", lineHeight: "1.5" }}>
           You can now enjoy your subscription. If you have any issues, feel free
           to contact our support team.
         </p>
-        <button onClick={handleBackToHome}>Go to Home</button>
+        <button
+          onClick={handleBackToHome}
+          style={{
+            backgroundColor: "#007bff",
+            color: "#fff",
+            padding: "10px 20px",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer",
+            fontSize: "16px",
+            fontWeight: "bold",
+            transition: "background-color 0.3s",
+          }}
+          onMouseOver={(e) => (e.target.style.backgroundColor = "#0056b3")}
+          onMouseOut={(e) => (e.target.style.backgroundColor = "#007bff")}>
+          Go to Home
+        </button>
+        {validationResult && (
+          <p
+            style={{
+              marginTop: "20px",
+              color: "#28a745",
+              fontWeight: "bold",
+            }}>
+            {validationResult}
+          </p>
+        )}
+        {error && (
+          <p
+            style={{
+              marginTop: "20px",
+              color: "#dc3545",
+              fontWeight: "bold",
+            }}>
+            {error}
+          </p>
+        )}
       </div>
     </div>
   );
 }
-
 export default PaymentSuccessPage;

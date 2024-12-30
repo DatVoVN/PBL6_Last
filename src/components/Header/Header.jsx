@@ -170,7 +170,8 @@ const Header = () => {
   const handleLogout = () => {
     Cookies.remove("authToken");
     Cookies.remove("userId");
-    Cookies.remove("userName"); // Remove userName from cookies
+    Cookies.remove("userName");
+    Cookies.remove("Bearer");
     setIsLoggedIn(false);
     setUserName(""); // Clear the userName state on logout
     navigate("/login");

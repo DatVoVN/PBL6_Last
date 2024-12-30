@@ -40,11 +40,16 @@ const Login = () => {
 
         console.log("User Role:", role);
 
-        setUserData(id, token, fullName);
+        // Set user data including role
+        setUserData(id, token, fullName, role); // Pass role to context
+
+        // Store role and other data in cookies
         Cookies.set("Bearer", token, { expires: 1 });
         Cookies.set("fullName", fullName, { expires: 1 });
+        Cookies.set("role", role, { expires: 1 }); // Store role in cookies
         Cookies.set("userData", JSON.stringify(response.data), { expires: 1 });
 
+        // Redirect based on role
         if (role === "ADMIN") navigate("/admin");
         else navigate("/");
       }
@@ -205,13 +210,23 @@ const Login = () => {
             bottom: "auto",
             marginRight: "-50%",
             transform: "translate(-50%, -50%)",
+            width: "400px" /* Set a fixed width */,
+            padding: "20px",
+            borderRadius: "8px",
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+            backgroundColor: "#fff",
+          },
+          overlay: {
+            backgroundColor: "rgba(0, 0, 0, 0.5)" /* Dimmed background */,
           },
         }}>
         <h2
           style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
+            textAlign: "center",
+            marginBottom: "20px",
+            fontSize: "24px",
+            fontWeight: "600",
+            color: "#333",
           }}>
           Forgot Password
         </h2>
@@ -222,31 +237,43 @@ const Login = () => {
           onChange={(e) => setModalEmail(e.target.value)}
           style={{
             width: "100%",
-            padding: "10px",
+            padding: "12px 16px",
             marginBottom: "20px",
             fontSize: "16px",
+            border: "1px solid #ccc",
+            borderRadius: "5px",
+            outline: "none",
+            boxSizing: "border-box",
           }}
         />
         <button
           onClick={handleForgotPassword}
           style={{
+            width: "100%",
             backgroundColor: "#00aaff",
             color: "white",
             fontWeight: "bold",
-            padding: "10px 20px",
+            padding: "12px",
             border: "none",
+            borderRadius: "5px",
             cursor: "pointer",
+            fontSize: "16px",
+            marginBottom: "10px",
+            transition: "background-color 0.3s",
           }}>
           {loading ? "Sending..." : "Submit"}
         </button>
         <button
           onClick={() => setModalIsOpen(false)}
           style={{
-            marginLeft: "10px",
-            padding: "10px 20px",
+            width: "100%",
+            padding: "12px",
             border: "1px solid #ccc",
             backgroundColor: "white",
+            borderRadius: "5px",
             cursor: "pointer",
+            fontSize: "16px",
+            transition: "background-color 0.3s",
           }}>
           Close
         </button>
@@ -260,7 +287,11 @@ const Login = () => {
             <div className="spinner"></div>
           </div>
         )}
-        {modalMessage && <p style={{ marginTop: "20px" }}>{modalMessage}</p>}
+        {modalMessage && (
+          <p style={{ marginTop: "20px", textAlign: "center", color: "#333" }}>
+            {modalMessage}
+          </p>
+        )}
       </Modal>
 
       {/* Modal for Resetting Password */}

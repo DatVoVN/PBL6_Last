@@ -20,7 +20,7 @@
 .content-area-table .data-table-diagram {
   border-radius: 6px;
   border: 1px solid var(--tbl-border-color) !important;
-  overflow-x: scroll;
+  /* overflow-x: scroll; */
 }
 
 .content-area-table .data-table-diagram::-webkit-scrollbar {

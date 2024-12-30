@@ -15,17 +15,17 @@ import "./AreaCharts.scss";
 
 // Giữ nguyên dữ liệu cho các tháng từ 1 đến tháng 11
 const fakeData = [
-  { month: "Jan", csiRenew: 70 },
-  { month: "Feb", csiRenew: 55 },
-  { month: "Mar", csiRenew: 35 },
-  { month: "April", csiRenew: 90 },
-  { month: "May", csiRenew: 55 },
-  { month: "Jun", csiRenew: 30 },
-  { month: "Jul", csiRenew: 32 },
-  { month: "Aug", csiRenew: 62 },
-  { month: "Sep", csiRenew: 55 },
-  { month: "Oct", csiRenew: 50 },
-  { month: "Nov", csiRenew: 60 },
+  { month: "Jan", csiRenew: 2000 },
+  { month: "Feb", csiRenew: 2200 },
+  { month: "Mar", csiRenew: 1212 },
+  { month: "April", csiRenew: 2030 },
+  { month: "May", csiRenew: 3121 },
+  { month: "Jun", csiRenew: 5434 },
+  { month: "Jul", csiRenew: 3211 },
+  { month: "Aug", csiRenew: 3212 },
+  { month: "Sep", csiRenew: 1212 },
+  { month: "Oct", csiRenew: 1212 },
+  { month: "Nov", csiRenew: 2431 },
 ];
 
 const AreaBarChart = () => {

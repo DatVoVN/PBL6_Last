@@ -133,17 +133,22 @@ const MovieWatching = () => {
       await fetchMembershipStatus();
 
       if (movieData) {
+        // Get the newest episode based on episode number
         const newestEpisode = movieData.episodes
           .slice()
           .sort((a, b) => b.episodeNumber - a.episodeNumber)[0];
 
         if (newestEpisode) {
+          // Check if the episode is free or not and if the user is a member
           if (newestEpisode.isFree === false && !isMember) {
             setShowSubscriptionModal(true);
           } else {
             setShowSubscriptionModal(false);
-            fetchEpisodesDetails(newestEpisode.episodeId);
+            fetchEpisodesDetails(newestEpisode.episodeId); // Fetch episode details
             setSelectedEpisode(newestEpisode.episodeId);
+
+            // Save the newest episode to watch history
+            saveWatchHistory(newestEpisode);
           }
         }
       }
