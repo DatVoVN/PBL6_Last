@@ -149,9 +149,12 @@ const MovieDetail = () => {
                 <div
                   className="anime__details__pic"
                   style={{
+                    marginTop: "10px",
                     backgroundImage: `url(${productData.movie.imageUrl})`,
                     backgroundSize: "contain",
                     backgroundRepeat: "no-repeat",
+                    width: "auto",
+                    height: "400px",
                   }}
                 />
               </div>

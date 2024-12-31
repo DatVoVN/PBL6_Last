@@ -15,7 +15,6 @@ const Header = () => {
   const [userId, setUserId] = useState("");
   const [searchResults, setSearchResults] = useState([]); // Add a state for search results
   const [searchResultsAll, setSearchResultsAll] = useState([]);
-
   const navigate = useNavigate();
   const location = useLocation();
   const USER = import.meta.env.VITE_USER;
@@ -172,7 +171,7 @@ const Header = () => {
     Cookies.remove("userName");
     Cookies.remove("Bearer");
     setIsLoggedIn(false);
-    setUserName(""); // Clear the userName state on logout
+    setUserName("");
     navigate("/login");
   };
 
@@ -202,7 +201,7 @@ const Header = () => {
         <div className="row">
           <div className="col-lg-2" style={{}}>
             <div className="header__logo">
-              <a href="./index.html">
+              <a href="./">
                 <img src="/public/img/logo1.jpg" alt="Logo" />
               </a>
             </div>
@@ -322,15 +321,21 @@ const Header = () => {
                     className="bi bi-person-circle"
                     style={{ marginRight: "20px" }}></i> */}
                   <img
-                    src={userName.avatar}
+                    src={
+                      userName.avatar ||
+                      "https://i.pinimg.com/originals/65/ad/58/65ad584c940806d2bb00845703cc5de4.png"
+                    } // Use a placeholder image if avatar is empty
                     alt="User Avatar"
                     style={{
-                      width: "40px", // Adjusted size for better visibility
+                      width: "40px",
                       height: "40px",
-                      borderRadius: "50%", // Makes the image circular
+                      borderRadius: "50%",
                       marginRight: "20px",
-                      objectFit: "cover", // Ensures the image fits the circle properly
+                      objectFit: "cover",
                       display: "inline-block",
+                      backgroundColor: !userName.avatar
+                        ? "#fff"
+                        : "transparent", // Apply white background if no avatar
                     }}
                   />
 

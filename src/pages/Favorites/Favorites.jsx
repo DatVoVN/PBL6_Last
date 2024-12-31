@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import "./Favorites.css"; // Import the CSS file
-import ProductItem from "../../components/ProductItem/ProductItem";
-import NoMovieComponent from "../../components/NoMovieComponent/NoMovieComponent";
 import Pagination from "../../components/Pagination/Pagination";
 import { Link } from "react-router-dom";
 import { CiHeart, CiTrash } from "react-icons/ci";
+import ConfirmationModal from "../../components/ConfirmationModal/ConfirmationModal"; // Import the modal
+import Spinner from "../../components/Spinner/Spinner";
 
 function Favorites() {
   const [favorites, setFavorites] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1); // Current page state
-  const [totalPages, setTotalPages] = useState(1); // Total pages state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [showModal, setShowModal] = useState(false); // State for showing modal
+  const [movieToDelete, setMovieToDelete] = useState(null); // State for the movie to delete
   const REACTION = import.meta.env.VITE_REACTION;
 
   const fetchFavorites = async (pageNumber = 1) => {
@@ -34,7 +36,7 @@ function Favorites() {
       const data = await response.json();
       if (data.isSuccess) {
         setFavorites(data.result.records || []);
-        setTotalPages(data.result.totalPages); // Set total pages
+        setTotalPages(data.result.totalPages);
       } else {
         throw new Error(data.message || "Failed to fetch favorites");
       }
@@ -46,15 +48,14 @@ function Favorites() {
     }
   };
 
-  const handleDeleteFavorite = async (movieId) => {
+  const handleDeleteFavorite = (movieId) => {
+    setMovieToDelete(movieId);
+    setShowModal(true); // Show the modal when trying to delete a movie
+  };
+
+  const confirmDelete = async () => {
     const token = Cookies.get("authToken");
     const url = `${REACTION}/api/favorites`;
-
-    const confirmDelete = window.confirm(
-      "Are you sure you want to remove this movie from your favorites?"
-    );
-
-    if (!confirmDelete) return;
 
     try {
       const response = await fetch(url, {
@@ -63,7 +64,7 @@ function Favorites() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ movieId }),
+        body: JSON.stringify({ movieId: movieToDelete }),
       });
 
       if (!response.ok) {
@@ -74,7 +75,7 @@ function Favorites() {
       if (result.isSuccess) {
         alert("Movie removed from favorites!");
         setFavorites((prevFavorites) =>
-          prevFavorites.filter((item) => item.movieId !== movieId)
+          prevFavorites.filter((item) => item.movieId !== movieToDelete)
         );
       } else {
         throw new Error(result.message || "Failed to delete favorite");
@@ -82,7 +83,13 @@ function Favorites() {
     } catch (err) {
       console.error("Error deleting favorite:", err);
       alert("An error occurred while removing the movie from favorites.");
+    } finally {
+      setShowModal(false); // Close the modal after the action
     }
+  };
+
+  const cancelDelete = () => {
+    setShowModal(false); // Close the modal without doing anything
   };
 
   // Handle page change
@@ -96,7 +103,7 @@ function Favorites() {
   }, [currentPage]);
 
   if (loading) {
-    return <div>Loading favorites...</div>;
+    return <Spinner />;
   }
 
   if (error) {
@@ -173,11 +180,21 @@ function Favorites() {
           </div>
         )}
       </div>
+
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={handlePageChange}
       />
+
+      {/* Modal for confirmation */}
+      {showModal && (
+        <ConfirmationModal
+          message="Are you sure you want to remove this movie from your favorites?"
+          onConfirm={confirmDelete}
+          onCancel={cancelDelete}
+        />
+      )}
     </div>
   );
 }

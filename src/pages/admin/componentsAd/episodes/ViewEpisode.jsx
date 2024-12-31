@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { HiEye } from "react-icons/hi";
 import axios from "axios";
 import { toast } from "react-toastify";
+import Cookies from "js-cookie"; // Import js-cookie
 
 function ViewEpisode({ episodeId }) {
   const [episodeData, setEpisodeData] = useState(null);
@@ -10,9 +11,18 @@ function ViewEpisode({ episodeId }) {
 
   const handleViewEpisode = async () => {
     setIsLoading(true);
+
+    // Get the auth token from cookies
+    const authToken = Cookies.get("authToken");
+
     try {
       const response = await axios.get(
-        `https://cineworld.io.vn:7001/api/episodes/${episodeId}`
+        `https://cineworld.io.vn:7001/api/episodes/${episodeId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`, // Add the auth token in the Authorization header
+          },
+        }
       );
 
       if (response.data.isSuccess) {

@@ -3,6 +3,7 @@ import { ThemeContext } from "../../contextAd/ThemeContext";
 import { LIGHT_THEME } from "../../constants/themeConstants";
 import LogoBlue from "../../assets/images/logo_blue.svg";
 import LogoWhite from "../../assets/images/logo_white.svg";
+import Cookies from "js-cookie";
 import {
   MdOutlineAttachMoney,
   MdOutlineBarChart,
@@ -46,6 +47,12 @@ const Sidebar = () => {
   const handleLogout = () => {
     localStorage.removeItem("userToken");
     sessionStorage.removeItem("userToken");
+    Cookies.remove("authToken");
+    Cookies.remove("Bearer");
+    Cookies.remove("fullName");
+    Cookies.remove("role");
+    Cookies.remove("userData");
+    Cookies.remove("userId");
     navigate("/login");
   };
 

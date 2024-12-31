@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import Spinner from "../../components/Spinner/Spinner";
+import Pagination from "../../components/Pagination/Pagination";
 
 const Receipt = () => {
   const [receipts, setReceipts] = useState([]);
@@ -72,86 +73,92 @@ const Receipt = () => {
         fontFamily: "Arial, sans-serif",
         height: "500px",
       }}>
-      <h2 style={{ textAlign: "center" }}>User Receipts</h2>
-      {receipts.length === 0 ? (
-        <p>No receipts found.</p>
-      ) : (
-        <table
-          style={{
-            width: "100%",
-            borderCollapse: "collapse",
-            margin: "20px 0",
-            color: "#fff",
-          }}>
-          <thead>
-            <tr>
-              <th style={{ padding: "10px", border: "1px solid #fff" }}>
-                Receipt ID
-              </th>
-              <th style={{ padding: "10px", border: "1px solid #fff" }}>
-                Email
-              </th>
-              <th style={{ padding: "10px", border: "1px solid #fff" }}>
-                Package ID
-              </th>
-              <th style={{ padding: "10px", border: "1px solid #fff" }}>
-                Package Price
-              </th>
-              <th style={{ padding: "10px", border: "1px solid #fff" }}>
-                Term (Months)
-              </th>
-              <th style={{ padding: "10px", border: "1px solid #fff" }}>
-                Total Amount
-              </th>
-              <th style={{ padding: "10px", border: "1px solid #fff" }}>
-                Discount Amount
-              </th>
-              <th style={{ padding: "10px", border: "1px solid #fff" }}>
-                Status
-              </th>
-              <th style={{ padding: "10px", border: "1px solid #fff" }}>
-                Created Date
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {receipts.map((receipt) => (
-              <tr key={receipt.receiptId}>
-                <td style={{ padding: "10px", border: "1px solid #fff" }}>
-                  {receipt.receiptId}
-                </td>
-                <td style={{ padding: "10px", border: "1px solid #fff" }}>
-                  {receipt.email}
-                </td>
-                <td style={{ padding: "10px", border: "1px solid #fff" }}>
-                  {receipt.packageId}
-                </td>
-                <td style={{ padding: "10px", border: "1px solid #fff" }}>
-                  {receipt.packagePrice}
-                </td>
-                <td style={{ padding: "10px", border: "1px solid #fff" }}>
-                  {receipt.termInMonths}
-                </td>
-                <td style={{ padding: "10px", border: "1px solid #fff" }}>
-                  {receipt.totalAmount}
-                </td>
-                <td style={{ padding: "10px", border: "1px solid #fff" }}>
-                  {receipt.discountAmount || "N/A"}
-                </td>
-                <td style={{ padding: "10px", border: "1px solid #fff" }}>
-                  {receipt.status}
-                </td>
-                <td style={{ padding: "10px", border: "1px solid #fff" }}>
-                  {new Date(receipt.createdDate).toLocaleDateString()}
-                </td>
+      <div style={{ height: "400px" }}>
+        <h2 style={{ textAlign: "center" }}>USER RECEIPTS</h2>
+        {receipts.length === 0 ? (
+          <p>No receipts found.</p>
+        ) : (
+          <table
+            style={{
+              width: "100%",
+              borderCollapse: "collapse",
+              margin: "20px 0",
+              color: "#fff",
+            }}>
+            <thead>
+              <tr>
+                <th style={{ padding: "10px", border: "1px solid #fff" }}>
+                  Receipt ID
+                </th>
+                <th style={{ padding: "10px", border: "1px solid #fff" }}>
+                  Email
+                </th>
+                <th style={{ padding: "10px", border: "1px solid #fff" }}>
+                  Package ID
+                </th>
+                <th style={{ padding: "10px", border: "1px solid #fff" }}>
+                  Package Price
+                </th>
+                <th style={{ padding: "10px", border: "1px solid #fff" }}>
+                  Term (Months)
+                </th>
+                <th style={{ padding: "10px", border: "1px solid #fff" }}>
+                  Total Amount
+                </th>
+                <th style={{ padding: "10px", border: "1px solid #fff" }}>
+                  Discount Amount
+                </th>
+                <th style={{ padding: "10px", border: "1px solid #fff" }}>
+                  Status
+                </th>
+                <th style={{ padding: "10px", border: "1px solid #fff" }}>
+                  Created Date
+                </th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
-
+            </thead>
+            <tbody>
+              {receipts.map((receipt) => (
+                <tr key={receipt.receiptId}>
+                  <td style={{ padding: "10px", border: "1px solid #fff" }}>
+                    {receipt.receiptId}
+                  </td>
+                  <td style={{ padding: "10px", border: "1px solid #fff" }}>
+                    {receipt.email}
+                  </td>
+                  <td style={{ padding: "10px", border: "1px solid #fff" }}>
+                    {receipt.packageId}
+                  </td>
+                  <td style={{ padding: "10px", border: "1px solid #fff" }}>
+                    {receipt.packagePrice}
+                  </td>
+                  <td style={{ padding: "10px", border: "1px solid #fff" }}>
+                    {receipt.termInMonths}
+                  </td>
+                  <td style={{ padding: "10px", border: "1px solid #fff" }}>
+                    {receipt.totalAmount}
+                  </td>
+                  <td style={{ padding: "10px", border: "1px solid #fff" }}>
+                    {receipt.discountAmount || "N/A"}
+                  </td>
+                  <td style={{ padding: "10px", border: "1px solid #fff" }}>
+                    {receipt.status}
+                  </td>
+                  <td style={{ padding: "10px", border: "1px solid #fff" }}>
+                    {new Date(receipt.createdDate).toLocaleDateString()}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      />
       {/* Pagination Controls */}
-      <div
+      {/* <div
         style={{
           display: "flex",
           justifyContent: "center",
@@ -189,7 +196,7 @@ const Receipt = () => {
           }}>
           Next
         </button>
-      </div>
+      </div> */}
     </div>
   );
 };

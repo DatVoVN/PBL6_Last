@@ -24,6 +24,8 @@ const MovieDetail = ({ movie }) => {
         justifyContent: "center",
         padding: "20px",
         backgroundColor: "#f9f9f9",
+        height: "100vh", // Đặt chiều cao cố định
+        overflow: "hidden", // Thêm thanh cuộn khi nội dung vượt quá
       }}>
       <div
         style={{
@@ -34,8 +36,9 @@ const MovieDetail = ({ movie }) => {
           boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
           padding: "20px",
           borderRadius: "8px",
-          width: "80%",
+          width: "100%",
           maxWidth: "1200px",
+          overflow: "hidden",
         }}>
         <div style={{ flex: "1" }}>
           <img
@@ -49,7 +52,14 @@ const MovieDetail = ({ movie }) => {
             }}
           />
         </div>
-        <div style={{ flex: "2", display: "flex", flexDirection: "column" }}>
+        <div
+          style={{
+            flex: "2",
+            display: "flex",
+            flexDirection: "column",
+            overflowY: "auto", // Cho phép cuộn dọc nội dung
+            maxHeight: "calc(100vh - 80px)", // Giới hạn chiều cao nội dung
+          }}>
           <h2 style={{ marginBottom: "10px", fontSize: "24px", color: "#333" }}>
             {movie.name}
           </h2>

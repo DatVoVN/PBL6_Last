@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import "./Membership.css";
 import { useNavigate } from "react-router-dom";
+import Spinner from "../../components/Spinner/Spinner";
 
 function Membership() {
   const [packages, setPackages] = useState([]);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
   const MEMBERSHIP = import.meta.env.VITE_MEMBERSHIP;
   const fetchPackages = async () => {
+    setLoading(true);
     try {
       const response = await fetch(`${MEMBERSHIP}/api/packages`);
       const data = await response.json();
@@ -17,6 +20,8 @@ function Membership() {
       }
     } catch (error) {
       console.error("Error fetching packages:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -26,7 +31,9 @@ function Membership() {
   const handlePackageClick = (packageId) => {
     navigate(`/membership/coupon/${packageId}`);
   };
-
+  if (loading) {
+    return <Spinner />;
+  }
   return (
     <div className="pricing-section">
       <h1 className="pricing-title">Convenient Pricing</h1>

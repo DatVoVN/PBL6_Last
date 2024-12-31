@@ -9,6 +9,7 @@ import "./Episode.css";
 import { ToastContainer } from "react-toastify";
 import { HiEye, HiPencilAlt, HiFire } from "react-icons/hi";
 import ViewEpisode from "./ViewEpisode";
+import UploaderComponent from "./Uploader";
 
 const TABLE_HEADS = [
   "Episode ID",
@@ -17,6 +18,7 @@ const TABLE_HEADS = [
   "Status",
   "Action",
   "Fetch Server",
+  "Upload Video",
 ];
 
 function Episodes() {
@@ -30,6 +32,17 @@ function Episodes() {
   const [episodeToEdit, setEpisodeToEdit] = useState(null);
   const [totalPagesEpisodes, setTotalPagesEpisodes] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
+  const [showUploader, setShowUploader] = useState(false);
+  const [isModalOpen1, setIsModalOpen1] = useState(true);
+
+  // Hàm đóng modal
+  const closeModal = () => {
+    setIsModalOpen1(false);
+  };
+
+  const handleIconClick = () => {
+    setShowUploader(!showUploader);
+  };
   const MOVIE = import.meta.env.VITE_MOVIE;
   const fetchMovies = async (name) => {
     try {
@@ -226,6 +239,24 @@ function Episodes() {
                             justifyContent: "center",
                           }}>
                           <FetchServer episodeId={episode.episodeId} />
+                        </td>
+                        <td>
+                          <i
+                            className="bi bi-upload" // Thay bằng icon bạn muốn
+                            style={{
+                              cursor: "pointer",
+                              marginRight: "10px",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                            }}
+                            onClick={handleIconClick}></i>
+                          {showUploader && (
+                            <UploaderComponent
+                              episodeId={episode.episodeId}
+                              closeModal={closeModal}
+                            />
+                          )}
                         </td>
                       </tr>
                     ))

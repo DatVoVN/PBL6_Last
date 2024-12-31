@@ -131,7 +131,9 @@ const EditMovie = ({ movieToEdit, onClose, fetchMovies }) => {
       console.error("Authorization token is missing");
       return;
     }
+
     const updatedMovieData = { ...movieData, genreIds: movieData.genreIds };
+
     try {
       const response = await fetch(`${MOVIE}/api/movies`, {
         method: "PUT",
@@ -142,6 +144,9 @@ const EditMovie = ({ movieToEdit, onClose, fetchMovies }) => {
         body: JSON.stringify(updatedMovieData),
       });
 
+      // Log trạng thái trả về
+      console.log("Response status:", response.status);
+
       if (!response.ok) {
         const errorResponse = await response.json();
         toast.error(
@@ -149,9 +154,19 @@ const EditMovie = ({ movieToEdit, onClose, fetchMovies }) => {
         );
         return;
       }
-      toast.success("Movie updated successfully!");
-      fetchMovies(1, "", "", "", "");
-      onClose();
+      if (response.status === 200) {
+        console.log("1");
+        toast.success("Movie updated successfully!");
+        fetchMovies(1, "", "", "", "");
+        setTimeout(() => {
+          onClose();
+        }, 500);
+      } else {
+        const errorResponse = await response.json();
+        toast.error(
+          `Error editing movie: ${errorResponse.message || "Unexpected status"}`
+        );
+      }
     } catch (error) {
       toast.error(`Error editing movie: ${error.message}`);
     }
@@ -268,6 +283,7 @@ const EditMovie = ({ movieToEdit, onClose, fetchMovies }) => {
           <div className="form-group">
             <label>Description</label>
             <textarea
+              style={{ height: "200px" }}
               name="description"
               value={movieData.description}
               onChange={handleInputChange}

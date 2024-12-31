@@ -9,8 +9,8 @@ import Modal from "react-modal"; // Import Modal library
 const USER = import.meta.env.VITE_USER;
 
 const Login = () => {
-  const [email, setEmail] = useState("dat246642@gmail.com");
-  const [password, setPassword] = useState("01278983568aB@");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalEmail, setModalEmail] = useState("");
@@ -22,7 +22,6 @@ const Login = () => {
   const [resetModalIsOpen, setResetModalIsOpen] = useState(false);
   const navigate = useNavigate();
   const { setUserData } = useContext(UserContext);
-
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
@@ -31,7 +30,6 @@ const Login = () => {
         { email, password },
         { withCredentials: true }
       );
-
       if (response.status === 200) {
         const { token, user } = response.data.result;
         const role = user.role;
@@ -39,9 +37,7 @@ const Login = () => {
         const fullName = user.fullName;
 
         console.log("User Role:", role);
-
-        // Set user data including role
-        setUserData(id, token, fullName, role); // Pass role to context
+        setUserData(id, token, fullName, role);
 
         // Store role and other data in cookies
         Cookies.set("Bearer", token, { expires: 1 });
@@ -49,9 +45,12 @@ const Login = () => {
         Cookies.set("role", role, { expires: 1 }); // Store role in cookies
         Cookies.set("userData", JSON.stringify(response.data), { expires: 1 });
 
-        // Redirect based on role
-        if (role === "ADMIN") navigate("/admin");
-        else navigate("/");
+        // Set a 2-second delay before redirecting
+        setTimeout(() => {
+          // Redirect based on role
+          if (role === "ADMIN") navigate("/admin");
+          else navigate("/");
+        }, 2000); // 2 seconds delay
       }
     } catch (err) {
       setError(
@@ -101,11 +100,9 @@ const Login = () => {
 
       if (response.status === 200) {
         setModalMessage("Password has been reset successfully!");
-
-        // Redirect to login page after success
         setTimeout(() => {
-          setResetModalIsOpen(false); // Close modal after success
-          navigate("/login"); // Redirect to login page
+          setResetModalIsOpen(false);
+          navigate("/login");
         }, 2000);
       }
     } catch (err) {

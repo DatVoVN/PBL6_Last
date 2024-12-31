@@ -45,11 +45,17 @@ const Register = () => {
       if (err.response) {
         console.log("Response data:", err.response.data);
         console.log("Response status:", err.response.status);
-        if (err.response.data.errors) {
-          setError(JSON.stringify(err.response.data.errors));
+
+        // Extracting error message specifically for the gender field
+        if (err.response.data.errors && err.response.data.errors.Gender) {
+          setError(err.response.data.errors.Gender.join(", "));
+        } else if (err.response.data.errors) {
+          // If there are other errors
+          setError("An error occurred during registration. Please try again.");
         } else {
           setError("Registration failed. Please try again.");
         }
+
         setSuccess(null);
       } else {
         setError("An unexpected error occurred.");
@@ -124,7 +130,7 @@ const Register = () => {
                   <select
                     value={gender}
                     onChange={(e) => setGender(e.target.value)}>
-                    <option value="" disabled>
+                    <option value="" disabled style={{ color: "#a0a0a0" }}>
                       Gender
                     </option>
                     <option className="options" value="Male">
@@ -138,6 +144,7 @@ const Register = () => {
                     </option>
                   </select>
                 </div>
+
                 <div className="input__item">
                   <input
                     type="date"

@@ -252,23 +252,31 @@ const Profile = () => {
           }}>
           <h3
             style={{
-              marginBottom: "20px",
-              textAlign: "center",
-              color: "#333",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              fontSize: "30px",
+              color: "#1fc3f9",
+              background: "linear-gradient(to right, #00ffe8, #db8e00)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              fontWeight: "bold",
             }}>
-            Update Profile Information
+            UPDATE PROFILE
           </h3>
           <form
+            style={{ backgroundColor: "#f9f9f9" }}
             onSubmit={(e) => {
               e.preventDefault();
               handleUpdate();
             }}>
-            <div style={{ marginBottom: "15px" }}>
+            <div style={{ marginBottom: "15px", backgroundColor: "#f9f9f9" }}>
               <label
                 style={{
                   display: "block",
                   marginBottom: "5px",
                   fontWeight: "bold",
+                  color: "black",
                 }}>
                 Full Name:
               </label>
@@ -285,6 +293,7 @@ const Profile = () => {
                   border: "1px solid #ccc",
                   borderRadius: "4px",
                   fontSize: "14px",
+                  color: "black",
                 }}
               />
             </div>
@@ -294,6 +303,7 @@ const Profile = () => {
                   display: "block",
                   marginBottom: "5px",
                   fontWeight: "bold",
+                  color: "black",
                 }}>
                 Gender:
               </label>
@@ -309,6 +319,7 @@ const Profile = () => {
                   border: "1px solid #ccc",
                   borderRadius: "4px",
                   fontSize: "14px",
+                  color: "black",
                 }}>
                 <option value="">Select Gender</option>
                 <option value="Male">Male</option>
@@ -322,6 +333,7 @@ const Profile = () => {
                   display: "block",
                   marginBottom: "5px",
                   fontWeight: "bold",
+                  color: "black",
                 }}>
                 Date of Birth:
               </label>

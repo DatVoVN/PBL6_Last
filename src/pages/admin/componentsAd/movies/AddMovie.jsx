@@ -114,9 +114,13 @@ const AddMovie = ({ onClose, fetchMovies }) => {
       console.log(response.status);
 
       if (response.status === 201) {
+        console.log("1");
         toast.success("Movie added successfully!");
         fetchMovies(1, "", "", "", "");
-        onClose();
+        // Đợi 1 giây trước khi đóng modal
+        setTimeout(() => {
+          onClose();
+        }, 1000);
       } else {
         const errorResponse = await response.json();
         toast.error(
@@ -267,6 +271,8 @@ const AddMovie = ({ onClose, fetchMovies }) => {
                   borderRadius: "50%",
                   padding: "5px",
                   cursor: "pointer",
+                  width: "50px",
+                  height: "50px",
                 }}>
                 X
               </button>

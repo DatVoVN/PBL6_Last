@@ -74,7 +74,7 @@ const MembershipComponent = ({ user }) => {
         alert("Đăng ký thành viên thành công!");
         setShowModal(false);
       } else {
-        console.log("Unexpected status code:", response.status); // Log unexpected status codes
+        console.log("Unexpected status code:", response.status);
         alert("Đăng ký thất bại!");
       }
     } catch (error) {
@@ -82,12 +82,10 @@ const MembershipComponent = ({ user }) => {
       console.error("Error occurred while creating membership:", error);
 
       if (error.response) {
-        // If the error is a response error, log the full response
         console.error("Error response data:", error.response.data);
         console.error("Error response status:", error.response.status);
         console.error("Error response headers:", error.response.headers);
       } else if (error.request) {
-        // If the error is due to no response, log the request
         console.error("Error request:", error.request);
       } else {
         // General error if no specific details are available

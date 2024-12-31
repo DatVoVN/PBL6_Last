@@ -233,7 +233,6 @@ const Coupon = () => {
 
   return (
     <section className="content-area-table">
-      <ToastContainer autoClose={2000} />
       <div className="data-table-info">
         <h4
           className="data-table-title"
