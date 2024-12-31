@@ -3,7 +3,8 @@ import Cookies from "js-cookie";
 import { Link } from "react-router-dom";
 import "./Profile.css";
 import Spinner from "../../components/Spinner/Spinner";
-
+const USER = import.meta.env.VITE_USER;
+const MEMBERSHIP = import.meta.env.VITE_MEMBERSHIP;
 const Profile = () => {
   const [profileData, setProfileData] = useState(null);
   const [membershipData, setMembershipData] = useState(null);
@@ -30,7 +31,7 @@ const Profile = () => {
       const fetchUserData = async () => {
         try {
           const response = await fetch(
-            `https://cineworld.io.vn:7000/api/users/GetById?id=${userId}`,
+            `${USER}/api/users/GetById?id=${userId}`,
             {
               method: "GET",
               headers: {
@@ -71,9 +72,7 @@ const Profile = () => {
 
   const checkMembership = async (email) => {
     try {
-      const response = await fetch(
-        `https://cineworld.io.vn:7002/api/memberships/${email}`
-      );
+      const response = await fetch(`${MEMBERSHIP}/api/memberships/${email}`);
 
       if (!response.ok) {
         throw new Error("Failed to fetch membership status");
@@ -105,17 +104,14 @@ const Profile = () => {
     const { createdDate, ...updatedInfoWithoutCreatedDate } = updatedInfo;
 
     try {
-      const response = await fetch(
-        "https://cineworld.io.vn:7000/api/users/UpdateInformation",
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${tokenAuth}`,
-          },
-          body: JSON.stringify(updatedInfoWithoutCreatedDate),
-        }
-      );
+      const response = await fetch(`${USER}/api/users/UpdateInformation`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${tokenAuth}`,
+        },
+        body: JSON.stringify(updatedInfoWithoutCreatedDate),
+      });
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -147,16 +143,13 @@ const Profile = () => {
       setLoading(true);
       const tokenAuth = Cookies.get("authToken");
 
-      fetch(
-        `https://cineworld.io.vn:7000/api/users/updateAvatar?folder=user_avatars`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${tokenAuth}`,
-          },
-          body: formData,
-        }
-      )
+      fetch(`${USER}/api/users/updateAvatar?folder=user_avatars`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${tokenAuth}`,
+        },
+        body: formData,
+      })
         .then((response) => {
           if (!response.ok) {
             throw new Error("Failed to update avatar");

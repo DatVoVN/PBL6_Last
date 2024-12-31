@@ -142,7 +142,7 @@
 
 .owl-nav .right-nav {
   margin-left: 610px; /* Cách phần tử bên trái 600px và dịch chuyển sang phải thêm 10px */
-  margin-right: 104px; /* Giảm margin-right đi 10px (93px - 10px) */
+  margin-right: 124px; /* Giảm margin-right đi 10px (93px - 10px) */
 }
 .owl-next:hover {
   background: none !important;  /* Loại bỏ hiệu ứng nền khi hover */

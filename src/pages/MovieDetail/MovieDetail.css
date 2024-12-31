@@ -188,3 +188,7 @@
 .back{
     margin-left: 120px;
 }
+.trailer-btn.disabled {
+    pointer-events: none; /* Prevent any interaction */
+    background-color: #ccc; /* Change background color to indicate disabled state */
+  }

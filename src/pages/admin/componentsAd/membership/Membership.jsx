@@ -60,12 +60,12 @@ const Membership = () => {
   };
   const handleFilterChange = (event) => {
     setFilter(event.target.value);
-    setCurrentPage(1); // Reset to first page when filter changes
+    setCurrentPage(1);
   };
   const handleSearchClick = () => {
-    setSearchQuery(searchInput); // Cập nhật giá trị thực tế để tìm kiếm
-    setCurrentPage(1); // Reset về trang đầu tiên
-    fetchMemberships(1, filter, searchInput); // Gọi API với giá trị tìm kiếm
+    setSearchQuery(searchInput);
+    setCurrentPage(1);
+    fetchMemberships(1, filter, searchInput);
   };
   const handleViewMembership = async (MembershipId) => {
     try {

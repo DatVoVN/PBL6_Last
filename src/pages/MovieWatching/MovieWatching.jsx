@@ -40,13 +40,19 @@ const MovieWatching = () => {
       console.error("Error fetching membership status:", error);
     }
   };
-
-  // Fetch episode details
   const fetchEpisodesDetails = async (episodeId) => {
     try {
-      const response = await fetch(`${MOVIE}/api/episodes/${episodeId}`);
-      const data = await response.json();
+      const authToken = Cookies.get("authToken");
 
+      const response = await fetch(`${MOVIE}/api/episodes/${episodeId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authToken}`,
+        },
+      });
+
+      const data = await response.json();
       if (data.isSuccess) {
         setProductData(data.result);
         setSelectedEpisodeUrl(data.result?.servers[0].link);
@@ -179,7 +185,7 @@ const MovieWatching = () => {
         fetch(
           `https://cineworld.io.vn:7004/api/views?MovieId=${movieId}&EpisodeId=${episodeId}`,
           {
-            method: "POST", // Đặt phương thức là POST
+            method: "POST",
             headers: {
               "Content-Type": "application/json",
             },

@@ -18,6 +18,7 @@ const Header = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
+  const USER = import.meta.env.VITE_USER;
   const MOVIE = import.meta.env.VITE_MOVIE;
   useEffect(() => {
     const token = Cookies.get("authToken");
@@ -30,11 +31,11 @@ const Header = () => {
       const fetchUser = async () => {
         try {
           const response = await fetch(
-            `https://cineworld.io.vn:7000/api/users/GetById?id=${userId}`,
+            `${USER}/api/users/GetById?id=${userId}`,
             {
               method: "GET",
               headers: {
-                Authorization: `Bearer ${token}`, // Add Bearer token to the headers
+                Authorization: `Bearer ${token}`,
               },
             }
           );
@@ -137,8 +138,6 @@ const Header = () => {
     };
     fetchMovies();
   }, [oddCategories, oddCountries]);
-
-  // Fetch movies based on the search query
   useEffect(() => {
     const fetchMoviesBySearchQuery = async () => {
       if (searchQuery.trim() !== "") {
@@ -159,8 +158,8 @@ const Header = () => {
           setSearchResults([]);
         }
       } else {
-        setSearchResults([]); // Reset search results when query is empty
-        setSearchResultsAll(""); // Reset the search term
+        setSearchResults([]);
+        setSearchResultsAll("");
       }
     };
 
@@ -190,7 +189,7 @@ const Header = () => {
     navigate("/search-results", {
       state: { searchResultsAll },
     });
-    setSearchQuery(""); // Clear the search input field after submitting
+    setSearchQuery("");
   };
 
   if (location.pathname === "/login") {
@@ -319,9 +318,22 @@ const Header = () => {
                     display: "flex",
                     width: "70%",
                   }}>
-                  <i
+                  {/* <i
                     className="bi bi-person-circle"
-                    style={{ marginRight: "20px" }}></i>
+                    style={{ marginRight: "20px" }}></i> */}
+                  <img
+                    src={userName.avatar}
+                    alt="User Avatar"
+                    style={{
+                      width: "40px", // Adjusted size for better visibility
+                      height: "40px",
+                      borderRadius: "50%", // Makes the image circular
+                      marginRight: "20px",
+                      objectFit: "cover", // Ensures the image fits the circle properly
+                      display: "inline-block",
+                    }}
+                  />
+
                   {userName.fullName}
                   {isProfileMenuVisible && (
                     <div className="profile-menu">

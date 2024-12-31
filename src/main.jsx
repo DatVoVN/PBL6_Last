@@ -78,7 +78,6 @@ createRoot(document.getElementById("root")).render(
               <Route path="/no-movie" element={<NoMovieComponent />} />
             </Route>
           </Routes>
-          {/* <ToastContainer /> */}
         </BrowserRouter>
       </UserProvider>
     </ThemeProvider>

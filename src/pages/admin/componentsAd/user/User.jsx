@@ -5,7 +5,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { MdChangeCircle } from "react-icons/md";
 import { FaFilter } from "react-icons/fa";
-
+import MembershipComponent from "../../../../components/MembershipComponent/MembershipComponent";
+const MEMBERSHIP = import.meta.env.VITE_MEMBERSHIP;
 const TABLE_HEADS = [
   "Username",
   "Avatar",
@@ -76,50 +77,6 @@ const User = () => {
     setFilter(event.target.value);
     setCurrentPage(1);
   };
-  const handleMembershipChange = async () => {
-    const authToken = Cookies.get("authToken");
-    if (!authToken) {
-      console.error("Authorization token is missing");
-      return;
-    }
-
-    const requestData = {
-      memberShipId: 0, // Update this based on your logic
-      userId: "string", // Replace with actual user ID
-      userEmail: "user@example.com", // Replace with actual user email
-      memberType: selectedMemberType,
-      firstSubscriptionDate: new Date().toISOString(),
-      renewalStartDate: new Date().toISOString(),
-      lastUpdatedDate: new Date().toISOString(),
-      expirationDate: new Date().toISOString(),
-    };
-
-    try {
-      const response = await fetch(
-        "https://cineworld.io.vn:7002/api/memberships",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${authToken}`,
-          },
-          body: JSON.stringify(requestData),
-        }
-      );
-
-      if (!response.ok) {
-        const errorResponse = await response.json();
-        toast.error(`Failed to update membership: ${errorResponse.message}`);
-        return;
-      }
-
-      toast.success("Membership updated successfully!");
-      setIsMembershipModalOpen(false); // Close the modal after successful API call
-    } catch (error) {
-      console.error("Error updating membership:", error);
-      toast.error("Failed to update membership!");
-    }
-  };
 
   const handleSearchChange = (event) => {
     const { name, value } = event.target;
@@ -141,24 +98,21 @@ const User = () => {
     }
 
     try {
-      const response = await fetch(
-        `https://cineworld.io.vn:7000/api/users/UpdateInformation`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${authToken}`,
-          },
-          body: JSON.stringify({
-            id: userToEdit.id,
-            fullName: userToEdit.fullName,
-            avatar: userToEdit.avatar,
-            gender: userToEdit.gender,
-            dateOfBirth: userToEdit.dateOfBirth,
-            createdDate: new Date().toISOString(), // Set to current date if needed
-          }),
-        }
-      );
+      const response = await fetch(`${USER}/api/users/UpdateInformation`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authToken}`,
+        },
+        body: JSON.stringify({
+          id: userToEdit.id,
+          fullName: userToEdit.fullName,
+          avatar: userToEdit.avatar,
+          gender: userToEdit.gender,
+          dateOfBirth: userToEdit.dateOfBirth,
+          createdDate: new Date().toISOString(), // Set to current date if needed
+        }),
+      });
 
       if (!response.ok) {
         const errorResponse = await response.json();
@@ -209,7 +163,7 @@ const User = () => {
       }
 
       toast.success("Role changed successfully!");
-      fetchUsers(1); // Refresh the user list after role change
+      fetchUsers(1);
     } catch (error) {
       console.error("Error changing role:", error);
       toast.error("Failed to change role!");
@@ -222,8 +176,9 @@ const User = () => {
       console.error("Authorization token is missing");
       return;
     }
+
     try {
-      const response = await fetch(`${USER}/api/users/${userId}`, {
+      const userDeleteResponse = await fetch(`${USER}/api/users/${userId}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -231,18 +186,77 @@ const User = () => {
         },
       });
 
-      if (!response.ok) {
-        const errorText = await response.text();
+      if (!userDeleteResponse.ok) {
+        const errorText = await userDeleteResponse.text();
         toast.error(`Error deleting user: ${errorText || "Unknown error"}`);
         return;
       }
 
       toast.success("User deleted successfully!");
+      const membershipResponse = await fetch(
+        `${MEMBERSHIP}/api/memberships/GetByUserId/${userId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
+
+      // Nếu trả về 204 (No Content), không cần xóa membership
+      if (membershipResponse.status === 204) {
+        console.log(
+          "No membership found for this user, skipping membership deletion."
+        );
+        fetchUsers(1, "", "", "");
+        setIsDeleteModalOpen(false);
+        return;
+      }
+
+      if (membershipResponse.ok) {
+        const membershipData = await membershipResponse.json();
+
+        if (
+          membershipData.isSuccess &&
+          membershipData.result &&
+          membershipData.result.memberShipId
+        ) {
+          const membershipId = membershipData.result.memberShipId;
+
+          // Xóa Membership nếu tồn tại
+          const membershipDeleteResponse = await fetch(
+            `${MEMBERSHIP}/api/memberships?id=${membershipId}`,
+            {
+              method: "DELETE",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${authToken}`,
+              },
+            }
+          );
+
+          if (!membershipDeleteResponse.ok) {
+            const errorText = await membershipDeleteResponse.text();
+            toast.error(
+              `Error deleting membership: ${errorText || "Unknown error"}`
+            );
+            return;
+          }
+
+          toast.success("Membership deleted successfully!");
+        } else {
+          console.log("No membership found for this user.");
+        }
+      } else {
+        console.log(
+          "Failed to fetch membership data, skipping membership deletion."
+        );
+      }
       fetchUsers(1, "", "", "");
       setIsDeleteModalOpen(false);
-      setCategoryToDelete(null);
     } catch (error) {
-      toast.error(`Error deleting category: ${error.message}`);
+      toast.error(`Error deleting user or membership: ${error.message}`);
     }
   };
 
@@ -410,11 +424,7 @@ const User = () => {
                           setIsDeleteModalOpen(true);
                         }}
                       />
-                      <HiFire
-                        size={20}
-                        style={{ marginRight: "10px", cursor: "pointer" }}
-                        onClick={() => setIsMembershipModalOpen(true)} // Open modal on click
-                      />
+                      <MembershipComponent user={user} />
                     </td>
                   </tr>
                 ))
@@ -444,56 +454,7 @@ const User = () => {
           </div>
         </div>
       )}
-      {isModalOpen && (
-        <div className="modal">
-          <div className="modal-content">
-            <h3>Add New User</h3>
-            <form>
-              <div>
-                <label>Username</label>
-                <input
-                  type="text"
-                  value={newUser.username}
-                  onChange={(e) =>
-                    setNewUser({ ...newUser, username: e.target.value })
-                  }
-                  required
-                />
-              </div>
-              <div>
-                <label>Email</label>
-                <input
-                  type="email"
-                  value={newUser.email}
-                  onChange={(e) =>
-                    setNewUser({ ...newUser, email: e.target.value })
-                  }
-                  required
-                />
-              </div>
-              <div>
-                <label>Role</label>
-                <select
-                  value={newUser.role}
-                  onChange={(e) =>
-                    setNewUser({ ...newUser, role: e.target.value })
-                  }>
-                  <option value="user">User</option>
-                  <option value="admin">Admin</option>
-                </select>
-              </div>
-              <div className="modal-actions">
-                <button type="button" onClick={handleAddUser}>
-                  Add User
-                </button>
-                <button type="button" onClick={() => setIsModalOpen(false)}>
-                  Close
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+
       {isEditModalOpen && userToEdit && (
         <div className="modal">
           <div className="modal-content">
@@ -575,76 +536,6 @@ const User = () => {
               Yes
             </button>
             <button onClick={() => setIsDeleteModalOpen(false)}>No</button>
-          </div>
-        </div>
-      )}
-      {isMembershipModalOpen && (
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            zIndex: 9999,
-          }}>
-          <div
-            style={{
-              backgroundColor: "#fff",
-              padding: "20px",
-              borderRadius: "8px",
-              width: "300px",
-              boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-              textAlign: "center",
-            }}>
-            <h4 style={{ marginBottom: "15px" }}>Select Membership Type</h4>
-            <select
-              value={selectedMemberType}
-              onChange={(e) => setSelectedMemberType(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "8px",
-                marginBottom: "15px",
-                borderRadius: "4px",
-                border: "1px solid #ccc",
-              }}>
-              <option value="">Select Member Type</option>
-              {memberTypes.map((type, index) => (
-                <option key={index} value={type}>
-                  {type}
-                </option>
-              ))}
-            </select>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <button
-                onClick={handleMembershipChange}
-                style={{
-                  padding: "10px 20px",
-                  backgroundColor: "#4CAF50",
-                  color: "#fff",
-                  border: "none",
-                  borderRadius: "4px",
-                  cursor: "pointer",
-                }}>
-                Submit
-              </button>
-              <button
-                onClick={() => setIsMembershipModalOpen(false)}
-                style={{
-                  padding: "10px 20px",
-                  backgroundColor: "#f44336",
-                  color: "#fff",
-                  border: "none",
-                  borderRadius: "4px",
-                  cursor: "pointer",
-                }}>
-                Cancel
-              </button>
-            </div>
           </div>
         </div>
       )}

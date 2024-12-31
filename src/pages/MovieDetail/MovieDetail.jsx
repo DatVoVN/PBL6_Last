@@ -137,7 +137,7 @@ const MovieDetail = () => {
   const decodedDescription = decodeHtmlEntities(productData.movie.description);
 
   return (
-    <div className="anime-details" style={{ height: "1600px" }}>
+    <div className="anime-details" style={{ height: "1800px" }}>
       <div className="back">
         <BackButton />
       </div>
@@ -160,8 +160,11 @@ const MovieDetail = () => {
               <div className="content-right">
                 <div className="anime__details__text">
                   <div className="anime__details__title">
-                    <h3>{productData.movie.name}</h3>
+                    <h3>
+                      {productData.movie.name} ({productData.movie.originName})
+                    </h3>
                   </div>
+
                   <p>{decodedDescription}</p>
                   <div className="anime__details__widget">
                     <div className="row">
@@ -225,11 +228,14 @@ const MovieDetail = () => {
                         className="watch-btn">
                         <span>Watch Now</span>
                       </Link>
-                      <button
-                        className="trailer-btn"
-                        onClick={() => setShowTrailer(true)}>
-                        <span>Trailer</span>
-                      </button>
+                      {productData.movie.trailer && (
+                        <button
+                          className="trailer-btn"
+                          onClick={() => setShowTrailer(true)}>
+                          <span>Trailer</span>
+                        </button>
+                      )}
+
                       <button
                         className={`favorite-btn ${isFavorite ? "active" : ""}`}
                         onClick={toggleFavorite}>

@@ -5,9 +5,10 @@ import { useNavigate } from "react-router-dom";
 function Membership() {
   const [packages, setPackages] = useState([]);
   const navigate = useNavigate();
+  const MEMBERSHIP = import.meta.env.VITE_MEMBERSHIP;
   const fetchPackages = async () => {
     try {
-      const response = await fetch("https://cineworld.io.vn:7002/api/packages");
+      const response = await fetch(`${MEMBERSHIP}/api/packages`);
       const data = await response.json();
       if (data.isSuccess && Array.isArray(data.result)) {
         setPackages(data.result);
@@ -23,7 +24,6 @@ function Membership() {
     fetchPackages();
   }, []);
   const handlePackageClick = (packageId) => {
-    console.log("1:", packageId);
     navigate(`/membership/coupon/${packageId}`);
   };
 

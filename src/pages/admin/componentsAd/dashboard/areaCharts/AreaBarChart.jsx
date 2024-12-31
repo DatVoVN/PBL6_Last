@@ -12,7 +12,7 @@ import { ThemeContext } from "../../../contextAd/ThemeContext";
 import { FaArrowUpLong } from "react-icons/fa6";
 import { LIGHT_THEME } from "../../../constants/themeConstants";
 import "./AreaCharts.scss";
-
+const MEMBERSHIP = import.meta.env.VITE_MEMBERSHIP;
 // Giữ nguyên dữ liệu cho các tháng từ 1 đến tháng 11
 const fakeData = [
   { month: "Jan", csiRenew: 2000 },
@@ -41,7 +41,7 @@ const AreaBarChart = () => {
 
       try {
         const response = await fetch(
-          "https://cineworld.io.vn:7002/api/receipts/ReceiptStat?From=2024-12-01T00%3A00%3A00&To=2024-12-31T23%3A59%3A59"
+          `${MEMBERSHIP}/api/receipts/ReceiptStat?From=2024-12-01T00%3A00%3A00&To=2024-12-31T23%3A59%3A59`
         );
         const result = await response.json();
         if (result.isSuccess && result.result.receiptStat) {
