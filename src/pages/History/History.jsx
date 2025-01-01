@@ -63,7 +63,7 @@ function History() {
     fetchWatchHistories(page);
   };
 
-  // Function to handle deletion of watch history
+  // Function to handle deletion of all watch history
   const handleDeleteHistory = async () => {
     const token = Cookies.get("authToken");
     if (!token) {
@@ -96,6 +96,41 @@ function History() {
     }
   };
 
+  // Function to handle deletion of individual watch history item
+  const handleDeleteHistoryItem = async (watchHistoryId) => {
+    const token = Cookies.get("authToken");
+    if (!token) {
+      setError("Authentication token not found.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const response = await fetch(`${DELETE_ENDPOINT}/${watchHistoryId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete watch history item.");
+      }
+
+      // If deletion is successful, remove the item from the history data
+      setHistoryData((prevData) =>
+        prevData.filter((history) => history.id !== watchHistoryId)
+      );
+      setError(null);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchWatchHistories(currentPage);
   }, [currentPage]);
@@ -113,7 +148,7 @@ function History() {
       <div className="history-container">
         <div className="history-header">
           <h2>Lịch sử xem</h2>
-          <button onClick={handleDeleteHistory}>Xóa lịch sử xem</button>
+          <button onClick={handleDeleteHistory}>Xóa tất cả lịch sử xem</button>
         </div>
         {historyData.length === 0 ? (
           <p>Bạn chưa xem phim nào gần đây.</p>
@@ -138,6 +173,12 @@ function History() {
                   <a href={`/detail-watching/${history.movieId}`}>
                     Xem tiếp phim
                   </a>
+                  <button
+                    style={{ marginLeft: "30px", color: "red" }}
+                    onClick={() => handleDeleteHistoryItem(history.id)}
+                    className="delete-history-btn">
+                    Xóa
+                  </button>
                 </div>
               </li>
             ))}

@@ -71,7 +71,7 @@ const Receipt = () => {
         padding: "20px",
         color: "#fff",
         fontFamily: "Arial, sans-serif",
-        height: "500px",
+        height: "800px",
       }}>
       <div style={{ height: "400px" }}>
         <h2 style={{ textAlign: "center" }}>USER RECEIPTS</h2>
@@ -161,11 +161,14 @@ const Receipt = () => {
           </table>
         )}
       </div>
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={handlePageChange}
-      />
+      <div style={{ marginTop: "200px" }}>
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
+      </div>
+
       {/* Pagination Controls */}
       {/* <div
         style={{
