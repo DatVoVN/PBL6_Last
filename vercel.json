@@ -1,0 +1,12 @@
+{
+    "rewrites": [
+      {
+        "source": "/payment-success",
+        "destination": "/payment-success"
+      },
+      {
+        "source": "/payment-error",
+        "destination": "/payment-error"
+      }
+    ]
+  }

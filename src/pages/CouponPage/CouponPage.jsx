@@ -14,7 +14,6 @@ function CouponPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const MEMBERSHIP = import.meta.env.VITE_MEMBERSHIP;
-  const MAIN = import.meta.env.VITE_MAIN;
   const fullName = Cookies.get("fullName");
   const userData = Cookies.get("userData");
   const [user, setUser] = useState(null);
@@ -75,7 +74,7 @@ function CouponPage() {
 
       const receiptStatus = result?.result?.status;
       if (receiptStatus === "pending") {
-        window.location.href = `${MAIN}/payment`; // Redirect to payment page
+        window.location.href = "http://localhost:5173/payment"; // Redirect to payment page
       }
 
       localStorage.setItem("receiptId", result.result.receiptId);
@@ -98,8 +97,8 @@ function CouponPage() {
         body: JSON.stringify({
           receiptId: sessionData.receiptId,
           paymentSessionUrl: "string",
-          approvedUrl: `${MAIN}/payment-success`, // Approved URL
-          cancelUrl: `${MAIN}/payment-error`, // Cancel URL
+          approvedUrl: "http://localhost:5173/payment-success", // Approved URL
+          cancelUrl: "http://localhost:5173/payment-error", // Cancel URL
         }),
       });
 
