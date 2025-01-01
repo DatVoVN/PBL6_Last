@@ -88,6 +88,11 @@ function CouponPage() {
   // Function to create payment session (Stripe or PayOS)
   const createPaymentSession = async (sessionData) => {
     try {
+      const baseUrl =
+        import.meta.env.MODE === "development"
+          ? "http://localhost:5173" // Local URL
+          : "https://pbl-6-last.vercel.app"; // Production URL
+
       const response = await fetch(`${MEMBERSHIP}/api/receipts/CreateSession`, {
         method: "POST",
         headers: {
@@ -97,8 +102,8 @@ function CouponPage() {
         body: JSON.stringify({
           receiptId: sessionData.receiptId,
           paymentSessionUrl: "string",
-          approvedUrl: "https://pbl-6-last.vercel.app/payment-success", // Approved URL
-          cancelUrl: "https://pbl-6-last.vercel.app/payment-error", // Cancel URL
+          approvedUrl: `${baseUrl}/payment-success`, // Approved URL
+          cancelUrl: `${baseUrl}/payment-error`, // Cancel URL
         }),
       });
 

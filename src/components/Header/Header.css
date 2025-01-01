@@ -391,11 +391,9 @@
   }
 
   .search-results {
-      width: 90%; /* Đảm bảo kết quả tìm kiếm vừa màn hình */
+      width: 90%; 
   }
 }
-
-/* Màn hình trung bình (576px đến 768px) */
 @media (min-width: 576px) and (max-width: 768px) {
   .header {
       padding: 10px;
@@ -406,7 +404,7 @@
   }
 
   .search-results {
-      width: 50%; /* Giảm độ rộng */
+      width: 50%; 
   }
 }
 
