@@ -118,7 +118,6 @@ function CouponPage() {
       return null;
     }
   };
-
   const handleCouponSubmit = async (e) => {
     e.preventDefault(); // Prevent the default form submission
 
@@ -162,7 +161,7 @@ function CouponPage() {
     // Redirecting to payment session URL
     window.location.href = sessionResponse.result.paymentSessionUrl;
   };
-
+  console.log("App mode:", import.meta.env.MODE);
   return (
     <div
       style={{
