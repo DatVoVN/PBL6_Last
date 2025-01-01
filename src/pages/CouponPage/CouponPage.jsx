@@ -74,7 +74,7 @@ function CouponPage() {
 
       const receiptStatus = result?.result?.status;
       if (receiptStatus === "pending") {
-        window.location.href = "pbl-6-last.vercel.app/payment"; // Redirect to payment page
+        window.location.href = "https://pbl-6-last.vercel.app/payment"; // Redirect to payment page
       }
 
       localStorage.setItem("receiptId", result.result.receiptId);
@@ -97,8 +97,8 @@ function CouponPage() {
         body: JSON.stringify({
           receiptId: sessionData.receiptId,
           paymentSessionUrl: "string",
-          approvedUrl: "pbl-6-last.vercel.app/payment-success", // Approved URL
-          cancelUrl: "pbl-6-last.vercel.app/payment-error", // Cancel URL
+          approvedUrl: "https://pbl-6-last.vercel.app/payment-success", // Approved URL
+          cancelUrl: "https://pbl-6-last.vercel.app/payment-error", // Cancel URL
         }),
       });
 
