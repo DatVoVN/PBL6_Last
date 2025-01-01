@@ -204,7 +204,7 @@ const Header = () => {
           <div className="col-lg-2" style={{}}>
             <div className="header__logo">
               <a href="/">
-                <img src="/public/img/logo1.jpg" alt="Logo" />
+                <img src="/img/logo1.jpg" alt="Logo" />
               </a>
             </div>
           </div>
