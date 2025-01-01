@@ -14,6 +14,7 @@ function CouponPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const MEMBERSHIP = import.meta.env.VITE_MEMBERSHIP;
+  const MAIN = import.meta.env.VITE_MAIN;
   const fullName = Cookies.get("fullName");
   const userData = Cookies.get("userData");
   const [user, setUser] = useState(null);
@@ -74,7 +75,7 @@ function CouponPage() {
 
       const receiptStatus = result?.result?.status;
       if (receiptStatus === "pending") {
-        window.location.href = "https://pbl-6-last.vercel.app/payment"; // Redirect to payment page
+        window.location.href = `${MAIN}/payment`; // Redirect to payment page
       }
 
       localStorage.setItem("receiptId", result.result.receiptId);
@@ -88,11 +89,6 @@ function CouponPage() {
   // Function to create payment session (Stripe or PayOS)
   const createPaymentSession = async (sessionData) => {
     try {
-      const baseUrl =
-        import.meta.env.MODE === "development"
-          ? "http://localhost:5173" // Local URL
-          : "https://pbl-6-last.vercel.app"; // Production URL
-
       const response = await fetch(`${MEMBERSHIP}/api/receipts/CreateSession`, {
         method: "POST",
         headers: {
@@ -102,8 +98,8 @@ function CouponPage() {
         body: JSON.stringify({
           receiptId: sessionData.receiptId,
           paymentSessionUrl: "string",
-          approvedUrl: `${baseUrl}/payment-success`, // Approved URL
-          cancelUrl: `${baseUrl}/payment-error`, // Cancel URL
+          approvedUrl: `${MAIN}/payment-success`, // Approved URL
+          cancelUrl: `${MAIN}/payment-error`, // Cancel URL
         }),
       });
 
@@ -118,6 +114,7 @@ function CouponPage() {
       return null;
     }
   };
+
   const handleCouponSubmit = async (e) => {
     e.preventDefault(); // Prevent the default form submission
 
@@ -161,7 +158,7 @@ function CouponPage() {
     // Redirecting to payment session URL
     window.location.href = sessionResponse.result.paymentSessionUrl;
   };
-  console.log("App mode:", import.meta.env.MODE);
+
   return (
     <div
       style={{

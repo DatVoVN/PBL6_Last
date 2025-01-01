@@ -12,6 +12,7 @@ function History() {
 
   const REACTION = import.meta.env.VITE_REACTION;
   const API_ENDPOINT = `${REACTION}/api/watch_histories/GetWatchHistories`;
+  const DELETE_ENDPOINT = "https://cineworld.io.vn:7003/api/watch_histories";
 
   // Function to fetch watch history
   const fetchWatchHistories = async (page) => {
@@ -62,6 +63,39 @@ function History() {
     fetchWatchHistories(page);
   };
 
+  // Function to handle deletion of watch history
+  const handleDeleteHistory = async () => {
+    const token = Cookies.get("authToken");
+    if (!token) {
+      setError("Authentication token not found.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const response = await fetch(DELETE_ENDPOINT, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete watch history.");
+      }
+
+      // If deletion is successful, clear the history data
+      setHistoryData([]);
+      setError(null);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchWatchHistories(currentPage);
   }, [currentPage]);
@@ -79,7 +113,7 @@ function History() {
       <div className="history-container">
         <div className="history-header">
           <h2>Lịch sử xem</h2>
-          <button onClick={() => setHistoryData([])}>Xóa lịch sử xem</button>
+          <button onClick={handleDeleteHistory}>Xóa lịch sử xem</button>
         </div>
         {historyData.length === 0 ? (
           <p>Bạn chưa xem phim nào gần đây.</p>
