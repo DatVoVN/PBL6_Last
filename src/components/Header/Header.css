@@ -367,4 +367,54 @@
   .search-results li a:hover {
     color: #f0f0f0;  /* Màu chữ khi hover (có thể thay đổi nếu muốn) */
   }
-  
+  /* Màn hình nhỏ (dưới 576px) */
+@media (max-width: 576px) {
+  .header {
+      flex-direction: column; /* Chuyển từ ngang sang dọc */
+      align-items: center;
+  }
+
+  .header__logo {
+      margin-top: 0;
+      text-align: center;
+  }
+
+  .header__menu ul li {
+      display: block; /* Hiển thị theo chiều dọc */
+      margin-bottom: 10px;
+  }
+
+  .header__right {
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+  }
+
+  .search-results {
+      width: 90%; /* Đảm bảo kết quả tìm kiếm vừa màn hình */
+  }
+}
+
+/* Màn hình trung bình (576px đến 768px) */
+@media (min-width: 576px) and (max-width: 768px) {
+  .header {
+      padding: 10px;
+  }
+
+  .header__menu ul li {
+      margin-right: 10px;
+  }
+
+  .search-results {
+      width: 50%; /* Giảm độ rộng */
+  }
+}
+
+/* Màn hình lớn hơn (từ 992px) */
+@media (min-width: 992px) {
+  .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+  }
+}

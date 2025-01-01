@@ -35,9 +35,6 @@ const MembershipComponent = ({ user }) => {
       if (error.response) {
         setMembershipData(null); // Make sure it's set to null to indicate new membership
         setShowModal(true); // Show modal for creating new membership
-        console.log("Error response data:", error.response.data); // Log the response data
-        console.log("Error status:", error.response.status); // Log the status code
-        console.log("Error message:", error.response.statusText); // Log the error message
       }
     }
   };
@@ -74,7 +71,6 @@ const MembershipComponent = ({ user }) => {
         alert("Đăng ký thành viên thành công!");
         setShowModal(false);
       } else {
-        console.log("Unexpected status code:", response.status);
         alert("Đăng ký thất bại!");
       }
     } catch (error) {
@@ -150,6 +146,7 @@ const MembershipComponent = ({ user }) => {
       {/* Modal */}
       {showModal && (
         <div
+          className="modal-overlay"
           style={{
             position: "fixed",
             top: 0,
@@ -160,13 +157,17 @@ const MembershipComponent = ({ user }) => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            zIndex: 1000,
           }}>
           <div
+            className="modal-content"
             style={{
               background: "white",
               padding: "20px",
               borderRadius: "8px",
               width: "400px",
+              boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+              position: "relative",
             }}>
             <h2>
               {membershipData ? "Cập nhật Membership" : "Đăng ký Membership"}

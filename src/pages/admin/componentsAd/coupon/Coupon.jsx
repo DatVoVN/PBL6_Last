@@ -6,7 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "font-awesome/css/font-awesome.min.css";
 import { FaFilter } from "react-icons/fa";
 const TABLE_HEADS = [
-  "couponId",
+  "CouponId",
   "CouponCode",
   "DiscountAmount",
   "DurationInMonths",

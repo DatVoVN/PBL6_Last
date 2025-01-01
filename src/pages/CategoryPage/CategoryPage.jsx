@@ -124,9 +124,6 @@ const CategoryPage = () => {
         `${MOVIE}/api/movies?CategoryId=${id}&PageNumber=${pageNumber}&PageSize=25&OrderBy=${orderBy}&Country=${country}&Genre=${genre}&Year=${year}` // Make sure `year` is included in the query
       );
       const data = await response.json();
-      console.log(
-        `${MOVIE}/api/movies?CategoryId=${id}&PageNumber=${pageNumber}&PageSize=25&OrderBy=${orderBy}&Country=${country}&Genre=${genre}&Year=${year}`
-      );
 
       setMovies(data.result);
       setPagination({
@@ -146,7 +143,6 @@ const CategoryPage = () => {
   if (loading) {
     return <Spinner />;
   }
-  console.log(movies);
 
   return (
     <div className="categorypage">

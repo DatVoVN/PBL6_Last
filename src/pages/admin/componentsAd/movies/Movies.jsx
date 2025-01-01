@@ -122,7 +122,6 @@ const Movies = () => {
       );
       if (response.status === 204) {
         toast.success("Movie deleted successfully.");
-        console.log("success");
 
         fetchMovies(1, "", "", "", ""); // Refresh the movies list
         setIsDeleteModalOpen(false); // Close the delete modal
@@ -355,7 +354,6 @@ const Movies = () => {
                           setIsDeleteModalOpen(true);
                         }}
                       />
-                      <HiFire size={20} style={{ marginRight: "10px" }} />
                     </td>
                   </tr>
                 ))

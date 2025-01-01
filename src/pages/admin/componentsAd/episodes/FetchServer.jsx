@@ -10,42 +10,77 @@ function FetchServer({ episodeId }) {
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-
+  const [episodeInfo, setEpisodeInfo] = useState(null);
   const MOVIE = import.meta.env.VITE_MOVIE;
 
   const fetchServerData = async () => {
     setLoading(true);
     const authToken = Cookies.get("authToken");
+
     if (!authToken) {
-      toast.error("You need to log in to fetch server data.");
+      toast.error("You need to log in to fetch data.");
       setLoading(false);
       return;
     }
 
     try {
-      const response = await axios.get(`${MOVIE}/api/servers/${episodeId}`, {
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-        },
-      });
+      // Step 1: Fetch episode information
+      const episodeResponse = await axios.get(
+        `https://cineworld.io.vn:7001/api/episodes/${episodeId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
 
-      if (response.status === 200 && response.data && response.data.result) {
-        setServerData(response.data.result);
-        setFormData({
-          name: response.data.result.name,
-          link: response.data.result.link,
-        });
-        setIsModalOpen(true);
+      if (episodeResponse.status === 200 && episodeResponse.data.isSuccess) {
+        const episodeInfo = episodeResponse.data.result;
+        setEpisodeInfo(episodeInfo); // Store episode info in state
+
+        // Check if servers exist
+        if (episodeInfo.servers && episodeInfo.servers.length > 0) {
+          const firstServer = episodeInfo.servers[0];
+
+          // Step 2: Fetch server data using the first server's ID
+          const serverResponse = await axios.get(
+            `${MOVIE}/api/servers/${firstServer.serverId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${authToken}`,
+              },
+            }
+          );
+
+          if (
+            serverResponse.status === 200 &&
+            serverResponse.data &&
+            serverResponse.data.result
+          ) {
+            setServerData(serverResponse.data.result);
+            setFormData({
+              name: serverResponse.data.result.name,
+              link: serverResponse.data.result.link,
+            });
+            setIsModalOpen(true); // Open modal with server data
+            toast.success("Server data fetched successfully!");
+          } else {
+            toast.error("Failed to fetch server data.");
+          }
+        } else {
+          toast.info("No servers found for this episode.");
+          setIsModalOpen(true); // Allow user to add a new server
+        }
       } else {
-        toast.error("Failed to fetch server data.");
+        toast.error("Failed to fetch episode information.");
       }
     } catch (error) {
       if (error.response && error.response.status === 404) {
-        setIsModalOpen(true); // Open modal for adding server
-        toast.info("Server not found. You can add a new server.");
+        toast.info("Data not found. You can add a new server.");
+        setIsModalOpen(true);
       } else {
-        toast.error("Error occurred while fetching server data.");
-        console.error("Error fetching server data:", error);
+        toast.error("Error occurred while fetching data.");
+        console.error("Error fetching data:", error);
       }
     } finally {
       setLoading(false);
@@ -83,12 +118,10 @@ function FetchServer({ episodeId }) {
 
       if (response.status === 200 || response.status === 201) {
         toast.success(`Server added successfully: ${response.data.message}`);
-        console.log("Response:", response.data); // Log toàn bộ phản hồi
         setServerData(response.data.result); // Cập nhật dữ liệu server mới
         setIsModalOpen(false);
       } else {
         toast.error(`Failed to add server: ${response.data.message}`);
-        console.log("Response:", response.data); // Log toàn bộ phản hồi
       }
     } catch (error) {
       if (error.response) {
@@ -185,7 +218,7 @@ function FetchServer({ episodeId }) {
     <div>
       <HiFire
         size={20}
-        style={{ cursor: "pointer", marginRight: "10px" }}
+        style={{ cursor: "pointer", marginRight: "50px" }}
         onClick={fetchServerData}
       />
 

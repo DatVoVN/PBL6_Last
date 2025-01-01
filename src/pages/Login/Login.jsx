@@ -35,8 +35,6 @@ const Login = () => {
         const role = user.role;
         const id = user.id;
         const fullName = user.fullName;
-
-        console.log("User Role:", role);
         setUserData(id, token, fullName, role);
 
         // Store role and other data in cookies

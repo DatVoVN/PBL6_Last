@@ -35,7 +35,6 @@ function Episodes() {
   const [showUploader, setShowUploader] = useState(false);
   const [isModalOpen1, setIsModalOpen1] = useState(true);
 
-  // Hàm đóng modal
   const closeModal = () => {
     setIsModalOpen1(false);
   };
@@ -242,7 +241,7 @@ function Episodes() {
                         </td>
                         <td>
                           <i
-                            className="bi bi-upload" // Thay bằng icon bạn muốn
+                            className="bi bi-upload"
                             style={{
                               cursor: "pointer",
                               marginRight: "10px",

@@ -50,7 +50,7 @@ function AddEpisode({ movieId, setIsModalOpen, fetchEpisodes }) {
         "Error adding episode:",
         error.response ? error.response.data : error.message
       );
-      toast.error("Failed to add episode!");
+      toast.error("Failed to add episode! - Duplicate Episode Number");
     } finally {
       setIsLoading(false);
     }

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-
+import Cookies from "js-cookie";
 const AreaProgressChart = ({ startDate, endDate }) => {
   const [data, setData] = useState([]);
 
@@ -18,50 +18,40 @@ const AreaProgressChart = ({ startDate, endDate }) => {
     // Format the dates to the correct string format (ISO 8601)
     const formattedStartDate = validStartDate.toISOString();
     const formattedEndDate = validEndDate.toISOString();
-
-    // Log the formatted dates for debugging
-    console.log("Formatted Start Date:", formattedStartDate);
-    console.log("Formatted End Date:", formattedEndDate);
-
+    const authToken = Cookies.get("authToken");
     // Fetch data from the API based on the selected date range
     const fetchTopMovies = async () => {
       try {
         const response = await fetch(
-          `https://cineworld.io.vn:7004/api/views/ViewStat?StatWith=Movie&TopMovies=1&From=${formattedStartDate}&To=${formattedEndDate}&PageNumber=1`
+          `https://cineworld.io.vn:7004/api/views/ViewStat?StatWith=Movie&TopMovies=1&From=${formattedStartDate}&To=${formattedEndDate}&PageNumber=1`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+              "Content-Type": "application/json", // Add any other necessary headers
+            },
+          }
         );
 
         const result = await response.json();
 
-        // Log the fetched data for debugging
-        console.log("Fetched data:", result);
-
         if (result && result.result) {
           const newData = result.result.map((movie) => ({
-            id: movie.movieInfor.movieId, // movieId dùng làm ID duy nhất
-            name: movie.movieInfor.movieName, // Tên phim
-            percentValues: movie.viewCount, // Lượt xem làm tỷ lệ phần trăm
-            imageUrl: movie.movieInfor.imageUrl, // URL ảnh phim
+            id: movie.movieInfor.movieId,
+            name: movie.movieInfor.movieName,
+            percentValues: movie.viewCount,
+            imageUrl: movie.movieInfor.imageUrl,
           }));
           setData(newData); // Cập nhật dữ liệu
         } else {
           setData([]); // Xóa dữ liệu nếu không có kết quả
         }
       } catch (error) {
-        console.error("Error fetching top movies:", error);
         setData([]); // Xử lý lỗi và xóa dữ liệu
       }
     };
-
-    // Log the full URL for fetching data to ensure it's correct
-    console.log(
-      `Fetching data with URL: https://cineworld.io.vn:7004/api/views/ViewStat?StatWith=Movie&TopMovies=1&From=${formattedStartDate}&To=${formattedEndDate}&PageNumber=1`
-    );
-
     fetchTopMovies();
   }, [validStartDate, validEndDate]); // Fetch data whenever the date range changes
-
-  console.log("Data:", data); // Log the data to verify it's being set correctly
-
   return (
     <div className="progress-bar">
       <div className="progress-bar-info">

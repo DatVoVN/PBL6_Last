@@ -1,16 +1,36 @@
 .back-button {
-    background-color: #070720;
-    color: white;
-    border: 1px solid white;
-    padding: 10px 20px;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
+  background-color: #070720;
+  color: white;
+  border: 1px solid white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center; /* Ensures proper alignment */
+  transition: background-color 0.3s, color 0.3s; /* Smooth hover transition */
+  text-align: center; /* Ensures text stays centered */
+}
+
+/* Hover effect */
+.back-button:hover {
+  background-color: black;
+  color: #f0f0f0; /* Slightly lighter for contrast */
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+  .back-button {
+      padding: 8px 16px; /* Slightly smaller padding */
+      font-size: 14px; /* Reduce font size */
   }
-  
-  .back-button:hover {
-    background-color: black
+}
+
+/* Further adjustments for very small screens */
+@media (max-width: 480px) {
+  .back-button {
+      padding: 6px 12px; /* Even smaller padding */
+      font-size: 12px; /* Further reduce font size */
   }
-  
+}

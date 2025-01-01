@@ -14,7 +14,6 @@ const Poster = () => {
         `${MOVIE}/api/movies?OrderBy=-CreatedDate&PageNumber=1&PageSize=3`
       );
       const data = await response.json();
-      console.log("API Response:", data);
 
       if (data.isSuccess && Array.isArray(data.result)) {
         setMovies(data.result);

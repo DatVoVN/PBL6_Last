@@ -4,16 +4,16 @@ import MovieItemYear from "../MovieItemYear/MovieItemYear";
 
 const MovieByYear = () => {
   const [movies, setMovies] = useState([]);
-  const [selectedYear, setSelectedYear] = useState(null);
+  const [selectedYear, setSelectedYear] = useState(2018); // Default year
   const movieListRef = useRef(null);
   const isMouseDown = useRef(false);
   const startX = useRef(0);
   const scrollLeft = useRef(0);
-  const MOVIE = import.meta.env.VITE_MOVIE;
-  const fetchMovies = async () => {
+
+  const fetchMovies = async (year) => {
     try {
       const response = await fetch(
-        `${MOVIE}/api/movies?PageNumber=1&PageSize=2000`
+        `https://cineworld.io.vn:7001/api/movies?Year=${year}&PageNumber=1&PageSize=25`
       );
       const data = await response.json();
       if (data.isSuccess) {
@@ -28,15 +28,13 @@ const MovieByYear = () => {
 
   const handleYearSelect = (year) => {
     setSelectedYear(year);
+    fetchMovies(year);
   };
 
-  const filteredMovies = selectedYear
-    ? movies.filter((movie) => movie.movie.year === selectedYear)
-    : movies;
-
   useEffect(() => {
-    fetchMovies();
+    fetchMovies(selectedYear); // Fetch movies for the default year
   }, []);
+
   const handleMouseDown = (e) => {
     isMouseDown.current = true;
     startX.current = e.pageX - movieListRef.current.offsetLeft;
@@ -94,7 +92,7 @@ const MovieByYear = () => {
           onMouseUp={handleMouseUp}
           onMouseMove={handleMouseMove}
           style={{ cursor: isMouseDown.current ? "grabbing" : "grab" }}>
-          {filteredMovies.map((movie) => (
+          {movies.map((movie) => (
             <div className="movie-item" key={movie.movieId}>
               <MovieItemYear movie={movie} />
             </div>

@@ -26,7 +26,6 @@ function DeleteEpisode({ episodeId, onDeleteSuccess }) {
       );
       if (response.status === 204) {
         toast.success("Episode deleted successfully!");
-        console.log("Episode deleted successfully");
 
         if (onDeleteSuccess) {
           onDeleteSuccess(episodeId);
@@ -35,12 +34,10 @@ function DeleteEpisode({ episodeId, onDeleteSuccess }) {
         const errorMessage =
           response.data.Message || "Failed to delete episode.";
         toast.error(errorMessage);
-        console.log("Failed to delete episode");
       }
     } catch (error) {
       const errorMessage =
         error.response?.data?.Message || "Error occurred while deleting.";
-      console.error("Error deleting episode:", errorMessage);
       toast.error(errorMessage);
     } finally {
       setIsDeleteModalOpen(false);

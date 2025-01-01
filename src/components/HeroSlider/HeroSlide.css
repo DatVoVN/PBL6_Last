@@ -112,3 +112,12 @@
   font-size: 20px; 
   color: black; 
 }
+@media (max-width: 768px) {
+  .hero-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+  .hero__item {
+    width: 150px;
+    height: 250px;
+  }
+}

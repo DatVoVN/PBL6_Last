@@ -111,10 +111,7 @@ const AddMovie = ({ onClose, fetchMovies }) => {
         body: JSON.stringify(movieData),
       });
 
-      console.log(response.status);
-
       if (response.status === 201) {
-        console.log("1");
         toast.success("Movie added successfully!");
         fetchMovies(1, "", "", "", "");
         // Đợi 1 giây trước khi đóng modal

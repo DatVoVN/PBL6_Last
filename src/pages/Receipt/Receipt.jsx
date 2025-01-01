@@ -76,7 +76,16 @@ const Receipt = () => {
       <div style={{ height: "400px" }}>
         <h2 style={{ textAlign: "center" }}>USER RECEIPTS</h2>
         {receipts.length === 0 ? (
-          <p>No receipts found.</p>
+          <p
+            style={{
+              textAlign: "center",
+              display: "start",
+              color: "white",
+              fontSize: "18px",
+              height: "500px",
+            }}>
+            No receipts found.
+          </p>
         ) : (
           <table
             style={{

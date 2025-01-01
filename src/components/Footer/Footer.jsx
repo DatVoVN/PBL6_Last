@@ -43,7 +43,7 @@ function Footer() {
             </ul>
           </div>
           <div class="footer-col">
-            <h4>online shop</h4>
+            <h4>Movie Web</h4>
             <ul>
               <li>
                 <a href="#">watch</a>

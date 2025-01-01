@@ -55,7 +55,13 @@ const MovieWatching = () => {
       const data = await response.json();
       if (data.isSuccess) {
         setProductData(data.result);
-        setSelectedEpisodeUrl(data.result?.servers[0].link);
+        const link = data.result?.servers[0].link;
+        if (data.result.servers[0].name === "s3") {
+          const link_s3 = `https://cineworld.io.vn/?url=cdn.cineworld.io.vn/${link}.mp4`;
+          window.open(link_s3, "_blank");
+        } else {
+          setSelectedEpisodeUrl(link);
+        }
       } else {
         console.error("Failed to fetch episode details:", data.message);
       }
@@ -86,8 +92,6 @@ const MovieWatching = () => {
         lastWatched,
       });
 
-      console.log("Request body for saveWatchHistory:", body);
-
       const response = await fetch(`${REACTION}/api/watch_histories`, {
         method: "POST",
         headers: {
@@ -101,7 +105,6 @@ const MovieWatching = () => {
         console.error("Failed to save watch history:", response.statusText);
       } else {
         const data = await response.json();
-        console.log("Watch history saved successfully:", data);
       }
     } catch (error) {
       console.error("Error saving watch history:", error);
@@ -172,16 +175,12 @@ const MovieWatching = () => {
     );
   }
 
-  const handleRatingChange = (newRating) => {
-    console.log("New Rating:", newRating);
-  };
+  const handleRatingChange = (newRating) => {};
   useEffect(() => {
     const movieId = movieData?.movie?.movieId; // Ví dụ lấy từ movieData
     const episodeId = selectedEpisode; // Ví dụ lấy từ selectedEpisode
     if (movieId && episodeId) {
       const timer = setTimeout(() => {
-        console.log("MovieId:", movieId);
-        console.log("EpisodeId:", episodeId);
         fetch(
           `https://cineworld.io.vn:7004/api/views?MovieId=${movieId}&EpisodeId=${episodeId}`,
           {
@@ -196,9 +195,7 @@ const MovieWatching = () => {
           }
         )
           .then((response) => response.json())
-          .then((data) => {
-            console.log("API Response:", data);
-          })
+          .then((data) => {})
           .catch((error) => {
             console.error("Error fetching views:", error);
           });

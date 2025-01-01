@@ -87,7 +87,6 @@ const Membership = () => {
       return;
     }
 
-    // Validate memberType before sending the request
     const validMemberTypes = [
       "First Time Member",
       "Consecutive Member",
@@ -111,9 +110,6 @@ const Membership = () => {
       expirationDate: membershipToEdit.expirationDate,
     };
 
-    // Log the requestData object before sending the API request
-    console.log("Request Data:", requestData);
-
     try {
       const response = await fetch(`${MEMBERSHIP}/api/memberships`, {
         method: "PUT",
@@ -127,11 +123,18 @@ const Membership = () => {
       if (!response.ok) {
         const errorResponse = await response.json();
         console.error("API Error Response:", errorResponse);
-        toast.error(
-          `Error editing Membership: ${
-            errorResponse.message || "Unknown error"
-          }`
-        );
+
+        let errorMessage = "Unknown error";
+
+        if (errorResponse.errors) {
+          // Extract and format error messages from the 'errors' object
+          errorMessage = Object.values(errorResponse.errors).flat().join(", ");
+        } else if (errorResponse.message) {
+          // Fallback to 'message' field if 'errors' is not available
+          errorMessage = errorResponse.message;
+        }
+
+        toast.error(`Error editing Membership: ${errorMessage}`);
         return;
       }
 
@@ -511,7 +514,7 @@ const Membership = () => {
               animation: "fadeIn 0.5s", // Fade-in effect for modal appearance
             }}>
             <h3 style={{ textAlign: "center" }}>Edit Membership</h3>
-
+            UserId
             <input
               type="text"
               value={membershipToEdit.userId}
@@ -531,7 +534,7 @@ const Membership = () => {
                 border: "1px solid #ccc",
               }}
             />
-
+            User Email
             <input
               type="email"
               value={membershipToEdit.userEmail}
@@ -550,7 +553,7 @@ const Membership = () => {
                 border: "1px solid #ccc",
               }}
             />
-
+            MemberType
             <select
               value={membershipToEdit.memberType}
               onChange={(e) =>
@@ -570,7 +573,7 @@ const Membership = () => {
               <option value="Consecutive Member">Consecutive Member</option>
               <option value="Returning Member">Returning Member</option>
             </select>
-
+            First Subscription Date
             <input
               type="date"
               value={new Date(membershipToEdit.firstSubscriptionDate)
@@ -591,7 +594,7 @@ const Membership = () => {
                 border: "1px solid #ccc",
               }}
             />
-
+            Renewal Start Date
             <input
               type="date"
               value={new Date(membershipToEdit.renewalStartDate)
@@ -612,7 +615,7 @@ const Membership = () => {
                 border: "1px solid #ccc",
               }}
             />
-
+            Last Updated Date
             <input
               type="date"
               value={new Date(membershipToEdit.lastUpdatedDate)
@@ -633,7 +636,7 @@ const Membership = () => {
                 border: "1px solid #ccc",
               }}
             />
-
+            Expiration Date
             <input
               type="date"
               value={new Date(membershipToEdit.expirationDate)
@@ -654,7 +657,6 @@ const Membership = () => {
                 border: "1px solid #ccc",
               }}
             />
-
             <button
               onClick={handleEditMembership}
               style={{
@@ -670,7 +672,6 @@ const Membership = () => {
               }}>
               Update Membership
             </button>
-
             <button
               onClick={() => setIsEditModalOpen(false)}
               style={{

@@ -43,7 +43,6 @@ const MovieDetail = () => {
     }
   };
   const handleRatingChange = (newRating) => {
-    console.log("New Rating:", newRating);
     // You can send the new rating to the server or update the state if necessary
   };
   const fetchFavoriteStatus = async () => {

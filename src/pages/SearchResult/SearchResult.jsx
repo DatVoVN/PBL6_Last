@@ -85,7 +85,7 @@ const SearchResults = () => {
           ))}
         </div>
       ) : (
-        <NoMovieComponent />
+        <p>No movie</p>
       )}
     </div>
   );

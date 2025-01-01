@@ -40,7 +40,6 @@ const CountryPage = () => {
     try {
       const response = await fetch(`${MOVIE}/api/countries/${id}`);
       const data = await response.json();
-      console.log(data); // Log the response to verify its structure
       if (data.result && data.result.name) {
         setCountryName(data.result.name); // Access name from result
       } else {

@@ -167,9 +167,11 @@ const Header = () => {
 
   const handleLogout = () => {
     Cookies.remove("authToken");
-    Cookies.remove("userId");
-    Cookies.remove("userName");
     Cookies.remove("Bearer");
+    Cookies.remove("fullName");
+    Cookies.remove("role");
+    Cookies.remove("userData");
+    Cookies.remove("userId");
     setIsLoggedIn(false);
     setUserName("");
     navigate("/login");
@@ -201,7 +203,7 @@ const Header = () => {
         <div className="row">
           <div className="col-lg-2" style={{}}>
             <div className="header__logo">
-              <a href="./">
+              <a href="/">
                 <img src="/public/img/logo1.jpg" alt="Logo" />
               </a>
             </div>

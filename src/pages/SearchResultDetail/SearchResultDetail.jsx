@@ -8,7 +8,6 @@ import Spinner from "../../components/Spinner/Spinner";
 const SearchResultDetail = () => {
   const location = useLocation();
   const searchResults = location.state?.searchResultsAll || [];
-  console.log("searcRessults", searchResults);
 
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -89,7 +88,17 @@ const SearchResultDetail = () => {
             />
           ))
         ) : (
-          <NoMovieComponent />
+          <p
+            style={{
+              height: "500px",
+              color: "white",
+              fontSize: "20px",
+              display: "flex",
+              justifyContent: "center",
+              fontWeight: "bold",
+            }}>
+            NO MOVIE
+          </p>
         )}
       </div>
       <div className="pagination-container" style={{ marginBottom: "20px" }}>

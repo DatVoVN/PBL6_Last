@@ -144,9 +144,6 @@ const EditMovie = ({ movieToEdit, onClose, fetchMovies }) => {
         body: JSON.stringify(updatedMovieData),
       });
 
-      // Log trạng thái trả về
-      console.log("Response status:", response.status);
-
       if (!response.ok) {
         const errorResponse = await response.json();
         toast.error(
@@ -155,12 +152,11 @@ const EditMovie = ({ movieToEdit, onClose, fetchMovies }) => {
         return;
       }
       if (response.status === 200) {
-        console.log("1");
         toast.success("Movie updated successfully!");
         fetchMovies(1, "", "", "", "");
         setTimeout(() => {
           onClose();
-        }, 500);
+        }, 1000);
       } else {
         const errorResponse = await response.json();
         toast.error(

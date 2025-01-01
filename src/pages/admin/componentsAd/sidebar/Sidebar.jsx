@@ -5,6 +5,11 @@ import LogoBlue from "../../assets/images/logo_blue.svg";
 import LogoWhite from "../../assets/images/logo_white.svg";
 import Cookies from "js-cookie";
 import {
+  MdAccountBalance,
+  MdAccountBalanceWallet,
+  MdBackpack,
+  MdCategory,
+  MdMovie,
   MdOutlineAttachMoney,
   MdOutlineBarChart,
   MdOutlineClose,
@@ -13,6 +18,7 @@ import {
   MdOutlineLogout,
   MdOutlineMessage,
   MdOutlinePeople,
+  MdOutlinePin,
   MdOutlineSettings,
   MdOutlineShoppingBag,
 } from "react-icons/md";
@@ -92,7 +98,7 @@ const Sidebar = () => {
                   isActive ? "menu-link active" : "menu-link"
                 }>
                 <span className="menu-link-icon">
-                  <MdOutlineBarChart size={20} />
+                  <MdCategory size={20} />
                 </span>
                 <span className="menu-link-text">Categories</span>
               </NavLink>
@@ -104,7 +110,7 @@ const Sidebar = () => {
                   isActive ? "menu-link active" : "menu-link"
                 }>
                 <span className="menu-link-icon">
-                  <MdOutlineAttachMoney size={20} />
+                  <MdAccountBalance size={20} />
                 </span>
                 <span className="menu-link-text">Country</span>
               </NavLink>
@@ -128,7 +134,7 @@ const Sidebar = () => {
                   isActive ? "menu-link active" : "menu-link"
                 }>
                 <span className="menu-link-icon">
-                  <MdOutlineShoppingBag size={20} />
+                  <MdMovie size={20} />
                 </span>
                 <span className="menu-link-text">Movies</span>
               </NavLink>
@@ -140,7 +146,7 @@ const Sidebar = () => {
                   isActive ? "menu-link active" : "menu-link"
                 }>
                 <span className="menu-link-icon">
-                  <MdOutlineShoppingBag size={20} />
+                  <MdOutlinePin size={20} />
                 </span>
                 <span className="menu-link-text">Episodes</span>
               </NavLink>
@@ -164,7 +170,7 @@ const Sidebar = () => {
                   isActive ? "menu-link active" : "menu-link"
                 }>
                 <span className="menu-link-icon">
-                  <MdOutlineMessage size={18} />
+                  <MdBackpack size={18} />
                 </span>
                 <span className="menu-link-text">Packages</span>
               </NavLink>
@@ -181,11 +187,6 @@ const Sidebar = () => {
                 <span className="menu-link-text">Membership</span>
               </NavLink>
             </li>
-          </ul>
-        </div>
-
-        <div className="sidebar-menu sidebar-menu2">
-          <ul className="menu-list">
             <li className="menu-item">
               <NavLink
                 to="/admin/coupon"
@@ -193,11 +194,16 @@ const Sidebar = () => {
                   isActive ? "menu-link active" : "menu-link"
                 }>
                 <span className="menu-link-icon">
-                  <MdOutlineSettings size={20} />
+                  <MdAccountBalanceWallet size={20} />
                 </span>
                 <span className="menu-link-text">Coupon</span>
               </NavLink>
             </li>
+          </ul>
+        </div>
+
+        <div className="sidebar-menu sidebar-menu2">
+          <ul className="menu-list">
             <li className="menu-item">
               <button className="menu-link" onClick={handleLogout}>
                 <span className="menu-link-icon">

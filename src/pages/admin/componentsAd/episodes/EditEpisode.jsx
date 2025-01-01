@@ -97,7 +97,7 @@ function EditEpisode({ episodeId, setIsModalOpen, fetchEpisodes }) {
         toast.success("Episode updated successfully!");
       }
     } catch (error) {
-      toast.error("Error updating episode");
+      toast.error("Error updating episode- Duplicate Episode Number");
     } finally {
       setIsLoading(false);
     }

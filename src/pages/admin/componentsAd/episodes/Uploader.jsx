@@ -2,13 +2,11 @@ import React, { useState, useRef } from "react";
 import axios from "axios";
 
 const UploaderComponent = ({ episodeId, closeModal }) => {
-  const [progress, setProgress] = useState(0);
   const [status, setStatus] = useState("");
-  const [serverName, setServerName] = useState("");
   const [videoLink, setVideoLink] = useState("");
   const [isUploaded, setIsUploaded] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(true);
   const fileInputRef = useRef();
-
   const api = axios.create({
     baseURL:
       "https://vy4uz0kpuh.execute-api.ap-southeast-2.amazonaws.com/cineworld",
@@ -156,7 +154,7 @@ const UploaderComponent = ({ episodeId, closeModal }) => {
           headers: { "Content-Type": "application/json" },
         });
 
-        setVideoLink(`${this.fileName}_s3`);
+        setVideoLink(`${this.fileName}`);
         setStatus("Upload completed!");
         setIsUploaded(true);
       } catch (err) {
@@ -183,8 +181,6 @@ const UploaderComponent = ({ episodeId, closeModal }) => {
       file.name.lastIndexOf(".")
     );
 
-    console.log("Uploading file:", fileNameWithoutExtension); // Log file name without extension
-
     const uploader = new Uploader({
       file,
       fileName: fileNameWithoutExtension,
@@ -195,13 +191,15 @@ const UploaderComponent = ({ episodeId, closeModal }) => {
       useTransferAcceleration: true,
     });
 
-    uploader.onProgress(({ percentage }) => setProgress(percentage));
+    setStatus("Uploading...");
+
+    uploader.onProgress(({ percentage }) => {});
+
     uploader.onError((err) => {
       console.error("Upload error:", err);
       setStatus(`Error: ${err.message}`);
     });
 
-    setStatus(`Uploading: ${fileNameWithoutExtension}...`);
     uploader.initialize();
   };
 
@@ -211,18 +209,16 @@ const UploaderComponent = ({ episodeId, closeModal }) => {
       .find((row) => row.startsWith("authToken"))
       ?.split("=")[1];
 
-    if (!authToken || !serverName || !videoLink || !episodeId) {
+    if (!authToken || !videoLink || !episodeId) {
       return;
     }
 
     const serverData = {
-      serverId: 0, // Server ID will be auto-incremented
+      serverId: 0,
       episodeId,
-      name: serverName,
+      name: "s3",
       link: videoLink,
     };
-
-    console.log("Server Data:", serverData); // Log the server data
 
     try {
       const response = await axios.post(
@@ -234,16 +230,17 @@ const UploaderComponent = ({ episodeId, closeModal }) => {
           },
         }
       );
-      console.log("Server Info Saved:", response.data);
       setStatus("Server information saved successfully!");
-
-      closeModal(); // Close modal after saving server info
+      closeModal();
     } catch (error) {
-      console.error("Error saving server info:", error);
       setStatus("Failed to save server information.");
     }
   };
+  const closeModal1 = () => {
+    setIsModalOpen(false);
+  };
 
+  if (!isModalOpen) return null;
   return (
     <div
       style={{
@@ -260,6 +257,7 @@ const UploaderComponent = ({ episodeId, closeModal }) => {
       }}>
       <div
         style={{
+          position: "relative",
           backgroundColor: "white",
           padding: "30px",
           borderRadius: "10px",
@@ -269,8 +267,23 @@ const UploaderComponent = ({ episodeId, closeModal }) => {
           textAlign: "center",
           overflowY: "auto",
         }}>
-        <h1>Upload Video File</h1>
-        <input type="file" ref={fileInputRef} />
+        <button
+          onClick={closeModal1}
+          style={{
+            position: "absolute",
+            top: "10px",
+            right: "10px",
+            backgroundColor: "#f44336",
+            color: "white",
+            border: "none",
+            borderRadius: "50%",
+            padding: "10px",
+            cursor: "pointer",
+          }}>
+          X
+        </button>
+        <h1 style={{ color: "red" }}>Upload Video File</h1>
+        <input type="file" ref={fileInputRef} style={{ color: "red" }} />
         <button
           onClick={handleUpload}
           style={{
@@ -285,28 +298,11 @@ const UploaderComponent = ({ episodeId, closeModal }) => {
         </button>
 
         <div id="progressContainer" style={{ marginTop: "20px" }}>
-          <progress value={progress} max="100" style={{ width: "100%" }} />
-          <span>{progress}%</span>
+          {status && <span style={{ color: "red" }}>{status}</span>}
         </div>
-
-        <div>{status}</div>
 
         {isUploaded && (
           <div style={{ marginTop: "20px" }}>
-            <h3>Enter Server Information</h3>
-            <input
-              type="text"
-              placeholder="Server Name"
-              value={serverName}
-              onChange={(e) => setServerName(e.target.value)}
-              style={{
-                padding: "10px",
-                width: "100%",
-                marginBottom: "10px",
-                borderRadius: "5px",
-                border: "1px solid #ccc",
-              }}
-            />
             <button
               onClick={handleServerNameSubmit}
               style={{

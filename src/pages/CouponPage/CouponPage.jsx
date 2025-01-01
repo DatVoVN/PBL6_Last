@@ -65,15 +65,16 @@ function CouponPage() {
       });
 
       const result = await response.json();
-      console.log(result);
 
       if (!response.ok) {
-        throw new Error(result?.message || "Failed to create receipt");
+        throw new Error(
+          result?.message || "Failed to create receipt- No has Coupon Code"
+        );
       }
 
       const receiptStatus = result?.result?.status;
       if (receiptStatus === "pending") {
-        window.location.href = "http://localhost:5173/payment"; // Redirect to payment page
+        window.location.href = "https://pbl-6-last.vercel.app/payment"; // Redirect to payment page
       }
 
       localStorage.setItem("receiptId", result.result.receiptId);
@@ -95,10 +96,9 @@ function CouponPage() {
         },
         body: JSON.stringify({
           receiptId: sessionData.receiptId,
-          paymentSessionUrl: "string", // The URL for the payment session (can be generated dynamically)
-          approvedUrl: "http://localhost:5173/payment-success", // Approved URL
-          cancelUrl:
-            "https://drive.google.com/file/d/1BjNcczy3hcsiLWNdzywwM8ay30MLJdyR/view?usp=sharing", // Cancel URL
+          paymentSessionUrl: "string",
+          approvedUrl: "https://pbl-6-last.vercel.app/payment-success", // Approved URL
+          cancelUrl: "https://pbl-6-last.vercel.app/payment-error", // Cancel URL
         }),
       });
 

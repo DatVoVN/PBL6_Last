@@ -33,7 +33,6 @@ const Register = () => {
         },
         { withCredentials: true }
       );
-      console.log("Response:", response);
       if (response.status >= 200 && response.status < 300) {
         setSuccess("Registration successful! Redirecting to login...");
         setError(null);
@@ -43,19 +42,14 @@ const Register = () => {
       }
     } catch (err) {
       if (err.response) {
-        console.log("Response data:", err.response.data);
-        console.log("Response status:", err.response.status);
-
-        // Extracting error message specifically for the gender field
-        if (err.response.data.errors && err.response.data.errors.Gender) {
-          setError(err.response.data.errors.Gender.join(", "));
-        } else if (err.response.data.errors) {
-          // If there are other errors
-          setError("An error occurred during registration. Please try again.");
+        const { errors } = err.response.data;
+        if (errors) {
+          // Extracting and joining error messages from validation errors
+          const errorMessages = Object.values(errors).flat().join(", ");
+          setError(errorMessages || "An error occurred during registration.");
         } else {
           setError("Registration failed. Please try again.");
         }
-
         setSuccess(null);
       } else {
         setError("An unexpected error occurred.");

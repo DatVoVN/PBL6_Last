@@ -17,7 +17,6 @@ import PageNotFound from "./pages/PageNotFound/PageNotFound.jsx";
 import Membership from "./pages/Membership/Membership.jsx";
 import { UserProvider } from "./Context/UserContext.jsx";
 import CouponPage from "./pages/CouponPage/CouponPage.jsx";
-import PaymentSuccessPage from "./pages/PaymentSuccessPage/PaymentSuccessPage.jsx";
 import ChangePassword from "./pages/ChangePassword/ChangePassword.jsx";
 import Profile from "./pages/Profile/Profile.jsx";
 import Admin from "./pages/admin/Admin.jsx";
@@ -31,6 +30,8 @@ import { ToastContainer } from "react-toastify"; // Import ToastContainer
 import "react-toastify/dist/ReactToastify.css"; // Import the ToastContainer styles
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute.jsx";
 import NoMovieComponent from "./components/NoMovieComponent/NoMovieComponent.jsx";
+import PaymentErrorPage from "./pages/PaymentErrorPage/PaymentErrorPage.jsx";
+import PaymentSuccessPage from "./pages/PaymentSuccessPage/PaymentSuccessPage.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -76,6 +77,7 @@ createRoot(document.getElementById("root")).render(
               <Route path="/history" element={<History />} />
               <Route path="/search-results" element={<SearchResultDetail />} />
               <Route path="/no-movie" element={<NoMovieComponent />} />
+              <Route path="/payment-error" element={<PaymentErrorPage />} />
             </Route>
           </Routes>
           <ToastContainer

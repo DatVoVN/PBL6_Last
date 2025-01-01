@@ -206,9 +206,6 @@ const User = () => {
 
       // Nếu trả về 204 (No Content), không cần xóa membership
       if (membershipResponse.status === 204) {
-        console.log(
-          "No membership found for this user, skipping membership deletion."
-        );
         fetchUsers(1, "", "", "");
         setIsDeleteModalOpen(false);
         return;
@@ -246,10 +243,10 @@ const User = () => {
 
           toast.success("Membership deleted successfully!");
         } else {
-          console.log("No membership found for this user.");
+          console.error("No membership found for this user.");
         }
       } else {
-        console.log(
+        console.error(
           "Failed to fetch membership data, skipping membership deletion."
         );
       }
@@ -319,8 +316,8 @@ const User = () => {
                   value={filter}
                   onChange={handleFilterChange}>
                   <option value="">Default</option>
-                  <option value="-fullName">fullName Descending</option>
-                  <option value="fullName">fullName Ascending</option>
+                  <option value="-fullName">FullName Descending</option>
+                  <option value="fullName">FullName Ascending</option>
                   <option value="-Email">Email Descending</option>
                   <option value="Email">Email Ascending</option>
                 </select>
