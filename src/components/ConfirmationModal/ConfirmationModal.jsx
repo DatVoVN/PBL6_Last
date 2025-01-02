@@ -7,7 +7,10 @@ const ConfirmationModal = ({ message, onConfirm, onCancel }) => {
       <div className="modal-content">
         <p>{message}</p>
         <div className="modal-actions">
-          <button onClick={onConfirm} className="confirm-button">
+          <button
+            onClick={onConfirm}
+            className="confirm-button"
+            style={{ backgroundColor: "red" }}>
             Confirm
           </button>
           <button onClick={onCancel} className="cancel-button">
