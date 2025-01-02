@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { CiHeart, CiTrash } from "react-icons/ci";
 import ConfirmationModal from "../../components/ConfirmationModal/ConfirmationModal"; // Import the modal
 import Spinner from "../../components/Spinner/Spinner";
+import { toast } from "react-toastify";
 
 function Favorites() {
   const [favorites, setFavorites] = useState([]);
@@ -73,7 +74,7 @@ function Favorites() {
 
       const result = await response.json();
       if (result.isSuccess) {
-        alert("Movie removed from favorites!");
+        toast.success("Movie removed from favorites!");
         setFavorites((prevFavorites) =>
           prevFavorites.filter((item) => item.movieId !== movieToDelete)
         );
@@ -82,7 +83,7 @@ function Favorites() {
       }
     } catch (err) {
       console.error("Error deleting favorite:", err);
-      alert("An error occurred while removing the movie from favorites.");
+      toast.error("An error occurred while removing the movie from favorites.");
     } finally {
       setShowModal(false); // Close the modal after the action
     }
