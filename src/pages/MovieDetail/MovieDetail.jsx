@@ -8,7 +8,7 @@ import Cookies from "js-cookie";
 import Spinner from "../../components/Spinner/Spinner";
 import Rating from "../../components/Rating/Rating";
 import TopViewProduct from "../../components/TopViewProduct/TopViewProduct";
-
+import { toast } from "react-toastify";
 const decodeHtmlEntities = (text) => {
   let textArea = document.createElement("textarea");
   textArea.innerHTML = text;
@@ -96,12 +96,6 @@ const MovieDetail = () => {
     const token = Cookies.get("authToken");
 
     const action = isFavorite ? "unfavorite" : "favorite";
-    const confirmMessage = `Do you want to ${action} this movie?`;
-
-    const userConfirmed = window.confirm(confirmMessage);
-
-    if (!userConfirmed) return;
-
     const url = `${REACTION}/api/favorites`;
 
     try {
@@ -118,14 +112,14 @@ const MovieDetail = () => {
 
       if (response.ok) {
         setIsFavorite(!isFavorite);
-        alert(`Movie ${action}d successfully!`);
+        toast.success(`Movie ${action}d successfully!`);
       } else {
         console.error(`Failed to ${action}:`, result.message);
-        alert(`Failed to ${action} the movie. Please try again.`);
+        toast.error(`Failed to ${action} the movie. Please try again.`);
       }
     } catch (error) {
       console.error(`Error while ${action}ing:`, error);
-      alert(`An error occurred while trying to ${action} the movie.`);
+      toast.error(`An error occurred while trying to ${action} the movie.`);
     }
   };
 
