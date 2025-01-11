@@ -199,7 +199,7 @@ const MovieWatching = () => {
           .catch((error) => {
             console.error("Error fetching views:", error);
           });
-      }, 300000);
+      }, 10);
 
       return () => clearTimeout(timer);
     }

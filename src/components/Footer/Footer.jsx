@@ -29,16 +29,10 @@ function Footer() {
                 <a href="#">FAQ</a>
               </li>
               <li>
-                <a href="#">shipping</a>
-              </li>
-              <li>
                 <a href="#">returns</a>
               </li>
               <li>
-                <a href="#">order status</a>
-              </li>
-              <li>
-                <a href="#">payment options</a>
+                <a href="/membership">Register Membership</a>
               </li>
             </ul>
           </div>
@@ -46,16 +40,7 @@ function Footer() {
             <h4>Movie Web</h4>
             <ul>
               <li>
-                <a href="#">watch</a>
-              </li>
-              <li>
-                <a href="#">bag</a>
-              </li>
-              <li>
-                <a href="#">shoes</a>
-              </li>
-              <li>
-                <a href="#">dress</a>
+                <a href="./">watch</a>
               </li>
             </ul>
           </div>

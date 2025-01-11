@@ -23,7 +23,7 @@ const AreaProgressChart = ({ startDate, endDate }) => {
     const fetchTopMovies = async () => {
       try {
         const response = await fetch(
-          `https://cineworld.io.vn:7004/api/views/ViewStat?StatWith=Movie&TopMovies=1&From=${formattedStartDate}&To=${formattedEndDate}&PageNumber=1`,
+          `https://cineworld.io.vn:7004/api/views/ViewStat?StatWith=Movie&TopMovies=5&From=${formattedStartDate}&To=${formattedEndDate}&PageNumber=1`,
           {
             method: "GET",
             headers: {
@@ -42,42 +42,44 @@ const AreaProgressChart = ({ startDate, endDate }) => {
             percentValues: movie.viewCount,
             imageUrl: movie.movieInfor.imageUrl,
           }));
-          setData(newData); // Cập nhật dữ liệu
+          setData(newData);
         } else {
-          setData([]); // Xóa dữ liệu nếu không có kết quả
+          setData([]);
         }
       } catch (error) {
-        setData([]); // Xử lý lỗi và xóa dữ liệu
+        setData([]);
       }
     };
+    console.log(data);
+
     fetchTopMovies();
-  }, [validStartDate, validEndDate]); // Fetch data whenever the date range changes
+  }, [validStartDate, validEndDate]);
   return (
     <div className="progress-bar">
       <div className="progress-bar-info">
-        <h4 className="progress-bar-title">Top 1 Most Viewed Movies</h4>
+        <h4 className="progress-bar-title">Top 5 Most Viewed Movies</h4>
       </div>
       <div className="progress-bar-list">
         {data?.map((progressbar) => (
           <div className="progress-bar-item" key={progressbar.id}>
             <div className="bar-item-info">
               <p className="bar-item-info-name">{progressbar.name}</p>
-              {/* <p className="bar-item-info-value">{progressbar.percentValues}</p> */}
+              <p className="bar-item-info-value">{progressbar.percentValues}</p>
             </div>
-            {/* <div className="bar-item-full">
+            <div className="bar-item-full">
               <div
                 className="bar-item-filled"
                 style={{
-                  width: `${progressbar.percentValues / 10}%`, // Scale view count to percentage
+                  width: `100%`,
                 }}></div>
-            </div> */}
-            <div className="movie-image">
+            </div>
+            {/* <div className="movie-image">
               <img
                 style={{ width: "100%", height: "280px" }}
                 src={progressbar.imageUrl}
                 alt={progressbar.name}
               />
-            </div>
+            </div> */}
           </div>
         ))}
       </div>

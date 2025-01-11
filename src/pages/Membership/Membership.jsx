@@ -24,6 +24,7 @@ function Membership() {
       setLoading(false);
     }
   };
+  console.log(packages);
 
   useEffect(() => {
     fetchPackages();
@@ -50,13 +51,12 @@ function Membership() {
             <h2 className="package-name">{pkg.name}</h2>
             <h3 className="package-price">
               ${pkg.price}
-              <span className="package-term">/month</span>
+              <span className="package-term">/{pkg.termInMonths} month</span>
             </h3>
             <p className="package-description">{pkg.description}</p>
             <ul className="package-features">
-              <li>All features included</li>
-              <li>Over 600 components</li>
-              <li>Build tools and examples</li>
+              <li>We are committed to giving you the best experience.</li>
+              <li>A comfortable feeling when watching movies</li>
             </ul>
             <button
               className="subscribe-button"

@@ -11,7 +11,6 @@ import AreaCharts from "../areaCharts/AreaCharts"; // Import AreaCharts componen
 const AreaTop = () => {
   const { openSidebar } = useContext(SidebarContext);
 
-  // Set startDate to the 1st day of the current month and endDate to the 30th or last day of the month
   const currentMonthStart = startOfMonth(new Date());
   const currentMonthEnd = endOfMonth(new Date());
 
@@ -70,7 +69,7 @@ const AreaTop = () => {
           />
         </div>
       </div>
-      {/* Pass state[0].startDate and state[0].endDate to AreaCharts */}
+
       <AreaCharts startDate={state[0].startDate} endDate={state[0].endDate} />
     </section>
   );

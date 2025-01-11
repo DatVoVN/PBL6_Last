@@ -78,11 +78,12 @@ const Receipt = () => {
         {receipts.length === 0 ? (
           <p
             style={{
-              textAlign: "center",
-              display: "start",
+              textAlign: "start",
+              display: "flex",
               color: "white",
               fontSize: "18px",
               height: "500px",
+              marginLeft: "50px",
             }}>
             No receipts found.
           </p>
