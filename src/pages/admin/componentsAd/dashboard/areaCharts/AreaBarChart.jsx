@@ -13,87 +13,60 @@ import { FaArrowUpLong } from "react-icons/fa6";
 import { LIGHT_THEME } from "../../../constants/themeConstants";
 import "./AreaCharts.scss";
 const MEMBERSHIP = import.meta.env.VITE_MEMBERSHIP;
-// Giữ nguyên dữ liệu cho các tháng từ 1 đến tháng 11
-const fakeData = [
-  { month: "Jan", csiRenew: 2000 },
-  { month: "Feb", csiRenew: 2200 },
-  { month: "Mar", csiRenew: 1212 },
-  { month: "April", csiRenew: 2030 },
-  { month: "May", csiRenew: 3121 },
-  { month: "Jun", csiRenew: 5434 },
-  { month: "Jul", csiRenew: 3211 },
-  { month: "Aug", csiRenew: 3212 },
-  { month: "Sep", csiRenew: 1212 },
-  { month: "Oct", csiRenew: 1212 },
-  { month: "Nov", csiRenew: 2431 },
-];
+
+// Array representing the months as numbers (1 = January, 12 = December)
+const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
 const AreaBarChart = () => {
   const { theme } = useContext(ThemeContext);
-  const [data, setData] = useState(fakeData); // Dữ liệu cho tháng 1 đến tháng 11
+  const [data, setData] = useState([]); // Start with an empty data array
   const [isLoading, setIsLoading] = useState(true);
-  const [isDecemberFetched, setIsDecemberFetched] = useState(false); // Flag to track if December data has been fetched
+  const [selectedYear, setSelectedYear] = useState(2025); // Default year
 
-  // Fetch dữ liệu từ API cho tháng 12
+  // Fetch data for each month of the selected year
   useEffect(() => {
-    const fetchDecemberData = async () => {
-      if (isDecemberFetched) return; // If December data is already fetched, don't fetch again
-
+    const fetchMonthlyData = async () => {
       try {
-        const response = await fetch(
-          `${MEMBERSHIP}/api/receipts/ReceiptStat?From=2024-12-01T00%3A00%3A00&To=2024-12-31T23%3A59%3A59`
-        );
-        const result = await response.json();
-        if (result.isSuccess && result.result.receiptStat) {
-          const decemberData = result.result.receiptStat.reduce(
-            (total, item) => {
-              return total + item.total;
-            },
-            0
-          );
-
-          // Cập nhật dữ liệu tháng 12 chỉ nếu chưa có
-          setData((prevData) => {
-            const decemberExists = prevData.some(
-              (item) => item.month === "Dec"
+        const fetchedData = await Promise.all(
+          months.map(async (month) => {
+            const response = await fetch(
+              `${MEMBERSHIP}/api/receipts/ReceiptStat?From=${selectedYear}-${month
+                .toString()
+                .padStart(2, "0")}-01T00%3A00%3A00&To=${selectedYear}-${month
+                .toString()
+                .padStart(2, "0")}-31T23%3A59%3A59`
             );
-            if (!decemberExists) {
-              return [
-                ...prevData,
-                {
-                  month: "Dec",
-                  csiRenew: decemberData,
-                },
-              ];
+            const result = await response.json();
+
+            if (result.isSuccess && result.result.receiptStat) {
+              const monthlyData = result.result.receiptStat.reduce(
+                (total, item) => total + item.total,
+                0
+              );
+              return { month, csiRenew: monthlyData }; // Return the data for the month
             }
-            return prevData;
-          });
-        }
+            return { month, csiRenew: 0 }; // If no data, return 0
+          })
+        );
+
+        setData(fetchedData); // Update state with the fetched data
       } catch (error) {
-        console.error("Error fetching December data", error);
+        console.error("Error fetching monthly data", error);
       } finally {
-        setIsLoading(false);
-        setIsDecemberFetched(true); // Set flag to true once data is fetched
+        setIsLoading(false); // Set loading to false after fetching
       }
     };
 
-    fetchDecemberData();
-  }, [isDecemberFetched]); // Only run effect when `isDecemberFetched` changes
+    fetchMonthlyData();
+  }, [selectedYear]); // Fetch data whenever selectedYear changes
 
   // Calculate the total revenue for all months
   const totalRevenue = data.reduce((total, item) => total + item.csiRenew, 0);
 
-  const formatTooltipValue = (value) => {
-    return `${value}`; // Không thêm 'k' cho tháng 12
-  };
-
-  const formatYAxisLabel = (value) => {
-    return `${value}`; // Không thêm 'k' cho YAxis
-  };
-
-  const formatLegendValue = (value) => {
-    return value.charAt(0).toUpperCase() + value.slice(1);
-  };
+  const formatTooltipValue = (value) => `${value}`;
+  const formatYAxisLabel = (value) => `${value}`;
+  const formatLegendValue = (value) =>
+    value.charAt(0).toUpperCase() + value.slice(1);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -110,6 +83,19 @@ const AreaBarChart = () => {
           </div>
         </div>
       </div>
+
+      {/* Year Selector */}
+      <div className="year-selector">
+        <label htmlFor="year">Select Year: </label>
+        <select
+          id="year"
+          value={selectedYear}
+          onChange={(e) => setSelectedYear(Number(e.target.value))}>
+          <option value={2024}>2024</option>
+          <option value={2025}>2025</option>
+        </select>
+      </div>
+
       <div className="bar-chart-wrapper">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
@@ -130,6 +116,23 @@ const AreaBarChart = () => {
               tick={{
                 fill: `${theme === LIGHT_THEME ? "#676767" : "#f3f3f3"}`,
                 fontSize: 14,
+              }}
+              tickFormatter={(month) => {
+                const monthNames = [
+                  "Jan",
+                  "Feb",
+                  "Mar",
+                  "April",
+                  "May",
+                  "Jun",
+                  "Jul",
+                  "Aug",
+                  "Sep",
+                  "Oct",
+                  "Nov",
+                  "Dec",
+                ];
+                return monthNames[month - 1]; // Convert number to month name
               }}
             />
             <YAxis
