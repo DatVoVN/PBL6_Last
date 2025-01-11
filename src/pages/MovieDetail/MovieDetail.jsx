@@ -110,9 +110,10 @@ const MovieDetail = () => {
 
       const result = await response.json();
 
-      if (response.ok) {
+      if (response.status === 200) {
         setIsFavorite(!isFavorite);
         toast.success(`Movie ${action}d successfully!`);
+        console.log(`Movie ${action}d successfully!`);
       } else {
         console.error(`Failed to ${action}:`, result.message);
         toast.error(`Failed to ${action} the movie. Please try again.`);

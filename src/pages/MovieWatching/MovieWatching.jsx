@@ -70,7 +70,6 @@ const MovieWatching = () => {
     }
   };
 
-  // Save watch history silently
   const saveWatchHistory = async (episode) => {
     const authToken = Cookies.get("authToken");
     if (!authToken) {
@@ -136,24 +135,21 @@ const MovieWatching = () => {
       console.error("Error fetching movies:", error);
     }
   };
-  // Automatically select the newest episode when movie data is loaded
   useEffect(() => {
     const fetchData = async () => {
       await fetchMembershipStatus();
 
       if (movieData) {
-        // Get the newest episode based on episode number
         const newestEpisode = movieData.episodes
           .slice()
           .sort((a, b) => b.episodeNumber - a.episodeNumber)[0];
 
         if (newestEpisode) {
-          // Check if the episode is free or not and if the user is a member
           if (newestEpisode.isFree === false && !isMember) {
             setShowSubscriptionModal(true);
           } else {
             setShowSubscriptionModal(false);
-            fetchEpisodesDetails(newestEpisode.episodeId); // Fetch episode details
+            fetchEpisodesDetails(newestEpisode.episodeId);
             setSelectedEpisode(newestEpisode.episodeId);
 
             // Save the newest episode to watch history
@@ -177,8 +173,8 @@ const MovieWatching = () => {
 
   const handleRatingChange = (newRating) => {};
   useEffect(() => {
-    const movieId = movieData?.movie?.movieId; // Ví dụ lấy từ movieData
-    const episodeId = selectedEpisode; // Ví dụ lấy từ selectedEpisode
+    const movieId = movieData?.movie?.movieId;
+    const episodeId = selectedEpisode;
     if (movieId && episodeId) {
       const timer = setTimeout(() => {
         fetch(

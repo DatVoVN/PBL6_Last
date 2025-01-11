@@ -74,7 +74,7 @@ function CouponPage() {
 
       const receiptStatus = result?.result?.status;
       if (receiptStatus === "pending") {
-        window.location.href = "https://pbl-6-last.vercel.app/payment"; // Redirect to payment page
+        window.location.href = "https://pbl-6-last.vercel.app/payment";
       }
 
       localStorage.setItem("receiptId", result.result.receiptId);
@@ -97,8 +97,8 @@ function CouponPage() {
         body: JSON.stringify({
           receiptId: sessionData.receiptId,
           paymentSessionUrl: "string",
-          approvedUrl: "https://pbl-6-last.vercel.app/payment-success", // Approved URL
-          cancelUrl: "https://pbl-6-last.vercel.app/payment-error", // Cancel URL
+          approvedUrl: "https://pbl-6-last.vercel.app/payment-success",
+          cancelUrl: "https://pbl-6-last.vercel.app/payment-error",
         }),
       });
 
@@ -115,7 +115,7 @@ function CouponPage() {
   };
 
   const handleCouponSubmit = async (e) => {
-    e.preventDefault(); // Prevent the default form submission
+    e.preventDefault();
 
     setError("");
     setLoading(true);
@@ -145,7 +145,6 @@ function CouponPage() {
 
     const paymentSessionData = {
       receiptId: newlyCreatedReceipt.receiptId,
-      // Additional session details can be included here
     };
 
     const sessionResponse = await createPaymentSession(paymentSessionData);
@@ -153,8 +152,6 @@ function CouponPage() {
       setLoading(false);
       return;
     }
-
-    // Redirecting to payment session URL
     window.location.href = sessionResponse.result.paymentSessionUrl;
   };
 
